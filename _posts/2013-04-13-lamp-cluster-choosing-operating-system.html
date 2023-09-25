@@ -1,0 +1,116 @@
+---
+title: "LAMP Cluster — Choosing an Operating System"
+tags: ["Guide", "Linux", "hosting", "sysadmin"]
+date: 2013-04-13 14:50:00 -0400
+---
+
+This post is part of:&nbsp;<a href="http://blog.lavoie.sl/2013/03/guide-to-replicated-lamp-stack-hosting-with-failover.html" rel="" target="">Guide to replicated LAMP stack hosting with failover</a><br />
+<br />
+<br />
+Beside choosing Linux vs Mac or Windows, the OS should not impact your users, it is mostly a sysadmin choice. Your users, the ones who will be connecting via SSH, will expect binaries to be available without modifying their PATH and common tools like Git or SVN to be already installed, but it does not really matter how it was installed.<br />
+<br />
+The key to be sure that nobody has a hard time making everything work is to do things the most standard and common way possible.<br />
+<h3>
+Choose between the most used distributions</h3>
+This is really important. Choosing a distribution for your laptop or your development server is not the same thing as choosing a production environment. Forget Gentoo and friends, being connected directly to the bare-bone of your system is nice when you are learning or building a world-class new system, but for you own setup, you want something tested by the whole community, something that works. Even if it involves a bit of magic.<br />
+<br />
+A good example of some <i>magic</i>&nbsp;is what Ubuntu does with networking. I admit that since 10.x, I don’t really understand all the cooperation between <span style="font-family: Courier New, Courier, monospace;">/etc/resolv.conf</span>, <span style="font-family: Courier New, Courier, monospace;">/etc/network/interfaces</span>, <span style="font-family: Courier New, Courier, monospace;">dhclient</span>, <span style="font-family: Courier New, Courier, monospace;">/etc/init.d/networking</span> and such. At some point, they all seem to redefine each other and in a particular release, a script will start to throw some warnings, but it works. Never has the network failed me on Ubuntu, which is something quite relevant when you need to access a remote machine.<br />
+<h3>
+Edge vs stable</h3>
+<div>
+I use the infamous expression “Debian stable” when I want to refer to something configured in such a conservative way that <i>will</i> work, but at the cost of using the technology of 2005. I know, Debian stable is not that bad, but I tend to have some faith in the testing procedures of the maintainers.</div>
+<div>
+<br /></div>
+<div>
+<b>My rule of thumb is</b>: when a stable version is available, use it. If I want the features of a less stable version, I make sure it lived at least a month and do a quick search on its stability and trustworthiness.</div>
+<div>
+<br /></div>
+<div>
+An example of this is that I don’t restrict myself to Ubuntu Long Term Support editions. I am happy to use it and will usually keep using it for a bit longer that the other releases but it is only every 2 years, sometimes this is not enough. Moreover, I tend to upgrade or reinstall every year or two, so I don’t hit the end-of-support limit.<br />
+<br />
+Here are some of the top distributions, ordered by <i>edginess</i>:<br />
+<br />
+<table align="center" border="1" cellpadding="4" cellspacing="0">
+<caption>Versions available</caption>
+        <thead>
+<tr>
+                <th>Distribution</th>
+                <th>Apache</th>
+                <th>PHP</th>
+                <th>MySQL</th>
+                <th>Varnish</th>
+            </tr>
+</thead>
+        <tbody>
+<tr>
+                <th align="left">Ubuntu 12.10</th>
+                <td>2.2.22</td>
+                <td>5.4.6</td>
+                <td>5.5.29</td>
+                <td>3.0.2</td>
+            </tr>
+<tr>
+                <th align="left">Debian wheezy</th>
+                <td>2.2.22</td>
+                <td>5.4.4</td>
+                <td>5.5.28</td>
+                <td>3.0.2</td>
+            </tr>
+<tr>
+                <th align="left">OpenSuse 12.3</th>
+                <td>2.2.22</td>
+                <td>5.3.17</td>
+                <td>5.5.30</td>
+                <td>3.0.3</td>
+            </tr>
+<tr>
+                <th align="left">Ubuntu 12.04 LTS</th>
+                <td>2.2.22</td>
+                <td>5.3.10</td>
+                <td>5.5.29</td>
+                <td>3.0.2</td>
+            </tr>
+<tr>
+                <th align="left">Debian squeeze (stable)</th>
+                <td>2.2.16</td>
+                <td>5.3.3</td>
+                <td>5.1.66</td>
+                <td>2.1.3</td>
+            </tr>
+<tr>
+                <th align="left">CentOS 6</th>
+                <td>2.2.15</td>
+                <td>5.3.3</td>
+                <td>5.1.66</td>
+                <td>manual</td>
+            </tr>
+</tbody>
+    </table>
+</div>
+<div>
+<br />
+PHP 5.3.3, our main concern, was released in July 2010 and important fixes have occurred since, so this is out of the question.<br />
+<br />
+Varnish 2 is very different from Varnish 3, so this needs to be looked at.<br />
+<br />
+It is usually possible to install newer versions, but this implies relying on third-party packaging, multiple installed binaries or even compiling yourself.<br />
+<br />
+<h3>
+Forget benchmarks</h3>
+<div>
+Linux is very low-print system; a common mistake is trying to over optimize it. What will eat your CPU is PHP and MySQL, what will eat your memory is MySQL and the number of connections you can handle is mostly dependant on your webserver. If you machine is spending too much time in kernel space, it is probably because you need a bigger one. Also, don’t forget to benchmark your disks.&nbsp;<a href="http://blog.lavoie.sl/2013/03/lamp-cluster-hosting-platform.html" target="_blank">See my post on choosing hardware</a>.</div>
+</div>
+<h3>
+Conclusion</h3>
+<div>
+Your choice must be focused on stability, ease-of-use and community size.&nbsp;</div>
+<div>
+<br /></div>
+<div>
+Personally, I prefer Debian-based solutions. Aptitude works very well and I just happen to have been more in contact with it.</div>
+<div>
+<br /></div>
+<div>
+All and all, I went for Ubuntu 12.10, PHP 5.4 offers really good performance improvement over 5.3 and it has been long enough since this release of Ubuntu happened.</div>
+<div>
+<br /></div>

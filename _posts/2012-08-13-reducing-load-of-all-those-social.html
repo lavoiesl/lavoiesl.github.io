@@ -1,0 +1,38 @@
+---
+title: "Reducing the load of all those social plugins"
+tags: ["GitHub", "Social Media", "PHP"]
+date: 2012-08-13 19:47:00 -0400
+---
+
+Some javascript libraries are big and they pose a stress on the browser when they are loaded all at the same time.<br />
+<br />
+Most of these libraries suggest to load them in async.<br />
+<h3>
+Library examples</h3>
+<ul>
+<li>Google Analytics</li>
+<li>Google Maps</li>
+<li>Google Plus</li>
+<li>Facebook Like</li>
+<li>Twitter button</li>
+</ul>
+<h3>
+Problems with existing solution</h3>
+<ul>
+<li>A lot of ugly script tag with semi-minified code.</li>
+<li>Most of the library suggest the same trick so we see code duplication.</li>
+<li>You have to go copy-paste the code each time you start a new project.</li>
+<li>If you have multiple libraries, they will all fire at the same time, possibly causing a stress on the browser</li>
+<li>While the libraries are loading (usually with a lot of dependencies) the browser is sluggish and users probably want to read that article before clicking on 'Like'.</li>
+</ul>
+<h3>
+Solution</h3>
+<ul>
+<li>Load each library with a function taking an id, a url and a delay.</li>
+<li>Allow each library to have a different delay.</li>
+<ul>
+<li>You may want Google Maps to load only 200ms after the page, but the Facebook Like can wait a bit more.</li>
+</ul>
+<li><a href="https://github.com/lavoiesl/async-js-loader" target="_blank">Code on Github</a></li>
+<li><a href="http://jsfiddle.net/7T4e7/" target="_blank">Working example on jsfiddle</a></li>
+</ul>

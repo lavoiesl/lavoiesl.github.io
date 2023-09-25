@@ -1,0 +1,25 @@
+---
+title: "Wordpress MU-Plugins subdirectory loader"
+tags: ["Wordpress"]
+date: 2013-08-22 01:37:00 -0400
+---
+
+Wordpress’s <a href="http://codex.wordpress.org/Must_Use_Plugins" target="_blank">Must Use Plugins</a>&nbsp;are an easy way to include quick pieces of code that will always be included.<br />
+<br />
+While having my way with <a href="http://getcomposer.org/" target="_blank">Composer</a> and <a href="https://github.com/composer/installers" target="_blank">Composer Installers</a>, I stumbled upon a <a href="https://github.com/composer/installers/pull/76" target="_blank">Pull Request</a>&nbsp;about adding support for mu-plugins. I already commented saying that I don’t how I works for them, because Wordpress does not load mu-plugins in subdirectories, they must be at the root of <span style="font-family: Courier New, Courier, monospace;">/wp-content/mu-plugins/</span>.<br />
+<br />
+After searching a bit, I found that someone had already thought of <a href="https://github.com/coolamit/ig-mu-plugins-loader" target="_blank">loading mu-plugins recursively</a> but this solution was not enough for me :<br />
+<ol>
+<li>Calling a scandir each request seems wrong (performance-wise), it seems better to cache the results.</li>
+<li>It requires that each folder has a file named like "folder.php", which a lot of existing plugins don’t have.</li>
+<li>It does not list the included plugins in the admin so it is completely invisible.</li>
+</ol>
+<div>
+The solution below covers all this, any plugin may be simply dropped in mu-plugins and it will be required.<br />
+<br />
+Except normal installation (manually or via Composer), the only other step is to copy or symlink a file in your mu-plugins directory.<br />
+<br />
+<blockquote class="tr_bq">
+<a href="https://github.com/wemakecustom/wp-mu-loader">https://github.com/wemakecustom/wp-mu-loader</a></blockquote>
+<br />
+<br /></div>

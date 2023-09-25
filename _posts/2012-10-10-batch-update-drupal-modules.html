@@ -1,0 +1,28 @@
+---
+title: "Batch update modules or themes of Drupal 6/7 in command line"
+tags: ["Bash", "Drupal", "sysadmin"]
+date: 2012-10-10 06:28:00 -0400
+---
+
+To update Drupal modules, you need to download manually all modules and this can quickly become tedious. Especially if you have multiple modules and Drupal installations.<br />
+<br />
+I wrote a simple script that parse the module's page and install or update the most up-to-date version.<br />
+<br />
+This works for themes as well.&nbsp;To use it, simply go into a modules or themes folder and run one of the tool.<br />
+<br />
+Valid folders are:<br />
+<ul>
+<li>/modules</li>
+<li>/themes</li>
+<li>/sites/all/modules</li>
+<li>/sites/all/themes</li>
+<li>/sites/*/modules</li>
+<li>/sites/*/themes</li>
+</ul>
+<div>
+However, not that you should not try to update root folders, they are&nbsp;reserved for core modules and are updated with Drupal.</div>
+<div>
+<br />
+drupal-install-module.sh will install or update one module,&nbsp;drupal-update-modules.sh will batch update all modules in current folder.<br />
+<br /></div>
+<script src="https://gist.github.com/3733090.js"> </script>

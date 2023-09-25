@@ -1,0 +1,37 @@
+---
+title: "bcrypt with ircmaxell and how to use it"
+tags: ["Wordpress", "Drupal", "bcrypt", "Security", "Symfony2", "PHP"]
+date: 2012-10-12 09:55:00 -0400
+---
+
+<br />
+It is common knowledge that md5 is not secure for password hashing. It is almost worst than plaintext because it may falsly induce the impression of security. People aware of this usually also consider sha1 insecure and straightly go to sha256. Some techniques exist to add further security like adding a salt or hashing multiple times but ultimately the flaw remains: those methods are too quick. If you can hash a password in a fraction of a second, a standard bruteforce can as well. That’s why strong password security involves slow algorithms.<br />
+<br />
+I was aware of all those principles, but @ircmaxell, contributor to PHP, made a video on password hashing with a nice comparison of different hashing functions and it struck me how quickly even a sha512 is computed quickly. Before, I often considered bcrypt as a nice feature to add to a backend but I now realise it is a must.<br />
+<br />
+<iframe allowfullscreen="allowfullscreen" frameborder="0" height="330" src="http://www.youtube.com/embed/eNdW5HWBhG0" width="586"></iframe>
+
+<br />
+<br />
+And be sure to check <a href="http://blog.ircmaxell.com/2012/10/password-hashing-in-php-talk.html" target="_blank">his blog post</a> with the slides and some other discussion (yes, we have the same blog template).<br />
+<br />
+Now, this is all very cute, but Anthony talks about an easy API coming in PHP 5.5 so it will not be usable anytime soon.<br />
+<br />
+Here are plugins/ways to integrate bcrypt into several platforms:<br />
+<br />
+<ul>
+<li><a href="https://github.com/elnur/ElnurBlowfishPasswordEncoderBundle" target="_blank">Symfony2</a></li>
+<li><a href="http://codex.wordpress.org/Function_Reference/wp_hash_password" target="_blank">Wordpress</a></li>
+<li><a href="http://drupal.org/node/29706#comment-6445434" target="_blank">Drupal</a></li>
+</ul>
+<div>
+Two good libraries:</div>
+<div>
+<ul>
+<li><a href="http://www.openwall.com/phpass/" target="_blank">PHPass</a></li>
+<li><a href="https://github.com/ircmaxell/PHP-PasswordLib" target="_blank">PHP-PasswordLib</a>&nbsp;(5.3+)</li>
+</ul>
+</div>
+But really, it boils down to this:
+
+<script src="https://gist.github.com/3879295.js"> </script>

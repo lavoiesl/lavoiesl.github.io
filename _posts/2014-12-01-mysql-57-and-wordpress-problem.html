@@ -1,0 +1,21 @@
+---
+title: "MySQL 5.7 and Wordpress problem"
+tags: ["Wordpress", "hosting", "MySQL", "sysadmin"]
+date: 2014-12-01 14:58:00 -0500
+---
+
+If you upgrade to MySQL 5.7, you may encounter bugs with legacy software. Wordpress, which I also consider some kind of legacy software, does not handle this very well with its default settings.<br />
+<br />
+You may encounter the "Submit for review" bug where you cannot add new posts. It may be related to <a href="https://wordpress.org/support/topic/submit-for-review-4" target="_blank">permissions, auto_increment and other stuff</a>, but here is another case: bad date formats and invalid data altogether.<br />
+<br />
+In MySQL &lt;= 5.6, by default, invalid values are coalesced into valid ones when needed. For example, attempting to set a field NULL on a non-null string will result in empty string. Starting with MySQL 5.7, this is not permitted.<br />
+<br />
+Hence, if you want to upgrade to 5.7 and use all the goodies, you should consider putting it in a more compatible mode, adding this to your /etc/my.cnf:<br />
+<br />
+{% highlight ini %}
+[mysqld]
+# Default:
+# sql_mode = ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION
+sql_mode = ALLOW_INVALID_DATES,NO_ENGINE_SUBSTITUTION
+{% endhighlight %}
+<span style="font-family: inherit;">See <a href="http://dev.mysql.com/doc/refman/5.7/en/sql-mode.html#sql-mode-important" target="_blank">official documentation</a> for complete information</span>

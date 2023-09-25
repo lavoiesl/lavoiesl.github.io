@@ -1,0 +1,29 @@
+---
+title: "Organizing Javascript and CSS assets for optimal loading"
+tags: ["CSS", "Caching", "Javascript", "CDN", "Performance"]
+date: 2013-12-06 22:37:00 -0500
+---
+
+On <a href="http://www.reddit.com/r/webdev/comments/1s8lvx/dynosrc_eliminate_http_requests_for_javascript/" target="_blank">Reddit</a>, I recently stumbled upon <a href="http://dinosrc.it/" target="_blank">DynoSRC</a>&nbsp;which allows to serve only a differential Javascript file to your users. The concept is pretty amazing, but I find it a bit overkill. I believe this would only be useful for very high traffic websites with a lot of Javascript with small parts changing often. For example: Facebook, Asana, WolframAlpha, Google Maps, etc.<br />
+<br />
+For common websites however, you will probably be deploying a bunch of files at the same time. If you modified 10% of 40% of your files, the overhead of computing all those diffs (server side <i>and</i> client side) and having this system to manage is probably not worth it. If you are already compressing and grouping your assets and you have a CDN with proper HTTP caching, you are already pretty good. That can be hard though, especially the <i>proper</i>&nbsp;part.<br />
+<h3>
+Separate assets in 3 groups</h3>
+When I have complete control over my assets, I usually like to split all the assets in 3 groups:<br />
+<ol>
+<li><b>Very common libraries</b> (Bootstrap, jQuery, Modernizr). I serve them using public CDN like <a href="http://cdnjs.com/" target="_blank">cdnjs</a>. This is because it is very likely that the user will already have it in cache.</li>
+<li><b>External assets</b> specific to my project (Custom Bootstrap build, jQuery plugins, lightbox plugin, etc.). I bundle them all in a big <span style="font-family: Courier New, Courier, monospace;">libs.js/css</span>.</li>
+<li>Global&nbsp;<b>custom assets</b>&nbsp;written for this project, bundled in a single <span style="font-family: Courier New, Courier, monospace;">global.js/css</span>. It does not need to be <i>all</i>&nbsp;the custom assets, but stuff you will need on 80% of your requests. Specific code for specific pages can be included individually.</li>
+</ol>
+<div>
+<h3>
+Cache busting</h3>
+</div>
+I mostly use Amazon CloudFront as a CDN which handles query parameters so I set the expire date to one year and append a query parameter with the last git commit. (<span style="font-family: Courier New, Courier, monospace;">git rev-parse --short HEAD</span>). That way, a fresh file is used each time there is any change in the project’s code. See&nbsp;<a href="http://blog.lavoie.sl/2012/10/automatic-cache-busting-using-git-in-symfony2.html" target="_blank">Automatic cache busting using Git commit in Symfony2</a> for an example.<br />
+<h3>
+About combining</h3>
+People often talk about combining how it saves HTTP requests but consider that it also compresses a lot better if the files are all grouped together. You may be adding an overhead on the first page load but the rest of the website will be blazing fast.<br />
+<br />
+However, be careful not to overload the browser. Keep it mind that the Javascript will be executed on each page load. For example, to not try to initialize every modal window just in case one might pop up. See&nbsp;<a href="http://blog.lavoie.sl/2013/12/optimizing-page-loads-by-reducing-javascript.htmlhttp://blog.lavoie.sl/2013/12/optimizing-page-loads-by-reducing-javascript.html" target="_blank">Optimizing page loads by reducing the impact of the Javascript initialization</a>&nbsp;for more details.<br />
+<br />
+<br />

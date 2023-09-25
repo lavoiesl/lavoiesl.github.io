@@ -1,0 +1,20 @@
+---
+title: "Generate a random string of non-ambiguous numbers and letters."
+tags: ["PHP"]
+date: 2012-08-01 00:38:00 -0400
+---
+
+I needed to generate a unique code, suitable for URLs and somewhat short so it doesn’t scare the user.<br />
+<br />
+Doing <span style="font-family: 'Courier New', Courier, monospace;">md5(microtime())</span> is nice but it is 32 chars long. I could use base64, but it contains weird characters like "/" and "=".<br />
+<br />
+So how do I restrain the encoding to alphanumeric ? I found the inspiration from <a href="http://rossduggan.ie/blog/codetry/base-56-integer-encoding-in-php/">Ross Duggan</a> and I added a random function. He also removes a couple ambiguous chars, which I think is a nice touch.<br />
+<br />
+The choice of random could be discussed but the idea is there.<br />
+<br />
+UPDATE: As suggested by&nbsp;<a href="http://pvk.ca/">a friend</a>, it is simpler and a better use of the range of available entropy to generate each character&nbsp;separately. You can see the old version in the Gist.<br />
+<br />
+<script src="https://gist.github.com/3223665.js?file=CodeGenerator.php">
+</script>
+
+<a href="https://gist.github.com/3223665#file_code_generator_test.php" target="_blank">Tests included</a>

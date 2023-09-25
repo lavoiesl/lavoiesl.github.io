@@ -1,0 +1,28 @@
+---
+title: "Hosting a Composer repository for private Gitlab projects"
+tags: ["Composer", "Packagist", "Git", "Gitlab"]
+date: 2013-08-22 17:32:00 -0400
+---
+
+Small script that loops through all branches and tags of all projects in a Gitlab installation
+and if it contains a <code>composer.json</code>, adds it to an index.<br />
+<br />
+This is very similar to the behaviour of Packagist.org<br />
+<br />
+See <a href="https://github.com/wemakecustom/gitlab-composer/blob/master/examples/packages.json">example</a>.<br />
+<h3>
+Usage</h3>
+Simply include a composer.json in your project, all branches and tags respecting
+the <a href="http://getcomposer.org/doc/04-schema.md#version">formats for versions</a> will be detected.<br />
+<br />
+Only requirement is that the package <code>name</code> must be equal to the path of the project. i.e.: <code>my-group/my-project</code>.
+This is not a design requirement, it is mostly to prevent common errors when you copy a <code>composer.json</code>
+from another project without without changing its name.<br />
+<br />
+<h3>
+Caveats</h3>
+While your projects will be protected through SSH, they will be publicly listed.
+If you require protection of the package list, <a href="https://github.com/composer/composer/blob/master/doc/articles/handling-private-packages-with-satis.md">I suggest this reading</a>.<br />
+<br />
+<br />
+Check out the code:&nbsp;<a href="https://github.com/wemakecustom/gitlab-composer">https://github.com/wemakecustom/gitlab-composer</a> !

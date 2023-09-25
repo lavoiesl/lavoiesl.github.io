@@ -1,0 +1,183 @@
+---
+title: "GlusterFS performance on different frameworks"
+tags: ["Wordpress", "Drupal", "Filesystem", "hosting", "GlusterFS", "Symfony2", "Performance", "sysadmin"]
+date: 2013-12-06 23:46:00 -0500
+---
+
+A couple months ago, I did a <a href="http://blog.lavoie.sl/2013/04/lamp-cluster-distributed-filesystem.html" target="_blank">comparison of different distributed filesystems</a>. It came out that <a href="http://www.gluster.org/" target="_blank">GlusterFS</a> was the easiest and most feature full, but it was slow. Since I would really like to use it, I decided to give another chance. Instead of doing raw benchmarks using <a href="http://sysbench.sourceforge.net/" target="_blank">sysbench</a>, I decided to stress test a basic installation of the three PHP frameworks/CMS I use the most using&nbsp;<a href="http://www.joedog.org/siege-home/" target="_blank">siege</a>.<br />
+<br />
+My test environment:<br />
+<br />
+<ul>
+<li>MacBook Pro (Late 2003, Retina, i7 2.66 Ghz)</li>
+<li>PCIe-based Flash Storage</li>
+<li>2-4 virtuals machines using VMware Fusion 4, each with 2 GB of RAM.</li>
+<li><span style="font-family: Courier New, Courier, monospace;"><span style="font-family: Times;">Ubuntu 13.10 server edition with PHP 5.5 and OPCache enabled</span></span></li>
+<li>GlusterFS running on all VMs with a volume in replica mode</li>
+<li>The volume was mounted using <span style="font-family: Courier New, Courier, monospace;">nodiratime,noatime</span>&nbsp;using GlusterFS native driver (NFS was slower)</li>
+</ul>
+The test:<br />
+<ol>
+<li><span style="font-family: Courier New, Courier, monospace;">siege -c 20 -r 5 http://localhost/foo</span> &nbsp;# Cache warming</li>
+<li><span style="font-family: Courier New, Courier, monospace;">siege -c 20 -r 100 http://localhost/foo</span> &nbsp;# Actual test</li>
+</ol>
+<div>
+I then compared the local filesystem (inside the VM) vs the Gluster volume using these setups:</div>
+<div>
+<ul>
+<li>2 nodes, 4 cores per node</li>
+<li>2 nodes, 2 cores per node</li>
+<li>4 nodes, 2 cores per node</li>
+</ul>
+</div>
+The compared value is the total time to serve 20 x 100 requests in parallel.<br />
+All tests were ran 2-3 times while my computer was doing nothing and the results were very consistent.<br />
+<br />
+<table border="0" cellpadding="2" cellspacing="3" style="font-size: 0.9em; text-align: right; width: 100%;">
+        <tbody>
+<tr>
+                <th></th>
+                <th></th>
+                <th style="text-align: right;">Symfony</th>
+                <th style="text-align: right;">Wordpress</th>
+                <th style="text-align: right;">Drupal</th>
+                <th style="text-align: right;">Average</th>
+            </tr>
+<tr>
+                <th rowspan="2" style="text-align: center;">2 nodes<br />
+4 cores</th>
+                <th style="text-align: center;">Local</th>
+                <td bgcolor="#eee">2.91 s</td>
+                <td bgcolor="#eee">9.92 s</td>
+                <td bgcolor="#eee">5.39 s</td>
+                <td bgcolor="#eee">6.07 s</td>
+            </tr>
+<tr>
+                <th style="text-align: center;">Gluster</th>
+                <td bgcolor="#eee">10.84 s</td>
+                <td bgcolor="#eee">23.94 s</td>
+                <td bgcolor="#eee">7.81 s</td>
+                <td bgcolor="#eee">14.20 s</td>
+            </tr>
+<tr>
+                <th rowspan="2" style="border-top: 1px solid #ccc; text-align: center;">2 nodes<br />
+2 cores</th>
+                <th style="border-top: 1px solid #ccc; text-align: center;">Local</th>
+                <td bgcolor="#eee">5.41 s</td>
+                <td bgcolor="#eee">19.14 s</td>
+                <td bgcolor="#eee">9.67 s</td>
+                <td bgcolor="#eee">11.41 s</td>
+            </tr>
+<tr>
+                <th style="text-align: center;">Gluster</th>
+                <td bgcolor="#eee">25.05 s</td>
+                <td bgcolor="#eee">31.91 s</td>
+                <td bgcolor="#eee">15.17 s</td>
+                <td bgcolor="#eee">24.04 s</td>
+            </tr>
+<tr>
+
+            </tr>
+<tr>
+                 <th rowspan="2" style="border-top: 1px solid #ccc; text-align: center;">4 nodes<br />
+2 cores</th>
+                <th style="border-top: 1px solid #ccc; text-align: center;">Local</th>
+                <td bgcolor="#eee">5.57 s</td>
+                <td bgcolor="#eee">19.6 s</td>
+                <td bgcolor="#eee">9.79 s</td>
+                <td bgcolor="#eee">11.65 s</td>
+            </tr>
+<tr>
+                <th style="text-align: center;">Gluster</th>
+                <td bgcolor="#eee">30.56 s</td>
+                <td bgcolor="#eee">35.92 s</td>
+                <td bgcolor="#eee">18.36 s</td>
+                <td bgcolor="#eee">28.28 s</td>
+            </tr>
+<tr>
+
+            </tr>
+<tr>
+                 <th rowspan="4" style="border-top: 1px solid #ccc; text-align: center;">Local vs<br />
+Gluster</th>
+                <th style="border-top: 1px solid #ccc; text-align: center;">2 nodes, 4 cores</th>
+                <td bgcolor="#eee">273 %</td>
+                <td bgcolor="#eee">141 %</td>
+                <td bgcolor="#eee">45 %</td>
+                <td bgcolor="#eee">153 %</td>
+            </tr>
+<tr>
+                <th style="text-align: center;">2 nodes, 2 cores</th>
+                <td bgcolor="#eee">363 %</td>
+                <td bgcolor="#eee">67 %</td>
+                <td bgcolor="#eee">57 %</td>
+                <td bgcolor="#eee">162 %</td>
+            </tr>
+<tr>
+                <th style="text-align: center;">4 nodes, 2 cores</th>
+                <td bgcolor="#eee">449 %</td>
+                <td bgcolor="#eee">83 %</td>
+                <td bgcolor="#eee">88 %</td>
+                <td bgcolor="#eee">206 %</td>
+            </tr>
+<tr>
+                <th style="text-align: center;">Average</th>
+                <td bgcolor="pink">361 %</td>
+                <td bgcolor="pink">97 %</td>
+                <td bgcolor="pink">63 %</td>
+                <td bgcolor="pink">174 %</td>
+            </tr>
+<tr>
+                <th rowspan="2" style="border-top: 1px solid #ccc; text-align: center;">2 nodes vs<br />
+4 nodes</th>
+                <th style="border-top: 1px solid #ccc; text-align: center;">Local</th>
+                <td bgcolor="lightblue">3 %</td>
+                <td bgcolor="lightblue">2 %</td>
+                <td bgcolor="lightblue">1 %</td>
+                <td bgcolor="lightblue">2 %</td>
+            </tr>
+<tr>
+                <th style="text-align: center;">Gluster</th>
+                <td bgcolor="lightgreen">22 %</td>
+                <td bgcolor="lightgreen">13 %</td>
+                <td bgcolor="lightgreen">21 %</td>
+                <td bgcolor="lightgreen">19 %</td>
+            </tr>
+<tr>
+                <th rowspan="2" style="border-top: 1px solid #ccc; text-align: center;">4 cores vs<br />
+2 cores</th>
+                <th style="border-top: 1px solid #ccc; text-align: center;">Local</th>
+                <td bgcolor="fuchsia">86 %</td>
+                <td bgcolor="fuchsia">93 %</td>
+                <td bgcolor="fuchsia">79 %</td>
+                <td bgcolor="fuchsia">86 %</td>
+            </tr>
+<tr>
+                <th style="text-align: center;">Gluster</th>
+                <td bgcolor="yellow">131 %</td>
+                <td bgcolor="yellow">33 %</td>
+                <td bgcolor="yellow">94 %</td>
+                <td bgcolor="yellow">86 %</td>
+            </tr>
+</tbody>
+    </table>
+<br />
+<div>
+<a href="https://docs.google.com/spreadsheet/ccc?key=0Avw4c4aLV1RjdENET25WTVRsR0lCcGozUTduQ2huNWc" target="_blank">Google spreadsheet</a></div>
+<div>
+<br /></div>
+<div>
+Observations:</div>
+<div>
+<ol>
+<li><span style="color: red;">Red</span>&nbsp;—&nbsp;<i>Wordpress</i>&nbsp;and&nbsp;<i>Drupal</i>&nbsp;have an acceptable loss in performance under Gluster, but&nbsp;<i>Symfony</i>&nbsp;is catastrophic.</li>
+<li><span style="color: blue;">Blue</span> —&nbsp;The <i>local</i>&nbsp;tests are slightly slower when using 4 nodes vs 2 nodes. This is normal, my computer had 4 VMs running.</li>
+<li><span style="color: green;">Green</span> —&nbsp;The <i>gluster</i>&nbsp;tests are 20% slower on a 4 node setup because there is more communication between the nodes to keep them all in sync. 20% overhead for double the nodes isn’t that bad.</li>
+<li><span style="color: purple;">Purple</span> —&nbsp;The&nbsp;<i>local</i>&nbsp;tests are 85% quicker using 4 cores vs 2 cores. A bit under 100% is normal, there is always some overhead to parallel processing.</li>
+<li><span style="color: gold;">Yellow</span> —&nbsp;For the <i>Gluster</i>&nbsp;tests,&nbsp;<i>Symfony</i>&nbsp;and <i>Drupal</i>&nbsp;scale very well with the number of nodes, but <i>Wordpress</i>&nbsp;is stalling, I am not sure why.</li>
+</ol>
+<div>
+<br /></div>
+</div>
+<div>
+I am still not sure why <i>Symfony</i>&nbsp;is so much slower on GlusterFS, but really, I can’t use it in production for the moment because I/O is already the weak point of my infrastructure. I am in the process of looking for a different hosting solution, maybe it will be better then.</div>

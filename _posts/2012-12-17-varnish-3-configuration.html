@@ -1,0 +1,28 @@
+---
+title: "Varnish 3 configuration"
+tags: ["Varnish", "Google Analytics", "sysadmin"]
+date: 2012-12-17 12:34:00 -0500
+---
+
+Shared caches are pretty strict when it comes to caching or not a request. This is good, otherwise it would cache requests that are not meant to be cached.<br />
+<br />
+However, there is some things that can be done to improve cacheability:<br />
+<br />
+<ol>
+<li>Ignore Google Analytics cookies</li>
+<li>Remove empty Cookie line</li>
+<li>Normalize Accept-Encoding header</li>
+<li>Allow replying with a stale response if the backend is slow</li>
+</ol>
+<div>
+Bonus:</div>
+<div>
+<ol>
+<li>Remove some headers to reduce header size and hide some details about the server (security).</li>
+<li>Add a debug header to help understand why a request is cached or not.</li>
+</ol>
+<div>
+<br /></div>
+</div>
+<br />
+<script src="https://gist.github.com/4320088.js"></script>

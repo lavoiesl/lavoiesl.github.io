@@ -1,0 +1,55 @@
+---
+title: "Configure ElasticSearch on a single shared host and reduce memory usage"
+tags: ["VPS", "ElasticSearch", "sysadmin"]
+date: 2012-09-12 10:47:00 -0400
+---
+
+<a href="http://www.elasticsearch.org/" target="_blank">ElasticSearch</a>&nbsp;is a powerful, yet easy to use, search engine based on Lucene. Compared to others, it features&nbsp;a JSON API and&nbsp;wonderful scaling capabilities via a distributed scheme and the defaults are aimed towards such scalability.<br />
+<br />
+However, you may want to use ElasticSearch on a single host, mixed with your Web server, database and everything. The problem is that ES is quite a CPU and memory hog by default. Here’s what I found through trial and error and some heavy search.<br />
+<br />
+This idea is to give ES some power, but leave some for the rest of the services. At the same time, if you tell ES that it can grab half of your memory and the OS needs some, ES will get killed, which isn’t nice.<br />
+<br />
+My host was configured this way:<br />
+<ul>
+<li>ElasticSearch 0.19.9, official .deb package</li>
+<li>Ubuntu 12.04</li>
+<li>1.5GB of RAM</li>
+<li>Dual-Core 2.6ghz</li>
+<li>LEMP stack</li>
+</ul>
+<div>
+After installing the official package:</div>
+<ol>
+<li><span style="font-family: inherit;">Allow user&nbsp;</span><span style="font-family: Courier New, Courier, monospace;">elasticsearch</span><span style="font-family: inherit;">&nbsp;to lock memory</span></li>
+<ol>
+<li><span style="font-family: inherit;">Edit </span><span style="font-family: Courier New, Courier, monospace;">/etc/security/limits.conf</span><span style="font-family: inherit;"> and add:</span><br /><span style="font-family: Courier New, Courier, monospace;">elasticsearch hard memlock 100000</span></li>
+</ol>
+<li>Edit the init script: <span style="font-family: Courier New, Courier, monospace;">/etc/init.d/elasticsearch</span></li>
+<ol>
+<li>Change&nbsp;<span style="font-family: Courier New, Courier, monospace;">ES_HEAP_SIZE</span> to 10-20% of your machine, I used <span style="font-family: Courier New, Courier, monospace;">128m</span></li>
+<li><strike>Change </strike><span style="font-family: Courier New, Courier, monospace; text-decoration: line-through;">MAX_OPEN_FILES</span><strike> to something sensible. </strike><br /><strike>Default is 65536, I used 15000</strike><br />Update: I asked <a href="https://groups.google.com/forum/?fromgroups=#!topic/elasticsearch/OqqlSWFH9RA" target="_blank">the question on ElasticSearch group</a> and it may be a bad idea, without giving any advantage.</li>
+<li>Change&nbsp;<span style="font-family: Courier New, Courier, monospace;">MAX_LOCKED_MEMORY</span> to <span style="font-family: Courier New, Courier, monospace;">100000</span> &nbsp;(~100MB)<br />Be sure to set it at the same value as <b>1.1</b></li>
+<li>Change <span style="font-family: Courier New, Courier, monospace;">JAVA_OPTS</span> to <span style="font-family: Courier New, Courier, monospace;">"-server"</span><br />I don’t exactly know why, but if you check in the logs, you will see Java telling you to do so.</li>
+</ol>
+<li>Edit the config file:&nbsp;<span style="font-family: 'Courier New', Courier, monospace;">/etc/elasticsearch/</span><span style="font-family: 'Courier New', Courier, monospace;">elasticsearch.yml</span></li>
+<ol>
+<li>Disable replication capabilities</li>
+<ol>
+<li><span style="font-family: Courier New, Courier, monospace;">index.number_of_shards: 1</span></li>
+<li><span style="font-family: Courier New, Courier, monospace;">index.number_of_replicas: 0</span></li>
+</ol>
+<li><span style="font-family: inherit;">Reduce memory usage</span></li>
+<ol>
+<li><span style="font-family: Courier New, Courier, monospace;">index.term_index_interval: 256</span></li>
+<li><span style="font-family: Courier New, Courier, monospace;">index.term_index_divisor: 5</span></li>
+</ol>
+<li><span style="font-family: inherit;">Ensure ES is binded to localhost</span><br /><span style="font-family: Courier New, Courier, monospace;">network.host: 127.0.0.1</span></li>
+<li>Enable blocking TCP because you are always on localhost<br /><span style="font-family: Courier New, Courier, monospace;">network.tcp.block: true</span></li>
+</ol>
+<li><span style="font-family: inherit;">Flush and restart the server</span></li>
+<ol>
+<li><span style="font-family: Courier New, Courier, monospace;">curl localhost:9200/_flush</span></li>
+<li><span style="font-family: Courier New, Courier, monospace;">/etc/init.d/elasticsearch restart</span></li>
+</ol>
+</ol>

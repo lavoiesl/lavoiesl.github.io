@@ -1,0 +1,27 @@
+---
+title: "PHP script to replace site url in Wordpress database dump, even with WPML"
+tags: ["Bash", "Wordpress"]
+date: 2012-07-12 12:22:00 -0400
+---
+
+Wordpress has the nice habit of storing every URL with its full path in the database.
+You sure can hardcode the HOME_URL and SITE_URL in the wp-config.php but it won't change the references to your medias, serialized strings, encoded HTML, etc.
+<br />
+<br />
+The only solution is really just to edit the database. At least, I haven't found a better solution.
+<br />
+
+<h2>Usage</h2>
+{% highlight bash %}
+wordpress-change-url.php http://old-domain.com https://new-domain.com < database.orig.sql > database.new.sql
+{% endhighlight %}
+
+<p><em>Or</em></p>
+
+{% highlight bash %}
+wordpress-change-url.php database.orig.sql https://new-domain.com > database.new.sql
+{% endhighlight %}
+
+<p><em>Will output all remaining mentions of http://old-domain.com to stderr</em></p>
+<br />
+<script src="https://gist.github.com/2227920.js"> </script>

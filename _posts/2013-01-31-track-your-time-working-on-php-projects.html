@@ -1,0 +1,75 @@
+---
+title: "Track your time working on PHP projects"
+tags: ["Development tool", "Management", "Meta", "PHP", "Time tracking"]
+date: 2013-01-31 02:07:00 -0500
+---
+
+Have you ever had a project manager? You know, the kind of person that comes to bug you about your timesheet not being properly done and how important it is? Well, as annoying as they can be, we must thank them and give them credit because it is indeed important. Even if you are a freelancer, you want to know roughly how much time you spent on a project to know if you billed the client correctly.<br />
+<br />
+For years I hated timesheets. I am not&nbsp;particularly thorough at doing them either, so it just gets worse and worse. Fear not, I think I may have found a neat solution. The idea is to track when a PHP file is executed and log which project it belongs to.<br />
+<br />
+To use my script, just follow the instructions in comments, but basically you will add it as a <span style="font-family: Courier New, Courier, monospace;">auto_prepend_file</span> in your <span style="font-family: Courier New, Courier, monospace;">php.ini</span> and it will check if the current script is watched and to which project it belongs to.<br />
+<br />
+It is using a very basic file structure without even writing content. It is simply creating folder and files so you should not see the overhead. In fact, I tested that it creates an overhead of only about <b>0.3ms</b> (on a SSD).<br />
+<br />
+It also has a threshold to count as continuous several minutes without activity (more details in comments).<br />
+<br />
+So lets say you have this structure:<br />
+<ul>
+<li><span style="font-family: Courier New, Courier, monospace;">/var/www/client-A/project-1</span></li>
+<li><span style="font-family: Courier New, Courier, monospace;">/var/www/client-A/project-2</span></li>
+<li><span style="font-family: Courier New, Courier, monospace;">/var/www/client-B/project-1</span></li>
+</ul>
+<div>
+Well with this script, configured to watch folder <span style="font-family: Courier New, Courier, monospace;">/var/www</span>, any PHP called in it would be tracked and you would end up with something like:</div>
+<div>
+<ul>
+<li>2013-01-30</li>
+<ul>
+<li>client-A&nbsp;</li>
+<ul>
+<li>project-1: Time: 3:30</li>
+<li>project-2: Time: 1:30</li>
+</ul>
+<li>client-B</li>
+<ul>
+<li>project-1: Time: 2:00</li>
+</ul>
+</ul>
+<li>2013-01-31</li>
+<ul>
+<li>client-B</li>
+<ul>
+<li>project-1: Time: 8:30</li>
+</ul>
+</ul>
+</ul>
+<div>
+Very very useful to build timesheets.<br />
+<br />
+<h3>
+Downside</h3>
+Now, of the people I have showed this, a lot have said that it tracks a too narrow portion of site development. From what I am used to, I have to disagree. Here's a breakdown of events that would be tracked:<br />
+<ul>
+<li>Looking or configuring the CMS</li>
+<li>Testing some CSS/JS/HTML/PHP</li>
+<li>Testing a new plugin</li>
+<li>An AJAX request that runs on the page</li>
+</ul>
+<div>
+And what would not:</div>
+<div>
+<ul>
+<li>Developing a complicated library</li>
+<li>Documenting</li>
+<li>Designing</li>
+</ul>
+<div>
+Well, I rarely design, it’s someone else who does it. Developing a complicated library? It is kinda rare, and when I do, it is linked to some project and I will end up testing it at the same time anyway. The real issue is documentation, but I tend to write it as I go. The threshold helps prevent those events won't be noticed, but in the end, the tool is meant to help, not to be an exact representation of your time.</div>
+</div>
+</div>
+</div>
+<div>
+<br />
+<br /></div>
+<script src="https://gist.github.com/4680788.js"></script>

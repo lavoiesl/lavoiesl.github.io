@@ -1,0 +1,71 @@
+---
+title: "Optimizing page loads by reducing the impact of Javascript initialization"
+tags: ["Optimization", "Javascript"]
+date: 2013-12-06 22:31:00 -0500
+---
+
+So you combined all your Javascript files in the hope it will speed up page loads ? Well for sure the <i>download</i>&nbsp;will be faster, but the browser still needs to execute all this Javascript ! There are simple tricks to help reduce the impact on page loads.<br />
+<h3>
+Reduce DOM queries and manipulations</h3>
+<div>
+With libraries like jQuery, it is really easy to bind all sorts of events on complicated selectors. The thing is, the browser has to query to DOM like a mad man to find out all elements. Things get even worse when you add elements or query information like height or position, which triggers reflows and repaints. Try to be minimal.</div>
+<h3>
+Make initialization conditional</h3>
+<div>
+If you have a big block of code that needs to be executed only in specific cases.</div>
+<div>
+<ul>
+<li>Add a class to the body element and verify it. <br />Ex: <span style="font-family: Courier New, Courier, monospace;">jQuery(document.body).hasClass('user-logged-in');</span></li>
+<li>Check existence of important sections.<br />Ex: <span style="font-family: Courier New, Courier, monospace;">document.getElementById('comments');</span></li>
+</ul>
+<h3>
+<span style="font-family: inherit;">Delay initialization of non-essential parts</span></h3>
+</div>
+<div>
+<ul>
+<li>Delay heavy libraries like Google Maps or Facebook Like.<br />See this&nbsp;<a href="http://blog.lavoie.sl/2012/08/reducing-load-of-all-those-social.html" target="_blank">post about loading social libraries</a>.</li>
+<li>Use&nbsp;<a href="https://developer.mozilla.org/en/docs/Web/API/window.requestAnimationFrame" target="_blank">requestAnimationFrame</a>&nbsp;for animations.</li>
+<li>Use&nbsp;<span style="font-family: Courier New, Courier, monospace;">setTimeout(function(){}, 1);</span>&nbsp;to push the execution to the async queue, delaying the execution.</li>
+<li>Use <a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Performance/Using_web_workers" target="_blank">Web workers</a>&nbsp;to run the&nbsp;function to run in background, without hanging the rest of the script. This also leverages multithread processing.</li>
+</ul>
+<h3>
+Use delegated event listeners</h3>
+<div>
+jQuery offers <a href="http://api.jquery.com/on/" target="_blank">delegated event listeners</a>&nbsp;where the listener is on an ancestor element. Your favorite library probably has it as well.</div>
+<div>
+<br /></div>
+<div>
+A good example is reply buttons in a comments thread:&nbsp;</div>
+<div>
+<span style="font-family: Courier New, Courier, monospace;">jQuery('#comments').on('click', '.reply', function(){</span><span style="font-family: 'Courier New', Courier, monospace;">});</span></div>
+<div>
+<br /></div>
+<div>
+How it works is that the <i>click</i>&nbsp;bubbles up to the <i>comments</i>&nbsp;element and there it verifies if the originally clicked element matches the selector.</div>
+<div>
+<br /></div>
+<div>
+This is extremely beneficial because you have much less DOM query at load and less event listeners to attach.</div>
+<h3>
+Initialize only on first use</h3>
+</div>
+<div>
+Let’s say you have a complicated modal dialog that needs&nbsp;initialization and this process may take about 50ms. This is not very noticeable, but if you have other things to do after, you may well get over the <a href="http://www.nngroup.com/articles/response-times-3-important-limits/" target="_blank">100ms rule</a>, so you wouldn’t want to do it every time a modal is popped. For the same idea, you wouldn’t want to initialize 2-3 of those things at page load. This is why you need <span style="font-family: Courier New, Courier, monospace;">setupOnce</span>.&nbsp;</div>
+<div>
+<br /></div>
+<div>
+Inspired by the <span style="font-family: Courier New, Courier, monospace;">once</span> function from <span style="font-family: Courier New, Courier, monospace;">Underscore</span>, this utility will group two callbacks: one that is ran the first time it is called and only that is called every time.<br />
+<div>
+<br /></div>
+<div>
+<br /></div>
+<script src="https://gist.github.com/lavoiesl/6241939.js?file=setupOnce.js"></script>
+
+<script src="https://gist.github.com/lavoiesl/6241939.js?file=examples.js"></script>
+
+<br />
+<h3>
+Mobile</h3>
+</div>
+<div>
+Mobile is even more critical because 200-700ms is spent doing the initial HTTP connection. For an in-depth look, see <a href="https://docs.google.com/a/lavoie.sl/presentation/d/1IRHyU7_crIiCjl0Gvue0WY3eY_eYvFQvSfwQouW9368/present" target="_blank">this presentation by <complete id="goog_288393184">@igrigorik from&nbsp;</complete>Google</a>.</div>

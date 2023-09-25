@@ -1,0 +1,61 @@
+---
+title: "PHP Coding standards"
+tags: ["Cleanup", "PHP-FIG", "PHP", "PSR"]
+date: 2012-08-13 20:33:00 -0400
+---
+
+For more than a year, some influent PHP programmers of the most active of the most active projects in the community have been working on coding standards.<br />
+<br />
+The group is name PHP Framework Interoperability Group and is composed of, but not limited to, authors from these projects:<br />
+<ul>
+<li>phpBB</li>
+<li>PEAR</li>
+<li>Doctrine</li>
+<li>Composer / Packagist</li>
+<li>Joomla</li>
+<li>Drupal</li>
+<li>CakePHP</li>
+<li>Amazon Web Services SDK</li>
+<li>Symfony</li>
+<li>Zend Framework</li>
+</ul>
+<h3>
+Why coding standards?</h3>
+You may be a fan, for example of naming your functions with underscore or use tab indentation, but really this is not point. The goal is to be able to use code from other authors and projects without having to "fix" the code style to be consistent with your project.<br />
+<br />
+In the future, the group also aims at providing some interfaces so implementations from different can work together.<br />
+<h3>
+Accepted standards</h3>
+<div>
+<ul>
+<li><a href="https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-0.md" target="_blank">PSR-0</a>&nbsp;Code structure, Class and function naming</li>
+<li><a href="https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-1-basic-coding-standard.md" target="_blank">PSR-1</a> Basic coding standards</li>
+<li><a href="https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-2-coding-style-guide.md" target="_blank">PSR-2</a> Coding style standards (mostly whitespace)</li>
+</ul>
+</div>
+See full repository: <a href="https://github.com/php-fig/fig-standards">https://github.com/php-fig/fig-standards</a><br />
+<h3>
+I don’t want to rewrite all my code!</h3>
+<div>
+Well, you probably don’t need to.</div>
+<div>
+<br /></div>
+<div>
+Chances are that you are already pretty near PSR-0 if you have organized your classes to be autoloaded. If you haven’t, you should really look forward to it, autoloading eliminate the need to require classes, simplifying a lot class dependencies.</div>
+<div>
+<br /></div>
+<div>
+After complying to PSR-0, there’s a tool that will do almost all the hard work for you by fixing all the whitespace. It is called <a href="https://github.com/fabpot/PHP-CS-Fixer" target="_blank">PHP-CS-Fixer</a> and is from Fabien Potencier, member of the group.</div>
+<br />
+You can try <a href="http://pear.php.net/package/PHP_CodeSniffer" target="_blank">PHP_CodeSniffer</a>, but personally a find it a pain to use because it only 'validates' and make some errors. It should probably need a rewrite.<br />
+<br />
+Some editors have plugins:<br />
+<ul>
+<li><a href="https://github.com/benmatselby/sublime-phpcs" target="_blank">Sublime Text</a></li>
+<li><a href="https://github.com/scottkimGit/php-codesniffer-tmbundle" target="_blank">TextMate</a></li>
+</ul>
+You can also add a <a href="https://github.com/LilaConcepts/LilaConceptsBestPracticeBundle/blob/master/hooks/pre-commit-cs-fixer" target="_blank">Git commit hook</a> to patch on-the-fly.<br />
+<h3>
+Further reading</h3>
+Great blog post from&nbsp;<a href="http://paul-m-jones.com/archives/2420" target="_blank">Paul M. Jones</a>.<br />
+<br />

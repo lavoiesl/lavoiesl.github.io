@@ -1,0 +1,92 @@
+---
+title: "The little quirks of using Twitter Bootstrap"
+tags: ["CSS", "Twitter Bootstrap"]
+date: 2012-11-20 13:10:00 -0500
+---
+
+<a href="http://twitter.github.com/bootstrap/" target="_blank">Twitter Bootstrap</a> is awesome to get started quickly on a custom layout. It had a lot of features that are very good best-practices like intuitive colours for buttons, error highlights and some good normalizations. However, like any CSS framework, it has its quirks. Here are some rules that are applied on elements without any classes and the issues they may cause. Keep in mind that this&nbsp;<span style="white-space: pre-wrap;">Bootstrap v2.1.1 and it in no way an exhaustive list nor a bug list. It is simply some things to put some extra attention on.</span><br />
+<br />
+
+{% highlight css %}
+input[type="file"] {
+  height: 30px;
+  line-height: 30px;
+}{% endhighlight %}
+
+On Chrome and Firefox, I had problems where the <i>Browse</i>&nbsp;button was not correctly vertically aligned.<br />
+<hr />
+
+{% highlight css %}
+h1,h2,h3,h4,h5,h6 { text-rendering: initial; }
+{% endhighlight %}
+
+May cause some troubles with custom fonts. <br />
+I noticed this problem with <a href="http://www.google.com/webfonts">Google Webfont</a> Advent Pro.
+<br />
+<hr />
+
+{% highlight css %}
+img { max-width: 100%; }
+{% endhighlight %}
+
+May cause some troubles if your wrapper box is smaller. <br />
+You may also see flicker and reflows during loading while the size is readjusting.<br />
+To correct this problem, you should always specify height and width attributes, but sometimes it is not possible.
+<br />
+<hr />
+
+{% highlight css %}
+button, input { line-height: normal; }
+{% endhighlight %}
+
+Will cause button and input not to inherit the line-height specfied in parent.
+<br />
+<hr />
+
+{% highlight css %}
+h1 { font-size: 36px; line-height: 40px; }
+{% endhighlight %}
+
+Occurs with all headers. Since the line-height is not in em, you will need to update it manually if you change the font-size.
+<br />
+<hr />
+
+{% highlight scss %}
+input, select, textarea {
+    &[readonly], &[disabled] {
+      cursor: not-allowed;
+    }
+}
+{% endhighlight %}
+
+This is not a problem in itself, but you may not want this cursor.<br />
+I stumbled upon it when I was trying to style an input as a seemlessly inline element.
+<br />
+<br />
+<hr />
+And of course all of the rules for text-shadow, border-radius, box-shadow, etc.
+<br />
+All in all, I found myself using rules like theses quite often.<br />
+The exact rules will depend on your usage, but you can see the point.<br />
+They are not specific to Twitter Bootstrap.
+<br />
+
+{% highlight css %}
+.reset-font {
+    font-size: inherit;
+    font-family: inherit;
+    line-height: inherit;
+}
+.reset-size {
+    height: auto;
+    width: auto;
+    max-height: auto;
+    max-width: auto;
+}
+.reset-effects {
+    text-shadow: none;
+    box-shadow: none;
+    border-radius: none;
+}
+{% endhighlight %}
+

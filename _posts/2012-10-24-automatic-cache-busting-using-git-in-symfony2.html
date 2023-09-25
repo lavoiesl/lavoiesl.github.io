@@ -1,0 +1,26 @@
+---
+title: "Automatic cache busting using Git commit in Symfony2"
+tags: ["Symfony2", "PHP"]
+date: 2012-10-24 14:03:00 -0400
+---
+
+<h3>
+Cache busting</h3>
+<div>
+Cache busting is to rewrite a URL for an asset (JS, CSS, images, etc) so that is unique. This way, you can cache them for as long as you want. If the URL changes, it will use the new file.</div>
+<h3>
+Symfony</h3>
+Symfony includes a <a href="http://symfony.com/doc/master/reference/configuration/framework.html#ref-framework-assets-version" target="_blank">cache busting mechanism</a>&nbsp;which appends a GET parameter to your asset,&nbsp;but you must remember to increment it and it could quickly become a pain.<br />
+<h3>
+Incrementing using Git version</h3>
+The idea is to use the current Git commit as a version number using&nbsp;<span style="font-family: Courier New, Courier, monospace;">git rev-parse --short HEAD</span><span style="font-family: inherit;">. We can call this in the command line using PHP. Don’t worry, in production mode, Symfony caches the compiled configs, so it won’t be checked until you clear the cache.</span><br /><br />
+<script src="https://gist.github.com/3947737.js"> </script>
+<h3>
+Caveats</h3>
+<div>
+<ul>
+<li>All assets will be reset with every commit. Not a big deal since when you deploy, you usually touch a lot of assets.</li>
+<li>By default, Symfony uses a GET parameter, which is not cached by all CDNs. <br />However, Amazon CloudFront now supports them.<br />Otherwise, it is possible to <a href="http://stackoverflow.com/questions/11681835/assetic-automatic-cache-busting-without-query" target="_blank">rewrite using a folder prefix</a>, but it can get tricky.</li>
+<li>You must be using Git (!), including on your production server. Otherwise, it could be possible to achieve something similar by adding a Git hook on commits, writing version in a file, and loading this file instead.</li>
+</ul>
+</div>

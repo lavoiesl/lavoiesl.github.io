@@ -1,0 +1,25 @@
+---
+title: "Using PHP’s mb_detect_encoding to cleanup your data"
+tags: ["UTF-8", "PHP"]
+date: 2014-06-16 14:29:00 -0400
+---
+
+Ever heard of iso-8859-1 ? Yeah… that nightmare… With it, my name ends up more often than not…&nbsp;SÃ©bastien. The <a href="https://www.youtube.com/watch?v=MijmeoH9LT4" target="_blank">computers gurus came up one day with UTF-8</a>&nbsp;and all our problems should have been solved; one encoding to rule them all.<br />
+<br />
+Sweet, let’s all switch to UTF-8 ! Oh wait… legacy projects… PHP internal encoding is still not UTF-8 and functions like strlen() are still not able to properly process multi-bytes strings. It is being said that <a href="http://philsturgeon.co.uk/blog/2013/01/php-6-pissing-in-the-wind" target="_blank">UTF-8 should land in PHP 6</a>, but in the mean time, we still have to do something.<br />
+<br />
+I am currently working on a big project with a lot of spaghetti-legacy code with <i>a lot</i> of entry points to the database. Almost all the data is stored in one big table, but not encoded uniformly. When I started working on it, tables had fields with a combinaison of &nbsp;ascii_bin, utf8_general_ci, latin_general_ci and latin_<b>swedish</b>_ci … and we are in Canada ! In all those fields, data was stored with absolutely no guaranty of its encoding. Data was retrieved and passed through a series of UTF-8 encode/decode and stuff like this:<br />
+<br />
+<span style="font-family: Courier New, Courier, monospace;">if (strpos($string, 'Ã©') !== false) {</span><br />
+<span style="font-family: Courier New, Courier, monospace;">&nbsp; &nbsp;$string = utf8_decode($string);</span><br />
+<span style="font-family: Courier New, Courier, monospace;">}</span><br />
+<span style="font-family: Courier New, Courier, monospace;"><br /></span>
+I eventually managed to change every field, change all database connections and remove and traces of encode/decode. However, I still had the problem of having data not encoded properly in <i>some</i>&nbsp;rows/columns. You may or may not be familiar with mb_detect_encoding, here is a very simple trick:<br />
+<br />
+<script src="https://gist.github.com/lavoiesl/d7a41597c8023978cab7.js"></script>
+
+Once you have detected the encoding, use iconv to convert it. This crunched through my 1GB database in no time and I was then sure that everything was in UTF-8.<br />
+<br />
+Of course, this is an example with a database, it can work with any data. This script could also be faster if all updates where done at the same time for each row.<br />
+<br />
+Please, save yourself some trouble, make sure all user content is in UTF-8.

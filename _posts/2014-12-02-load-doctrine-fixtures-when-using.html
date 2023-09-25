@@ -1,0 +1,15 @@
+---
+title: "Load Doctrine Fixtures when using Migrations in Symfony"
+tags: ["Data Fixtures", "Development tool", "Symfony2", "PHP", "Doctrine"]
+date: 2014-12-02 13:55:00 -0500
+---
+
+Using <span style="font-family: Courier New, Courier, monospace;">app/console&nbsp;doctrine:migrations:migrate</span><span style="font-family: inherit;">&nbsp;is really easy and trouble free for everybody, but those tables are often empty and they need some data to be of any use. A common example is a table of countries or user roles.</span><br />
+<span style="font-family: inherit;"><br /></span>
+However, once a project is started, it is often hard to use fixtures because it messes with your data. The trick here is to load only the fixtures you need, only when needed by the migration. This way, a new developer starting with the project could simply run the migrations and have a database ready for testing.<br />
+<br />
+Here is a simple way of loading those fixtures on postUp. You need to pass an array of initialized fixture classes, Doctrine will figure the way to order them by itself.<br />
+<br />
+This is only a proof of concept, it would need some refactoring and testing to be production ready, but you can get the idea.<br />
+<br />
+<script src="https://gist.github.com/lavoiesl/77375da08b3274aa6440.js"></script>

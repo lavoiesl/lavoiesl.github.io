@@ -1,0 +1,17 @@
+---
+title: "Starting a text editor from inside a Virtual Machine"
+tags: ["Development tool", "Vagrant"]
+date: 2014-11-05 17:24:00 -0500
+---
+
+Using Vagrant, Docker or other virtual development environment is becoming quite popular. However, a drawback of this is that you cannot start a visual text editor on your main machine because heh, the files are not there. Purist may tell you that you should be using Vim or Emacs, but I like Sublime, I want to keep using it.<br />
+<br />
+A simple trick I came up with it to call my text editor by SSH using path translation. Of course, you will need to translate the paths and otherwise adapt it to your needs, but this should get you started:<br />
+<br />
+<script src="https://gist.github.com/lavoiesl/c01b16b5f875906a6d82.js"></script>
+
+In this example, /media/data/projects on the Guest exists as ~/projects on the Host and ~ on the Host exists as /media/home on the Guest.<br />
+<br />
+Make sure you have ~/.ssh/authorized_keys and ForwardAgent properly setup to avoid password prompts each time.<br />
+<br />
+You could also use this trick to open a webpage by using the “open” program on Mac. Equivalent exists on most Linux distros.

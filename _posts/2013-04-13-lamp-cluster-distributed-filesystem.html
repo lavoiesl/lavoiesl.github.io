@@ -1,0 +1,247 @@
+---
+title: "LAMP Cluster — Distributed filesystem"
+tags: ["Linux", "NFS", "Filesystem", "hosting", "GlusterFS", "Csync2", "Lustre", "DRBD", "sysadmin"]
+date: 2013-04-13 17:49:00 -0400
+---
+
+This post is part of:&nbsp;<a href="http://blog.lavoie.sl/2013/03/guide-to-replicated-lamp-stack-hosting-with-failover.html">Guide to replicated LAMP stack hosting with failover</a>
+<br />
+<br />
+<br />
+The core concept of choosing a filesystem for a Web hosting cluster is to eliminate single points of failure, but sometimes it is just not easy like that. A true distributed system will still need to be performant, at least on reads. The problem relies in the fact that the bottleneck if very often the I/O so if your filesystem is not performant, you will end up spending a fortune on scaling, without gaining real performance.<br />
+<h3>
+Making priorities</h3>
+You can’t have everything, so start by making a list of priorities. Different systems will have different needs, but I figured I could afford a possibility of failure as long as the system could be restorable since I would be keeping periodic backups.
+
+<br />
+<ol>
+<li>Low maintenance</li>
+<ul>
+<li>It must be possible to read/write from any folder without adding a manifest for each site.</li>
+<li>The system must be completely autonomous and require no maintenance from a sysadmin. (Conflict management).</li>
+</ul>
+<li>Simple / Cheap</li>
+<ul>
+<li>Must be installed on each Web nodes or a maximum of 2 small/medium extra nodes</li>
+<li>Must run on Ubuntu, without recompiling the kernel. Kernel modules are acceptable.</li>
+</ul>
+<li>Performant</li>
+<ul>
+<li>Reads less than 50% slower than standard ext3 reads.</li>
+<li>Writes less than 80% slower than&nbsp;standard&nbsp;ext3 writes.</li>
+<li>Must be good at handling a lot of small files. Currently, my server hosts 470k files for a total of 6.8 GB. That is an average of 15 KB per file!</li>
+</ul>
+<li>Consistency<br />Changes must propagate to all servers within 5 seconds.</li>
+<ul>
+<li>Uploaded files stored in database but not yet synced may generate some errors&nbsp;for a short period&nbsp;if viewed by other users on other servers.</li>
+<li>Temporary files are only relevant on the local machine so a delay is not a big deal.</li>
+<li>HTTP Sessions will be sticky at the LodeBalancer&nbsp;level&nbsp;so user specific information will be handled properly.</li>
+</ul>
+<li>Must handle ACLs</li>
+<ul>
+<li>For permissions to be set perfectly, we will be using ACLs.</li>
+<li>ACLs may not be <i>readable</i>&nbsp;within the Web node, but they must still be enforced.</li>
+</ul>
+<li>Durability</li>
+<ul>
+<li>Must handle filesystem failures — be repairable very quickly.</li>
+<li>File losses are acceptable in the event of a filesystem failure.</li>
+<li>Filesystem must continue to function even if a Web node goes offline.</li>
+<li>No single point of failure. If there is one, if must be isolated on its own machine.</li>
+</ul>
+</ol>
+<h3>
+A. Synchronisation</h3>
+Synchronisation means that there is no filesystem solution, all the files are stored on the local filesystem and synchronisation is made with the other nodes&nbsp;periodically&nbsp;or by watching I/O events.
+
+<br />
+<br />
+Cluster synchronisation involving replication between all the nodes is usually very hard. To improve performance and reduce the risk of conflicts, it is often a good idea to elect a replication leader and a backup. If the leader is unavailable, the backup will be used instead. This way, all the nodes will sync with only one.
+
+<br />
+<ul>
+<li>Pros</li>
+<ul>
+<li>Very fast read/write</li>
+<li>Very simple to setup</li>
+</ul>
+<li>Cons</li>
+<ul>
+<li>May have troubles synchronizing ACLs</li>
+<li>May generate a lot of I/O</li>
+<li>Will most likely generate conflicts</li>
+</ul>
+</ul>
+<h4>
+Rsync</h4>
+The typical tool for fast file syncing is rsync. It is highly reliable and a bit of BASH scripting will get you started. However, as the number of files grows, it may become slow. For around a million files, it may easily take over 5 seconds. With our needs, it means it will have to run continuously, which will generate a lot of I/O and thus impact the overall performance.
+<br />
+<h4>
+<a href="http://oss.linbit.com/csync2/" target="_blank">Csync2</a></h4>
+Csync2 is a promising tool that works like rsync, but it keeps file hints in a SQLite database. When a file changes, it flags in the database that the file needs checking. This way, the full sync only needs to check marked files.
+
+<br />
+<br />
+Csync2 supports multi-master replication and slaves (receive-only). However, I found while testing that it is not really adapted to a lot of small files changing frequently: it tends to generate a lot of conflicts that need to be attended manually.
+
+<br />
+<br />
+It may not be the best solution for Web hosting, but for managing deployment of libraries or similar tasks, it would be awesome.
+<br />
+<h3>
+B. Simple sharing (NFS)</h3>
+Even simpler than file syncing is plain old sharing. A node is responsible of hosting the files and serves the files directly. Windows uses Samba/CIFS, Mac uses AFP and Linux uses NFS.
+
+<br />
+<br />
+NFS is very old, like 1989 old. Even the latest version, NFSv4, came around in 2000. This means it is very stable and very good at what it does.
+
+<br />
+<ul>
+<li>Pros</li>
+<ul>
+<li>Supports ACLs (NFSv4)</li>
+<li>Very cheap and simple setup</li>
+<li>Up to a certain scale, fast read/write</li>
+</ul>
+<li>Cons</li>
+<ul>
+<li>Single point of failure</li>
+<li>Hard to setup proper failover</li>
+<li>Not scalable</li>
+</ul>
+</ul>
+<h3>
+C. Distributed / Replicated</h3>
+A distributed filesystem may operate at a device, block or inode level. You can think of this a bit like a database cluster. It usually involves journals and is the most advanced solution.<br />
+<br />
+<ul>
+<li>Pros</li>
+<ul>
+<li>Very robust</li>
+<li>Scalable</li>
+</ul>
+<li>Cons</li>
+<ul>
+<li>Writes are often painfully slow</li>
+<li>Reads can also be slow</li>
+<li>Often complex to setup</li>
+</ul>
+</ul>
+<h4>
+<a href="http://www.gluster.org/" target="_blank">GlusterFS</a></h4>
+Gluster runs over Fuse and NFS. Each node can have its own block and the daemon handles the replication transparently, without the needs of a management node.&nbsp;
+
+<br />
+<br />
+Overall, it is very good software, the write performance is decent and it handles failures quite well. There has been a lot of recent work to improve caching, async writes, write-ahead, etc. &nbsp;However, in my experience, the read performance is disastrous. I really tried tuning it a lot, but I still feel like I haven’t&nbsp;&nbsp;found the true potential of this.&nbsp;
+
+<br />
+<br />
+Ultimately, I had to let it down for the moment because of a lack of time to tune it more. It has a large community and is widely spread, so I will probably end up giving it another chance.<br />
+<h4>
+<a href="http://wiki.lustre.org/index.php/Main_Page" target="_blank">Lustre</a></h4>
+Lustre seems like the Holy Grail of distributed filesystems. From <a href="http://en.wikipedia.org/wiki/Lustre_(file_system)" target="_blank">Wikipedia</a>: “At the present time, six of the top 10 and more than 60 of the top 100 supercomputers in the world have Lustre file systems in them.”<br />
+<br />
+It appears to have everything I could dream of: speed, scalability, locks, ACLs, you name it.&nbsp;
+
+<br />
+<br />
+However, I was never able to try it. It requires dedicated machines with various roles: management, data, file servers (API). This means I would need 4-5 additional machines. On top of that, it needs custom kernel modules.
+
+<br />
+<br />
+Definitely on my&nbsp;wish-list, but inaccessible for the moment.
+<br />
+<h4>
+<a href="http://www.drbd.org/" target="_blank">DRBD</a></h4>
+DRBD is not cluster solution, it does live backup. Usually, it is used to make a full mirror of a server that can be swapped with the master at any moment, should it fail. This is often used to <i>patch</i>&nbsp;solutions where replication is not built-it. Examples of this are NFS or MySQL. There is a way to <a href="http://www.drbd.org/users-guide/s-three-nodes.html" target="_blank">setup a 3-nodes solution</a>, but it is far from perfect.
+<br />
+<h3>
+Conclusion</h3>
+<div>
+In the end, I found that synced solutions were not reliable enough and distributed solutions were too complex so I chose NFS. My plan is to add a DRBD soon to provide a durability layer but a more serious solution will have to wait. If my cluster scales to the point that NFS can’t suffice to the task, this will mean I will have enough clients, enough money and enough reasons to consider a proper solution.</div>
+<div>
+<br /></div>
+<div>
+<br /></div>
+<table align="center" border="0" cellpadding="2" cellspacing="3" style="font-size: 0.9em; text-align: center;">
+    <caption>Comparison</caption>
+    <thead>
+<tr>
+            <th></th>
+            <th>Maintenance</th>
+            <th>Complexity</th>
+            <th>Performance</th>
+            <th>Scalability</th>
+            <th>Durability</th>
+            <th>Consistency</th>
+            <th>ACLs</th>
+        </tr>
+</thead>
+    <tbody>
+<tr>
+            <th>Rsync</th>
+            <td bgcolor="yellow">Low</td>
+            <td bgcolor="yellow">Low</td>
+            <td bgcolor="lightgreen">Very high</td>
+            <td bgcolor="yellow">Low</td>
+            <td bgcolor="lightgreen">High</td>
+            <td bgcolor="red">Low</td>
+            <td bgcolor="lightgreen">Yes</td>
+        </tr>
+<tr>
+            <th>Csync2</th>
+            <td bgcolor="red">High</td>
+            <td bgcolor="yellow">Medium</td>
+            <td bgcolor="lightgreen">Very high</td>
+            <td bgcolor="yellow">Low</td>
+            <td bgcolor="lightgreen">High</td>
+            <td bgcolor="red">Low</td>
+            <td bgcolor="lightgreen">Yes</td>
+        </tr>
+<tr>
+            <th>NFS</th>
+            <td bgcolor="lightgreen">None</td>
+            <td bgcolor="lightgreen">None</td>
+            <td bgcolor="yellow">Medium</td>
+            <td bgcolor="red">None</td>
+            <td bgcolor="red">None</td>
+            <td bgcolor="lightgreen">Very high</td>
+            <td bgcolor="yellow">Enforced</td>
+        </tr>
+<tr>
+            <th>GlusterFS</th>
+            <td bgcolor="lightgreen">None</td>
+            <td bgcolor="yellow">Medium</td>
+            <td bgcolor="red">Low</td>
+            <td bgcolor="lightgreen">High</td>
+            <td bgcolor="lightgreen">High</td>
+            <td bgcolor="lightgreen">Very high</td>
+            <td bgcolor="lightgreen">Yes</td>
+        </tr>
+<tr>
+            <th>Lustre</th>
+            <td bgcolor="lightgreen">None</td>
+            <td bgcolor="red">Very high</td>
+            <td bgcolor="lightgreen">High</td>
+            <td bgcolor="lightgreen">Very high</td>
+            <td bgcolor="lightgreen">Very high</td>
+            <td bgcolor="lightgreen">Very high</td>
+            <td bgcolor="lightgreen">Yes</td>
+        </tr>
+<tr>
+            <th>DRBD</th>
+            <td bgcolor="lightgreen">None</td>
+            <td bgcolor="yellow">Medium</td>
+            <td>n/a</td>
+            <td bgcolor="yellow">2 or 3</td>
+            <td bgcolor="lightgreen">Very high</td>
+            <td>n/a</td>
+            <td bgcolor="lightgreen">Yes</td>
+        </tr>
+</tbody>
+</table>
+<br />
+<br />
+<br />

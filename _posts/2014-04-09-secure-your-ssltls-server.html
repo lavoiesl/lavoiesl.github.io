@@ -1,0 +1,56 @@
+---
+title: "Secure your SSL/TLS server"
+tags: ["Security", "Apache", "Nginx"]
+date: 2014-04-09 10:55:00 -0400
+---
+
+<h3>
+Heartbleed</h3>
+Recently the <a href="http://heartbleed.com/" target="_blank">Heartbleed bug</a>&nbsp;came to light. It is a bug in the OpenSSL library that causes information to leak from the server. It is an undetectable backdoor that allows to gain the private key of your server. Let’s just say it is VERY important to fix it. Most distros have been very quick to propagate the OpenSSL update, so running your favorite update manager should fix it in no time.<div>
+<br /></div>
+<div>
+To verify if you have protected, run this command and check for built on to be greater or equal to April 7th, 2014:</div>
+<div>
+<div>
+<span style="font-family: Courier New, Courier, monospace;">$ openssl version -a</span></div>
+<div>
+<span style="font-family: Courier New, Courier, monospace;"><br /></span></div>
+<div>
+<span style="font-family: Courier New, Courier, monospace;">OpenSSL 1.0.1e 11 Feb 2013</span></div>
+<div>
+<span style="font-family: Courier New, Courier, monospace;">built on: Mon Apr &nbsp;7 20:33:19 UTC 2014</span></div>
+<div>
+<span style="font-family: Courier New, Courier, monospace;">platform: debian-amd64</span></div>
+</div>
+<h3>
+Disable weak ciphers</h3>
+<div>
+The way SSL/TLS works is that the client and the server must agree on a cipher to use for encryption. If you were to attack a server, you would obviously use the least secure cipher. To protect against this, simply disable ciphers to be known as weak or those which flaws have been discovered.</div>
+<div>
+<br /></div>
+<div>
+I am using this configuration for Apache:</div>
+<div>
+<br /></div>
+<div>
+<span style="font-family: Courier New, Courier, monospace;">SSLCipherSuite ALL:!ADH:!AECDH:RC4+RSA:+HIGH:+MEDIUM:!LOW:!SSLv2:!EXPORT</span></div>
+<div>
+<span style="font-family: Courier New, Courier, monospace;"><br /></span></div>
+<div>
+<span style="font-family: inherit;">For Nginx, see their <a href="http://wiki.nginx.org/NginxHttpSslModule#ssl_ciphers" target="_blank">configuration reference</a>. Since 1.0.5, they are using a sensible default. Otherwise, you can use the same as above.</span></div>
+<h3>
+Do not use a too weak or too strong private key</h3>
+<div>
+The private key must never be discovered. Otherwise, anyone could decrypt the content and could perpetrate a <a href="http://en.wikipedia.org/wiki/Man-in-the-middle_attack" target="_blank">MITM attack</a>. If the private key is too weak, it could eventually be guessed given enough data. However, SSL/TLS handshakes are very CPU intensive for both the server and the client. Using a key too long will considerably slow down your website. In most cases, 2048 is perfect.</div>
+<h3>
+Test your own server</h3>
+<div>
+SSL Labs provides a free test suite that will test your ciphers and for known attacks including BEAST and Heartbleed. This is a must:&nbsp;<a href="https://www.ssllabs.com/ssltest/">https://www.ssllabs.com/ssltest/</a></div>
+<h3>
+Further reading</h3>
+<div>
+I am not a security expert, I simply happen to have done hosting for quite a time. I suggest you do not take my word blindly and go check this <a href="https://www.ssllabs.com/downloads/SSL_TLS_Deployment_Best_Practices_1.3.pdf" target="_blank">very pertinent paper from SSL Labs</a>.</div>
+<div>
+<br /></div>
+<div>
+<span style="font-family: Courier New, Courier, monospace;"><br /></span></div>

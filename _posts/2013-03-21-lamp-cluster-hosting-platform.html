@@ -1,0 +1,187 @@
+---
+title: "LAMP Cluster — Comparison of different hosting platforms"
+tags: ["LAMP", "cluster", "hosting", "VPS", "Linode", "sysadmin"]
+date: 2013-03-21 16:01:00 -0400
+---
+
+This post is part of:&nbsp;<a href="http://blog.lavoie.sl/2013/03/guide-to-replicated-lamp-stack-hosting-with-failover.html" rel="" target="">Guide to replicated LAMP stack hosting with failover</a><br />
+<br />
+The first step of building a hosting service is to choose your provider. Each system have its strengths and weaknesses and you will have to choose according to your needs and your proficiency at using the provided tools. This step is crucial and if possible, you should spend some time testing and benchmarking each of them to see if it matches your expectations.<br />
+<br />
+<i><b>DISCLAIMER:</b>&nbsp;Below, I something mention prices; they are meant as an indication rather than a real comparison. Comparing different services can sometimes get very tricky as they don’t include the same things and their performance is difficult to compare effectively.
+</i><br />
+<h3>
+Platform as a service</h3>
+<div>
+This is basically what you want to build. Another company will provide you some services in the cloud and you will configure your applications to use them. Here, all the scalability and redundancy is done for you and you will only pay for what you use.</div>
+<div>
+<br /></div>
+<div>
+The thing is though, you have absolutely no control on the Operating System and you are bound to the services the platform provides you.</div>
+<div>
+<br /></div>
+<div>
+This guide is all about building it, so these are more here as a comparison basis than actual alternatives.</div>
+<h4>
+Google App Engine</h4>
+<div>
+<a href="https://developers.google.com/appengine/training/intro/whatisgae" target="_blank">What is and what is not Google App Engine</a></div>
+<div>
+<br /></div>
+<div>
+Typically, GAE runs Java and Python. It provides PHP through an emulation layer and some SQL, but there is no MySQL. Some quick research and I found people discussing it: <a href="http://wordpress.org/support/topic/how-to-install-wp-on-google-app-engine" rel="nofollow" target="_blank">Wordpress</a>&nbsp;and&nbsp;<a href="http://drupal.org/node/245477" target="_blank">Drupal</a>.&nbsp;&nbsp;Short answer: no MySQL, can’t be done.&nbsp;</div>
+<div>
+<br /></div>
+<div>
+However, if you want to host some Django on it, please do!</div>
+<h4>
+Windows Azure</h4>
+<div>
+This does almost everything you need, they have a really wide array of services. If you need something else, you can deploy a custom VM and do what you want. This is perfect for prototyping.</div>
+<div>
+<br /></div>
+<div>
+However, fiddling with their <a href="http://www.windowsazure.com/en-us/pricing/calculator/?scenario=full" target="_blank">price calculator</a>, I found that it can become quickly expensive, they charge for almost everything. Yes they have PHP/MySQL support, but the idea is to have some scale economy. I did an estimate:&nbsp;</div>
+<div>
+<ul>
+<li>4 small Web and Worker instances</li>
+<li>1 small Linux Virtual Machine (for testing, management, etc.)</li>
+<li>10 x 100 MB Databases</li>
+<li>100 GB bandwith</li>
+<li>100 GB storage</li>
+</ul>
+<div>
+This is rather conservative; you will probably need way more than 4 small instances. Only thing is, it is almost 500$ per month. Hardly a bargain.</div>
+</div>
+<h4>
+Heroku</h4>
+<div>
+Heroku is mostly known for its Ruby support, but it has a very wide array of add-ons; it even has MySQL support through <a href="https://addons.heroku.com/cleardb" rel="nofollow" target="_blank">ClearDB</a>. Their prices tend to be lower than Azure and it is closer to open source initiatives, which I tend to use a lot. I have never actually used Heroku, so I can’t really approximate what I would need, but the sheer amount of possible configurations is incredible.<br />
+<br />
+A big plus is also the deployment procedure that is backed by Git. It involves describing a project with a configuration file and simply <i>pushing</i> to Heroku. There is quite a lot of examples out there on how to deploy&nbsp;<a href="https://github.com/mhoofman/wordpress-heroku" rel="nofollow" target="_blank">Wordpress</a>, <a href="http://sysadminsjourney.com/content/2011/09/20/drupal-heroku/" target="_blank">Drupal</a>, etc. If I wasn’t trying to build an infrastructure myself, I would definitely consider it strongly.</div>
+<h3>
+</h3>
+<h3>
+</h3>
+<h3>
+Virtual machines on physical hardware</h3>
+If you plan on the long-term, investing in hardware might be a good idea. Hardware is way less expensive and providers like&nbsp;<a href="http://iweb.com/classic-server-hosting/overview" rel="nofollow" target="_blank">iWeb</a>&nbsp;tend to give a lot of bandwidth (if not unlimited). Upgrades are usually way less expensive, but they involve downtime and risk.
+<br />
+<h4>
+You still need some virtualization</h4>
+For ease of management, you will almost certainly want a virtualization solution: this way you can create, backup, scale and migrate virtual machines in only a couple steps. In the most popular solutions, <a href="http://www.openstack.org/" target="_blank">OpenStack</a> is free and open source while VMware has a very good reputation with <a href="http://www.vmware.com/products/vcenter-server/overview.html" target="_blank">vCenter</a>. The downside is that it means you have yet another thing to configure.
+<br />
+<h4>
+You still need multiple servers</h4>
+<div>
+If you go with physical machines, you will need some RAID and everything, but that all means downtime when something breaks. To reduce the risks, you will still need a second or third machine to provide some backup. Really, managing physical hardware is an art all by itself; if you wish to provide some good quality Web hosting, you will need someone specialized in that matter.<br />
+<br />
+Why not let a third party do all this for you ?</div>
+<h3>
+Virtual private servers (<a href="http://en.wikipedia.org/wiki/Virtual_private_server" rel="nofollow" target="_blank">VPS</a>)</h3>
+<div>
+We want full control over the system, scalability, virtualization management, etc. So it all comes to a nice in-the-middle solution: virtual machines provided by a third-party. Here, all the hard stuff is already done, you will most certainly have multiple locations in the world to choose from and you can usually trust the hardware to not fail completely. Sometimes there is downtime, but losing data is extremely rare.</div>
+<div>
+<br /></div>
+<div>
+Below are multiple choices I know of, but I suggest you try <a href="http://cloud-computing.findthebest.com/" target="_blank">FindTheBest</a>&nbsp;for a more thorough comparison.<br />
+<br />
+For the setup I will be talking about in another post, we need this setup:<br />
+<ul>
+<li>1 small/medium management node</li>
+<li>3 medium/large working nodes</li>
+<li>2 small/medium utility nodes</li>
+<li>1 small dev node</li>
+</ul>
+</div>
+<h4>
+Amazon Web Services (<a href="http://aws.amazon.com/" target="_blank">AWS</a>)</h4>
+<div>
+I have been a client of Amazon EC2 for more than two years. They offer a wide array of services:<br />
+<ul>
+<li>Virtual machines (EC2)</li>
+<li>DNS servvices (Route53)</li>
+<li>Load balancing&nbsp;+ Auto scaling</li>
+<li>Dedicated databases with automatic fallback (RDS)</li>
+<li>High performance I/O (EBS)</li>
+<li>Low performance, high durability I/O (S3)</li>
+<li>CDN (CloudFront)</li>
+<li>Highly configurable firewall</li>
+<li>And much much more</li>
+</ul>
+<div>
+A lot of websites are running on Amazon services. The problem is, it is expensive and it is built for computing, not Web hosting. This means it is perfect for a rather short burst of computing like crunching data but it becomes expensive if it is online all the time. Also, in the concept of pay-per-use, everything you do will end up costing you something, which can built up rather quickly. Over the last two years, the performance has been going downhill, but recently, they have been lowering their prices so it might be getting a better alternative.</div>
+<div>
+<br /></div>
+<div>
+Here is an <a href="http://calculator.s3.amazonaws.com/calc5.html#r=IAD&amp;key=calc-0E03BC6C-04C1-4312-BE37-EBD6579C1130" target="_blank">example using their calculator</a>.&nbsp;(333 $/month)</div>
+</div>
+<h4>
+Google Compute Engine (<a href="https://cloud.google.com/products/compute-engine" target="_blank">GCE</a>)</h4>
+<div>
+Google also has a service that is very similar to Amazon EC2, but with less options and it seems to have a better performance/price ratio. I am not familiar with their services, but I thought it was worth mentioning.</div>
+<div>
+<h4>
+Windows Azure</h4>
+</div>
+<div>
+As mentioned above, Azure has virtual machines as well, but you can connect them with the rest of the platform so it can be a nice hybrid solution.</div>
+<div>
+<br /></div>
+<div>
+However, it is still pretty pricy. For our setup, 3 medium, 2 small and 2 x-small, we are already at 478 $/month — and no bandwidth or storage is included yet.</div>
+<div>
+<h4>
+<a href="http://www.linode.com/?r=7195136bafa1cddc8ee264300b7ca407edd68ee0" target="_blank">Linode</a></h4>
+</div>
+<div>
+Linode exists since 2003, but I only discovered it last year. They are growing rapidly, new features are coming in and the amount of included things is going up and up every month. What I like about Linode is that I feel like I am in total control of my machines.</div>
+<div>
+<ul>
+<li>Multiple availability zones (like most other providers)</li>
+<li>Very easing permission management (you can give read-only access to your clients)</li>
+<li>Very powerful admin panel.</li>
+<li>Powerful recovery tools</li>
+<ul>
+<li>Remote connection via SSH or in-browser to the host so you can rescue your VM while it boots</li>
+<li>Possibility to switch kernels and reboot in rescue mode</li>
+<li>Possibility to reset root password from admin panel</li>
+<li>Possibility to rebuild from a backup or a fresh install without destroying the VM.</li>
+</ul>
+<li>Unexpensive Load Balancers</li>
+<li>Support for StackScripts, a way to run scripts while deploying a new VM</li>
+<ul>
+</ul>
+<li>High class (free) support. From my experience, replies typically take 1-5 minutes!</li>
+<li>Unlimited DNS zones</li>
+<li>Very high transfer caps</li>
+<li>Unmetered disk operations</li>
+<li>Unmetered Gigabit in-zone data transfer</li>
+</ul>
+<div>
+And they are on a rampage. They recently <a href="http://blog.linode.com/2013/03/07/linode-nextgen-the-network/" target="_blank">upgraded their network</a>&nbsp;and all VM now have <a href="http://blog.linode.com/2013/03/18/linode-nextgen-the-hardware/" target="_blank">8 cores</a>. You wonder how it is possible to have a 8 cores on a small instance, but it is actually the priority on those CPU that scales, not their power. In other words, the higher your package, the more reliable its performance is.</div>
+</div>
+<div>
+<br /></div>
+<div>
+Seriously, the more I work with Linode, the more they feel right, it just feels like they know their thing and do the best they can to give you everything they can.</div>
+<div>
+<br /></div>
+<div>
+Have a try, you can use a small instance for a month. Here is my <a href="http://www.linode.com/?r=7195136bafa1cddc8ee264300b7ca407edd68ee0" target="_blank">referral link</a>.&nbsp;I get 20$ if you buy something.</div>
+<div>
+<br /></div>
+<div>
+For a setup similar to the AWS detailed above, it boils down to around 220 $/month, but you have to build the database, memcache, CDN yourself.</div>
+<h3>
+Performance evaluation</h3>
+<div>
+Whatever provider you choose, be sure to test its performance. This is especially true for CPU and disks. The number of cores and their clock speed means little to nothing. The best tool I found was <a href="http://sysbench.sourceforge.net/" target="_blank">SysBench</a>. For disk operations specifically, you can choose various profiles like read-only,&nbsp;sequential read/write,&nbsp;&nbsp;random read/write or specify a ratio of read/write.<br />
+<br />
+When benchmarking for websites, you typically want a lot of small files (10kB - 1MB) that will be read sequentially and some big files (1MB-5MB) with a read/write ratio of about 95%.<br />
+<br />
+Maybe more on that later.<br />
+<br />
+<br /></div>
+<h3>
+</h3>

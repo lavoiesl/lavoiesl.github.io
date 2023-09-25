@@ -1,0 +1,50 @@
+---
+title: "Service management utility for Mac OSX (launchctl helper)"
+tags: ["Development tool", "Mac OSX", "sysadmin"]
+date: 2013-08-31 13:03:00 -0400
+---
+
+Having dealt with services mostly on Linux, I grew accustomed to type <code>service php restart</code>. On Mac, this is more like:<br />
+<br />
+<code>
+launchctl unload ~/Library/LaunchAgents/homebrew-php.josegonzalez.php55.plist<br />
+launchctl load ~/Library/LaunchAgents/homebrew-php.josegonzalez.php55.plist<br />
+</code>
+<br />
+<br />
+Which is ugly, hard to remember and launchctl has no way of listing all available services. Plus, those plist can reside in all those directories:<br />
+<ul>
+<li>/System/Library/LaunchDaemons</li>
+<li>/System/Library/LaunchAgent</li>
+<li>/Library/LaunchDaemons</li>
+<li>/Library/LaunchAgents</li>
+<li>~/Library/LaunchAgents</li>
+</ul>
+<div>
+Those in you home directory generally don’t need sudo, while the others do.</div>
+<br />
+This is why I can up with an utility to manage services. It searches in all directories above for your service, prompts for sudo if it is in a system directory and provide goodies like <code>restart</code>, <code>reload</code> and <code>link</code>.<br />
+<h3>
+Usage:</h3>
+<dl>
+<dt><code>service selfupdate</code></dt>
+<dd>update from the Gist</dd>
+<dt><code>service php</code></dt>
+<dd>searches for a plist containing 'php'</dd>
+<dt><code>service php load|unload|reload</code></dt>
+<dd>insert or remove a plist from launchctl</dd>
+<dt><code>service php start|stop|restart</code></dt>
+<dd>manage a daemon, but leave it in launchctl &nbsp;(does not work with Agents)</dd>
+<dt><code>service php link</code></dt>
+<dd>If you use <a href="http://brew.sh/" target="_blank">Homebrew</a>, which you should, it will link the plist of this Formula into ~/Library/LaunchAgents, reloading if needed. Very useful when upgrading.</dd>
+</dl>
+<br />
+<script src="https://gist.github.com/lavoiesl/6160897.js?file=service.sh"></script>
+
+<br />
+<h3>
+Manage all optional services at once</h3>
+<div>
+If you have several services running, especially if you are a developer, I also recommend to use a script to start/stop all of them at once when you are not working. They may not be using much resources, but having them running keeps the laptop working and can drain you battery very quickly.&nbsp;</div>
+<br />
+<script src="https://gist.github.com/lavoiesl/6160897.js?file=services.sh"></script>

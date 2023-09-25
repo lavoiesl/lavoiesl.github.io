@@ -1,0 +1,14 @@
+---
+title: "Writing a PHPUnit test for Symfony2 to test email sending"
+tags: ["Email", "Symfony2", "PHPUnit", "PHP", "SwiftMailer"]
+date: 2012-07-09 16:15:00 -0400
+---
+
+The idea is to test that an email is sent by a contact form by inspecting the SwiftMailler Collector.<br />
+<br />
+We generate a fake unique content and loop through all sent emails to verify that is was sent.<br />
+<br />
+Note that this does not actually test if the email is sent to the server but merely tells you if Symfony is trying to send it.<br />
+<br />
+<script src="https://gist.github.com/3078626.js"></script><br />
+Inspiration:&nbsp;<a href="http://docs.behat.org/cookbook/using_the_profiler_with_minkbundle.html">http://docs.behat.org/cookbook/using_the_profiler_with_minkbundle.html</a>

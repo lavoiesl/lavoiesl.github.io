@@ -1,0 +1,138 @@
+---
+title: "Introducing Dotfiles Builder"
+tags: ["Bash", "GitHub", "bashrc", "sysadmin"]
+date: 2012-07-13 20:56:00 -0400
+---
+
+<h2>
+  Managing bashrc sucks
+</h2>
+<p>
+  We all have our nice little bashrc that we are proud of.
+  It tests for files, programs and terminal features, detect your OS version,
+  builds a PATH, etc.
+  For all of our OS and different setups, various solutions exist.
+</p>
+<h3>
+  Keeping several versions
+</h3>
+<p>Pros:</p>
+<ul>
+  <li>Ultimate fine-tuning</li>
+  <li>Easy to understand</li>
+  <li>Usually optimized for every setup</li>
+</ul>
+<p>Cons:</p>
+<ul>
+  <li>Very time consuming to manage</li>
+  <li>Hard to “backport” new ideas</li>
+</ul>
+<h3>
+  Keep a single unusable file with everything and edit accordingly
+</h3>
+<p>
+  Pros:
+</p>
+<ul>
+  <li>Easy to backport, you just need to rembember to do it</li>
+  <li>Good performance</li>
+  <li>Since you edit at each deployment, nice fine-tuning capability</li>
+</ul>
+<p>Cons:</p>
+<ul>
+  <li>The single file can become unbearably cluttered.</li>
+  <li>You eventually end up managing several version.</li>
+  <li>Tedious to edit at each deployment</li>
+</ul>
+<h3>
+  Include several subfiles
+</h3>
+<p>Pros:</p>
+<ul>
+  <li>Still have a lot fine-tuning capabilities</li>
+  <li>If well constructed, can be easy to understand</li>
+  <li>Easy to deploy new features</li>
+</ul>
+<p>Cons:</p>
+<ul>
+  <li>Hard to detect which file to include</li>
+  <li>Multiplicates the number of files to manage</li>
+  <li>Slow performance</li>
+  <li>Until recently, this was my prefered method.</li>
+</ul>
+<h2>
+  Wanted features
+</h2>
+<p>So, what does a good bashrc have?</p>
+<p>Should have:</p>
+
+<ul>
+  <li>Good performance. On a busy server, you really don't want to wait 5 seconds for your new terminal because your IO is sky rocketing.</li>
+  <ul>
+    <li>Reduce number of included files</li>
+    <li>Reduce tests for environment features</li>
+    <li>Reduce tests for program and files</li>
+  </ul>
+  <li>High flexibility</li>
+  <ul>
+    <li>Cross-OS compatible</li>
+    <li>A lot of feature detection</li>
+    <li>Ideally, configuration files</li>
+  </ul>
+  <li>Ease and speed of configuration</li>
+  <ul>
+    <li>It should not take more than a minute to setup a new bashrc</li>
+    <li>If you need to specify your developer email, it would be nice to do it only once.</li>
+  </ul>
+</ul>
+<p>
+  Yes, you read right, reduce tests AND do a lot of feature detection.
+  You don't want to do Java specific configuration or set an empty variable if Java is not even installed,
+  but you <em>do</em> want Java to be automatically detected.
+</p>
+
+<h2>
+  Generating a bashrc
+</h2>
+<p>
+  Let's face it, you will install or remove Java way less often then you will start a new shell. Why then test for Java at each new shell?
+</p>
+<p>
+  This is where I introduce the Dotfiles Builder. The script runs in Bash and outputs the wanted bashrc.
+</p>
+
+<p>
+  This way, instead of doing:
+</p>
+{% highlight bash %}
+if [ -d "$HOME/bin" ]; then
+  PATH="$HOME/bin:$PATH"
+fi
+{% endhighlight %}
+
+<p>You would do:</p>
+{% highlight bash %}
+if [ -d "$HOME/bin" ]; then
+  echo "PATH=\"$HOME/bin:$PATH\""
+fi
+{% endhighlight %}
+
+<p>And the result would simply be:</p>
+{% highlight bash %}
+PATH="$HOME/bin:$PATH"
+{% endhighlight %}
+
+<p>But constructing PATH is a rather common task and you want to make sure the folder is not already on your PATH. Why not wrap it up ?</p>
+
+<p>
+  Take a look at the alpha version:
+  <a href="https://github.com/lavoiesl/dotfiles-builder/">https://github.com/lavoiesl/dotfiles-builder/</a>
+  <br />
+  As well as the <a href="https://github.com/lavoiesl/dotfiles-builder/blob/master/examples/.bashrc">example output</a>.
+</p>
+
+<p>
+  This is a very alpha version of the intended program,
+  but I still want to share what I have and maybe get some feedback and collaborators along the way.
+  Currently, it only generates a bashrc, but expect more to come.
+</p>

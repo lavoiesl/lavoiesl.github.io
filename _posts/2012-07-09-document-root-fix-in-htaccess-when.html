@@ -1,0 +1,23 @@
+---
+title: "Document Root fix in .htaccess when using VirtualDocumentRoot"
+tags: [".htaccess", "Apache", "mod_rewrite"]
+date: 2012-07-09 16:24:00 -0400
+---
+
+CMS often come with a .htaccess that has a RewriteRule like this:<br />
+<br />
+{% highlight apache %}
+# RewriteBase /
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^(.*)$ app.php [QSA,L]
+{% endhighlight %}
+<br />
+The RewriteBase has to be enabled if you are using a <a href="http://httpd.apache.org/docs/2.0/mod/mod_vhost_alias.html#virtualdocumentroot">VirtualDocumentRoot</a>&nbsp;but when you are sharing code, developers may all have different setups.<br />
+<br />
+By checking the content of DOCUMENT_ROOT, we can guess which setup we are using and prepend a / when necessary.<br />
+<br />
+Note however that this method is heavy on string comparison which is slow and should not go on production.<br />
+<br />
+<script src="https://gist.github.com/2721888.js">
+
+</script>

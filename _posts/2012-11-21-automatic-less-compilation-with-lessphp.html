@@ -1,0 +1,15 @@
+---
+title: "Automatic LESS compilation using mod_rewrite and lessphp"
+tags: ["LESS", "CSS", "mod_rewrite", "PHP"]
+date: 2012-11-21 15:03:00 -0500
+---
+
+I have been using LESS (and before SCSS) and I enjoy it, but I have to admit that I was spoiled by Symfony, Twig and Assetic that compile them automatically and I am really not looking forward to compile all my assets. I could use an application that watches a directory and compiles them on the fly, but there’s none that works on all OS and you still have to fire them up and configure them each time you start a project or reboot your computer.<br />
+<br />
+Using <a href="http://leafo.net/lessphp/" target="_blank">lessphp</a>, I made a simple script that will compile your LESS files, do some caching, gzip, etc.<br />
+<br />
+It works by checking that a .css file exists. If not, it checks if the corresponding .less exists. If so, it fires up lessphp.<br />
+<br />
+It is not perfect, but is worth using on simple projects.<br />
+<br />
+<script src="https://gist.github.com/4127137.js"> </script>

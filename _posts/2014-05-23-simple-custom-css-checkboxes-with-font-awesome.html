@@ -1,0 +1,49 @@
+---
+title: "Simple custom CSS checkboxes with Font Awesome"
+tags: ["tutorial", "codepen", "CSS", "checkbox"]
+date: 2014-05-23 15:55:00 -0400
+---
+
+Browsers make it notoriously hard to modify the default form elements like dropdowns and checkboxes. For ages, the only way to add a custom style was to use images and <a href="http://www.csscheckbox.com/" target="_blank">CSS Checkbox</a>&nbsp;gives a very good example of this. However, using images is more of a hack than anything else, developers usually prefer to avoid them for good reason: hard to modify, adds to the loading time, flicker when hovering unless you preload or you use sprites, and resolution issues when scaling.<br />
+<br />
+Then came the Javascript solutions. I personally like <a href="http://harvesthq.github.io/chosen/" target="_blank">Chosen</a>&nbsp;for custom dropdowns. These solutions are usually well supported cross-browser and are highly customizable and reliable, but they have the downside of being… Javascript. This means additional libraries, loading time, etc.<br />
+<br />
+The holy grail is to use native CSS: you can customize it as you like, it can be built on top of your site’s stylesheet, inheriting the colours, the fonts, etc. There are a lot of examples out there that will show you working solutions, but they are usually complex. Here is a quick tutorial:<br />
+<h3>
+The basics</h3>
+The concept is to define a custom element that will have a different style based on the state of the input element. No javascript and barely any extra markup. We will hide the original input, but it will continue to work as intended.<br />
+
+<h4>Base HTML</h4>
+
+{% highlight html %}
+<label>
+  <input type="checkbox">
+  <span class="icon"></span>
+  My label
+</label>
+{% endhighlight %}
+
+<h4>Base CSS</h4>
+
+{% highlight css %}
+input {
+  display: none;
+}
+.icon {
+  visibility: hidden;
+}
+input:checked + .icon {
+  visibility: visible;
+}
+{% endhighlight %}
+
+<br />
+This way, the input is always hidden and the .icon is hidden only when the input is not checked.<br />
+<br />
+** The :checked selector is not available for IE8 and lower.<br />
+<h3>
+Working demo</h3>
+For a basic demonstration:&nbsp;<a href="http://codepen.io/lavoiesl/pen/rjcIx">http://codepen.io/lavoiesl/pen/rjcIx</a>. The CSS is divided in section to clearly see what is essential. This demo uses&nbsp;<a href="http://fortawesome.github.io/Font-Awesome/" target="_blank">Font Awesome</a>&nbsp;to have a nice and clean checkmark.<br />
+<br />
+For more complex examples, see <a href="http://cssdeck.com/labs/css-checkbox-styles">http://cssdeck.com/labs/css-checkbox-styles</a>.<br />
+<br />

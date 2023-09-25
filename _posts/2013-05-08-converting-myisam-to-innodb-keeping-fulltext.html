@@ -1,0 +1,47 @@
+---
+title: "Converting MyISAM to InnoDB, keeping FULLTEXT"
+tags: ["MySQL", "MySQL Triggers", "MyISAM", "Percona", "InnoDB"]
+date: 2013-05-08 10:13:00 -0400
+---
+
+I was working with a&nbsp;<a href="http://www.percona.com/software/percona-xtradb-cluster" target="_blank">Percona XtraDB Cluster</a>&nbsp;and I noticed that even though it supports MyISAM replication, it is statement based so the PRIMARY KEY is not propagated correctly. <a href="https://bugs.launchpad.net/bugs/1080913" target="_blank">There is a bug report for this, but it has not been fixed yet</a>.<br />
+<br />
+Long story short, we cannot use auto increment with MyISAM. Anyway, the replication works way better with InnoDB.<br />
+<h3>
+Finding all MyISAM tables using AUTO_INCREMENT</h3>
+<div>
+To do so, we will use the&nbsp;marvellous&nbsp;database information_schema which contains all sorts of useful information. The column AUTO_INCREMENT contains the value of the next PRIMARY KEY to be inserted. If the table has no AUTO_INCREMENT, it will be NULL.</div>
+<br />
+<script src="https://gist.github.com/lavoiesl/5540284.js"></script>
+
+<br />
+<h3>
+Converting MyISAM to InnoDB</h3>
+You can find plenty of literature on <a href="https://www.google.com/search?q=InnoDB+vs+MyISAM" target="_blank">MyISAM vs InnoDB</a>, but our main concern was FULLTEXT indices. <a href="http://dev.mysql.com/doc/refman/5.6/en/fulltext-restrictions.html" target="_blank">InnoDB supports FULLTEXT only as of MySQL 5.6</a> and <a href="http://www.percona.com/downloads/Percona-Server-5.6/" target="_blank">Percona 5.6 is still in alpha</a>.
+
+<br />
+<br />
+Percona does not support MyISAM + AUTO_INCREMENT, but it does support MyISAM, so we can create a separate table to hold all the indexed data and join on this for a FULLTEXT search.<br />
+<br />
+We have a pretty big codebase, adding a join for searches is an acceptable task, but removing columns and changing all SELECTs, INSERTs, UPDATEs, DELETEs, etc. was not.<br />
+<br />
+The solution was to add triggers that would mirror columns that needed to be indexed from the original table. This way, you can deal with your original table as you used to do and only need to rewrite the SELECTs that are using FULLTEXT.<br />
+<br />
+<script src="https://gist.github.com/lavoiesl/5540479.js?file=myisam-fulltext-triggers.sql"></script><a href="https://gist.github.com/lavoiesl/5540479#file-generator-php" target="_blank">For those interested, I also made a little PHP script that generates the above SQL</a><br />
+<br />
+And the new query will be like:
+<script src="https://gist.github.com/lavoiesl/5540479.js?file=query-example.sql"></script>
+<br />
+This duplicates the data, but it works. Don’t forget to drop the old FULLTEXT indices and convert the table to InnoDB.<br />
+<h3>
+Final thoughts</h3>
+<div>
+The triggers where written using temporary variables because it seems not to work inline with Percona, but I haven’t search this thoroughly. If you are not using Percona, you can safely drop these and use NEW.id directly.</div>
+<div>
+<br /></div>
+The idea of having a separate MyISAM table for the data has other benefits:<br />
+<ul>
+<li>The original table is a lot smaller</li>
+<li>Smaller and fewer indices means faster INSERT/UPDATE/DELETE.</li>
+<li>Now supports foreign keys.</li>
+</ul>

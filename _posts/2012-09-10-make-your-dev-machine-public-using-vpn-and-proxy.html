@@ -1,0 +1,52 @@
+---
+title: "Make your dev machine public using a VPN and a proxy"
+tags: ["VPN", "Apache", "Development tool", "Proxy", "Nginx"]
+date: 2012-09-10 17:34:00 -0400
+---
+
+There is many reasons to be needing a machine available publicly:<br />
+<ul>
+<li>Developing a Facebook App</li>
+<li>Developing an OAuth authentication</li>
+<li>Make a quick showcase for your client</li>
+</ul>
+<div>
+Problem is, you probably want it to be your machine because you have all your development tools and IDEs, it is fast and you know it by heart. You could mount a folder using sshfs, but it is only part of the job and it may get very slow for some file editors.</div>
+<div>
+<br /></div>
+<div>
+The solution I came up with is to tunnel through a VPN to a public machine and let it proxy the requests back.</div>
+<h3>
+You will need</h3>
+<div>
+<ul>
+<li>A public Linux box with root access</li>
+<li>A domain name where you can setup a wildcard</li>
+</ul>
+<h3>
+Instructions, tested on Ubuntu 12.04</h3>
+</div>
+<div>
+<ol>
+<li>Install apache or nginx and pptpd (you can follow this <a href="http://www.ubuntugeek.com/howto-pptp-vpn-server-with-ubuntu-10-04-lucid-lynx.html" rel="" target="_blank">tutorial for the VPN</a>&nbsp;or <a href="http://silverlinux.blogspot.ca/2012/05/how-to-pptp-vpn-on-ubuntu-1204-pptpd.html" target="_blank">this one if you are using ufw</a>)</li>
+<li>In you <span style="font-family: Courier New, Courier, monospace;">/etc/ppp/chap-secrets</span> file, be sure to specify a fixed address for yourself (4th column)</li>
+<ul>
+<li>It must fit the IP range specified in&nbsp;<span style="font-family: Courier New, Courier, monospace;">/etc/pptpd.conf</span></li>
+</ul>
+<li>Create a DNS wildcard pointing to your server&nbsp;</li>
+<ul>
+<li>Ex: <span style="font-family: Courier New, Courier, monospace;">CNAME *.dev.lavoie.sl =&gt; server.lavoie.sl</span></li>
+</ul>
+<li>Create an Apache or Ngnix proxy to match a server wildcard and redirect it to the VPN IP decided before</li>
+<li>Create the same wildcard on your machine to answer correctly.</li>
+</ol>
+<h3>
+Security considerations</h3>
+<div>
+If you have unprotected data like phpMyAdmin or other websites you are developing, they could be at risk, consider protecting them via a password or an IP restriction.</div>
+</div>
+<h3>
+Configuration example for Apache and Nginx</h3>
+<div>
+<script src="https://gist.github.com/3693967.js"> </script>
+</div>

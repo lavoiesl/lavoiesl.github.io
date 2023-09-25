@@ -1,0 +1,115 @@
+---
+title: "Using a public CDN versus hosting custom libraries"
+tags: ["CSS", "Frontend", "Javascript", "CDN", "jQuery", "Twitter Bootstrap"]
+date: 2012-10-26 13:21:00 -0400
+---
+
+<h3>
+The plus side of using a public CDN</h3>
+<div>
+It is becoming common practice to use public CDNs to host some assets like jQuery and Bootstrap. The advantage is huge: less bandwidth usage for you, fully configured CDN will everything like Gzip, cache headers, etc. and a chance that even on the first load of your website, the user will already have the asset in his cache.<br />
+<h3>
+The down side</h3>
+<div>
+</div>
+However, those libraries often come fully bundled. The whole Javascript for jQuery UI is whopping 230KB. This of course is cached, gzipped and everything, but you still have to parse this Javascript. Twitter Bootstrap also runs a lot of onLoad functions to bind automatically. Almost all libraries like those have builders that let you choose which part you need, reducing the load quite a bit. Moreover, you increase a lot the number of HTTP requests while you could be bundling all JS/CSS libraries together.<br />
+<h3>
+Testing the difference</h3>
+</div>
+<div>
+So I decided to do a comparison of the three options: using a <b>public</b> <b>CDN</b>, hosting everything yourself bundled in one JS, one CSS (<b>Hosted)</b> and hosting only a subset of the features (<b>Custom)</b>. The demo was done using <a href="https://github.com/kriswallsmith/assetic" target="_blank">Assetic</a>&nbsp;to minify and concatenate.&nbsp;<a href="http://www.cslavoie.com/cdn-demo" target="_blank">It is available here</a>&nbsp;and it <a href="https://github.com/lavoiesl/cdn-demo" target="_blank">source code here</a>&nbsp;but the subset looks like this:</div>
+<div>
+<ul>
+<li>jQuery</li>
+<li>jQuery UI (including core and dependencies)</li>
+<ul>
+<li>Dialog</li>
+<li>Datepicker</li>
+</ul>
+<li>Twitter Bootstrap</li>
+<ul>
+<li>No responsive</li>
+<li>Alert</li>
+<li>Button</li>
+<li>Modal</li>
+<li>Tooltip</li>
+<li>Tab</li>
+</ul>
+</ul>
+<div>
+On the demo, you may notice Javascript errors, I may have made some errors in the dependencies order, but it does not change the idea.</div>
+</div>
+<div>
+<br /></div>
+<div>
+Then, the tests are done&nbsp;fully&nbsp;<b>cached</b>, <b>304</b> requests (when forcing refresh) and&nbsp;without any cache (<b>No cache)</b>.&nbsp;<b>Exec time</b> is calculated using <a href="https://chrome.google.com/webstore/detail/speed-tracer-by-google/ognampngfcbddbfemdapefohjiobgbdl" target="_blank">Google Speed Tracer</a>, it includes parsing of JS/CSS and some JS execution. Keep in mind that the DOM was almost empty so result could scale a lot on crowded pages.</div>
+<h3>
+Results breakdown</h3>
+<table border="0" cellpadding="6" style="text-align: right; width: 100%;">
+    <thead>
+<tr>
+            <th></th>
+            <th>Custom&nbsp;</th>
+            <th>Hosted</th>
+            <th>Public CDN</th>
+            <th>Half/CDN</th>
+        </tr>
+</thead>
+    <tbody>
+<tr>
+            <th>Gzipped size</th>
+            <td>82.91 KB</td>
+            <td>110.13 KB</td>
+            <td>128.93 KB</td>
+            <td>36 %</td>
+        </tr>
+<tr>
+            <th>Exec time</th>
+            <td>15 ms</td>
+            <td>22 ms</td>
+            <td>22 ms</td>
+            <td>32 %</td>
+        </tr>
+<tr>
+            <th>Cached</th>
+            <td>110 ms</td>
+            <td>130 ms</td>
+            <td>150 ms</td>
+            <td>27 %</td>
+        </tr>
+<tr>
+            <th>304</th>
+            <td>125 ms</td>
+            <td>155 ms</td>
+            <td>195 ms</td>
+            <td>36 %</td>
+        </tr>
+<tr>
+            <th>No cache</th>
+            <td>220 ms</td>
+            <td>240 ms</td>
+            <td>250 ms</td>
+            <td>12 %</td>
+        </tr>
+</tbody>
+</table>
+* The measured time is onLoad event, so all files are downloaded, script are executed and the browser is ready.<br />
+<h3>
+Developer tools screenshots</h3>
+<br />
+<iframe class="imgur-album" frameborder="0" height="500" src="http://imgur.com/a/AyyNI/embed" width="100%"></iframe>
+
+<br />
+<h3>
+Conclusion</h3>
+<div>
+Public CDN are really effective, but if you configure your CDN well, they are pretty on par. However, the difference is there and visible. As the page gets bigger and you add your own assets this idea quickly begins to become important. Also, don’t be too quick on calling micro-optimization because in the order 200ms, it is clearly noticeable.</div>
+<h3>
+CDN resources</h3>
+<ul>
+<li><a href="https://developers.google.com/speed/libraries/devguide" target="_blank">Google Hosted Libraries</a></li>
+<li><a href="http://www.asp.net/ajaxlibrary/cdn.ashx" target="_blank">Microsoft Ajax Libraries</a></li>
+<li><a href="http://www.bootstrapcdn.com/" target="_blank">Bootstrap CDN</a></li>
+</ul>
+<div>
+</div>

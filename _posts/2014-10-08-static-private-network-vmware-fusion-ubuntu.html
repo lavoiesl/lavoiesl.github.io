@@ -1,0 +1,61 @@
+---
+title: "Creating a static private network on VMWare Fusion with Ubuntu"
+tags: ["VMWare", "Ubuntu"]
+date: 2014-10-08 11:58:00 -0400
+---
+
+This tutorial is using VMWare Fusion 7, Ubuntu 14.04.1 server and OSX 10.9<br />
+<br />
+The goal here is to create a private network shared with selected VMs and the host, while offering NATing to connect to the Internet. VMWare offers some&nbsp;<a href="https://pubs.vmware.com/fusion-7/index.jsp?topic=%2Fcom.vmware.fusion.help.doc%2FGUID-DEB1FB99-0E44-4AAA-9693-6C2687098F13.html" target="_blank">documentation</a>, which works great with DHCP, but I needed to specify everything static for custom needs.<br />
+<h3>
+Creating a private network</h3>
+<div>
+<ol>
+<li>Go to the Network tab of general settings (⌘,)</li>
+<li>Unlock the screen by clicking on the lock.</li>
+<li>Add a custom network by clicking on the&nbsp;+.</li>
+<li>Make sure all options are checked (see screenshot).</li>
+<li>Specify a subnet IP, I will be using 192.168.200.0.<br />Activating the DHCP here is needed for the host to connect to it, even though our VMs will be using static IPs.</li>
+</ol>
+<div class="separator" style="clear: both; text-align: center;">
+<a href="http://1.bp.blogspot.com/-0TaYutCv2G0/VDVcEim4T7I/AAAAAAAABJM/MmIrB09u62Y/s1600/Screen%2BShot%2B2014-10-08%2Bat%2B11.43.17%2BAM.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://1.bp.blogspot.com/-0TaYutCv2G0/VDVcEim4T7I/AAAAAAAABJM/MmIrB09u62Y/s1600/Screen%2BShot%2B2014-10-08%2Bat%2B11.43.17%2BAM.png" height="302" width="320" /></a></div>
+<h3>
+Configure the VM’s network adapter</h3>
+</div>
+<div>
+<ol>
+<li>Make sure your VM is powered off.</li>
+<li>Go to the VM’s settings (⌘E)</li>
+<li>Click on Network Adapter.</li>
+<li>Select your newly created network (for me it was vmnet2).</li>
+</ol>
+<div class="separator" style="clear: both; text-align: center;">
+<a href="http://2.bp.blogspot.com/-bfJZ1ZOXids/VDVdBE5psyI/AAAAAAAABJU/j0LaxTlIor4/s1600/Screen%2BShot%2B2014-10-08%2Bat%2B11.35.28%2BAM.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://2.bp.blogspot.com/-bfJZ1ZOXids/VDVdBE5psyI/AAAAAAAABJU/j0LaxTlIor4/s1600/Screen%2BShot%2B2014-10-08%2Bat%2B11.35.28%2BAM.png" height="257" width="320" /></a></div>
+<div>
+<br /></div>
+<h3>
+Configure the OS’s network adapter</h3>
+</div>
+<div>
+<ol>
+<li>Edit the network interfaces :<br /><span style="font-family: 'Courier New', Courier, monospace;">$ sudo nano /etc/network/interfaces</span><span style="font-family: 'Courier New', Courier, monospace;"><br /><br /># The loopback<br />network interface</span><span style="font-family: 'Courier New', Courier, monospace;"><br />auto lo</span><span style="font-family: 'Courier New', Courier, monospace;"><br />iface lo inet loopback</span><span style="font-family: 'Courier New', Courier, monospace;"><br /><br /># The primary network interface</span><span style="font-family: 'Courier New', Courier, monospace;"><br />auto eth0</span><span style="font-family: 'Courier New', Courier, monospace;"><br />iface eth0 inet static</span><span style="font-family: 'Courier New', Courier, monospace;"><br />&nbsp; &nbsp; address 192.168.200.100</span><span style="font-family: 'Courier New', Courier, monospace;"><br />&nbsp; &nbsp; netmask 255.255.255.0</span><span style="font-family: 'Courier New', Courier, monospace;"><br />&nbsp; &nbsp; gateway 192.168.200.2</span><span style="font-family: 'Courier New', Courier, monospace;"><br />&nbsp; &nbsp; dns-nameservers 192.168.200.2</span></li>
+<li><span style="font-family: inherit;">Reboot</span></li>
+<li><span style="font-family: inherit;">Check to see if Internet works :</span><br /><span style="font-family: Courier New, Courier, monospace;">ping google.com</span></li>
+<li><span style="font-family: inherit;">Check to see if you can see your host :</span><br /><span style="font-family: Courier New, Courier, monospace;">ping 192.168.200.1</span></li>
+<li><span style="font-family: inherit;">Try SSHing to your VM from your host :</span><span style="font-family: 'Courier New', Courier, monospace;">ssh 192.168.200.100</span></li>
+</ol>
+<div>
+<span style="font-family: Courier New, Courier, monospace;"><br /></span></div>
+</div>
+<div>
+<span style="font-family: inherit;">You can add more VMs to this private network, just remember to change the IP from&nbsp;</span><span style="font-family: 'Courier New', Courier, monospace;">192.168.200.100</span><span style="font-family: inherit;"> to something else from&nbsp;</span><span style="font-family: 'Courier New', Courier, monospace;">192.168.200.3 to&nbsp;</span><span style="font-family: 'Courier New', Courier, monospace;">192.168.200.253</span><span style="font-family: inherit;">.</span></div>
+<div>
+<span style="font-family: inherit;"><br /></span></div>
+<div>
+<span style="font-family: inherit;"><br /></span></div>
+<div>
+<span style="font-family: Courier New, Courier, monospace;"></span><br />
+<div>
+<span style="font-family: Courier New, Courier, monospace;"><br /></span></div>
+<span style="font-family: Courier New, Courier, monospace;">
+</span></div>

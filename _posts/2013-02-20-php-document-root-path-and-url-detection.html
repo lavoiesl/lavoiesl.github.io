@@ -1,0 +1,65 @@
+---
+title: "PHP Document Root, Path and URL detection"
+tags: ["Apache", "PHP"]
+date: 2013-02-20 15:21:00 -0500
+---
+
+PHP has no built-in base URL variable. In all the mess that is the $_SERVER variable, there is nothing that will tell you the base URL for your website. &nbsp;This is very useful when embedding assets and building URLs.<br />
+<br />
+The thing is you can start from the DOCUMENT_ROOT and work your way from there, but if you are using Apache’s <a href="http://httpd.apache.org/docs/2.2/mod/mod_vhost_alias.html" target="_blank">VirtualDocumentRoot</a>, it is not reliable. Hence, you need to guess it.<br />
+<br />
+The trick resides in SCRIPT_NAME and SCRIPT_FILENAME that respectively describe the executed PHP file, starting from the domain, and its full path. I used exclamation marks as delimiters as I doubt you have some in your folder names. If you do, then… shame on you.<br />
+<br />
+While I was at it, I added some port and https detection and the absolute URL.<br />
+<br />
+<table align="center" border="1" cellpadding="5" cellspacing="0" style="text-align: left;">
+  <caption>Example</caption>
+  <thead>
+<tr><th>Variable</th>
+    <th>Content</th>
+  </tr>
+</thead>
+  <tbody>
+<tr>
+      <th>base_dir</th>
+      <td>/var/www/mywebsite</td>
+    </tr>
+<tr>
+      <th>doc_root</th>
+      <td>/var/www</td>
+    </tr>
+<tr>
+      <th>base_url</th>
+      <td>/mywebsite</td>
+    </tr>
+<tr>
+      <th>protocol</th>
+      <td>http</td>
+    </tr>
+<tr>
+      <th>port</th>
+      <td>8080</td>
+    </tr>
+<tr>
+      <th>domain</th>
+      <td>example.com</td>
+    </tr>
+<tr>
+      <th>full_url</th>
+      <td>http://example.com:8080/mywebsite</td>
+    </tr>
+</tbody>
+</table>
+<br />
+<script src="https://gist.github.com/lavoiesl/4998690.js"></script>
+
+<br />
+<h3>
+Not included</h3>
+<div>
+<ol>
+<li>Port detection of a server running behind a proxy. You may want to use the port of the proxy, not the Web server.</li>
+<li>Same goes for https.</li>
+<li>Non-resolved symlinks and relative paths. You may want to throw a couple of <a href="http://php.net/realpath" target="_blank">realpath()</a>&nbsp;in there.</li>
+</ol>
+</div>

@@ -1,0 +1,83 @@
+---
+title: "Protect Webserver against DOS attacks using UFW"
+tags: ["Apache", "iptables", "Nginx", "UFW", "VPS", "sysadmin"]
+date: 2012-09-18 01:30:00 -0400
+---
+
+Ubuntu comes bundled with <a href="https://help.ubuntu.com/community/UFW" target="_blank">UFW</a>, which is an interface to <a href="https://help.ubuntu.com/community/IptablesHowTo" target="_blank">iptables</a>. This is basically a very lightweight router/firewall inside the Linux kernel that runs way before any other application.<br />
+<br />
+Typical setup of ufw is to allow HTTP(S), limit SSH and shut everything else. This is not a UFW or iptables tutorial, you may find a lot of online help to guide you through all your needs. However, I personally had a lot of difficulties to find good documentation on how to protect yourself against HTTP attacks.<br />
+<h3>
+A lot of HTTP requests is normal</h3>
+The problem is that HTTP can get very noisy. A typical Web page can easily have up to a hundred of assets but usually, if you receive 100 requests in a second, it means you are under siege. If you really need to have 100 assets on a single Web page, you need a CDN, not as better server.<br />
+<h3>
+Rate limiting</h3>
+<div>
+These rules have been mostly guessed through trial-and-error and some search around the Web, tweak to fit your needs. A rate limit of x connections per y seconds means that if x connections has been initiated in the last y seconds by this profile, it will be dropped. Dropping is actually a nice protection against flooding because the sender won't know that you dropped it. He might think the packet was lost, that the port is closed or even better, the server is overloaded. Imagine how nice, your attacker thinks he succeeded, but in fact you are up and running, him being blocked.</div>
+<br />
+<b>
+Connections per IP</b><br />
+<div>
+A connection is an open channel. A typical browser will open around 5 connections per page load and they should last under 5 seconds each. Firefox, for example, has a default max of 15 connections per server and 256 total.</div>
+<div>
+<br /></div>
+<div>
+I decided to go for 20 connections / 10 seconds / IP.&nbsp;</div>
+<br />
+<b>
+Connections per Class C</b><br />
+<div>
+Same a above, but this time we apply the rule to the whole Class C of the IP because it is quite common for someone to have a bunch of available IPs. This means for example all IPs looking like 11.12.13.*</div>
+<br />
+<div>
+I decided to go for 50 simultaneous connections.</div>
+<br />
+<b>
+Packets per IP</b><br />
+<div>
+This is the challenging part. Due to a limitation that is not easy to circumvent, it is only possible to keep track of the last 20 packets. At the same time, it might add a considerable overhead to track 100 packets for each IPs. While big website may eventually need more than this, like I said, you should take a look in a proper CDN.</div>
+<div>
+<br /></div>
+<div>
+I decided to go for 20 packets / second / IP</div>
+<h3>
+Configuring UFW</h3>
+The following instructions are targeted at UFW, but it is really just a wrapper so it should be easy to adapt them for a generic system.<br />
+<br />
+Edit <span style="font-family: Courier New, Courier, monospace;">/etc/ufw/before.rules</span>, putting each part where it belongs<br />
+<br />
+<script src="https://gist.github.com/3740917.js"> </script>
+
+Make sure ufw runs and reload everything using <span style="font-family: Courier New, Courier, monospace;">ufw reload.</span><br />
+<h3>
+<span style="font-family: inherit;">Testing the results</span></h3>
+<div>
+<span style="font-family: inherit;">Make sure everything runs smoothly by refreshing your browser like a mad-man. You should start getting timeout after ~15 refreshes and it should come back in less than 30 seconds. This is good.</span></div>
+<div>
+<span style="font-family: inherit;"><br /></span></div>
+<div>
+<span style="font-family: inherit;">But if you want to get serious on your tests, some tools may help you putting your server to its knees. It is highly discouraged to use this on a production server, but it is still better if you do it yourself than if you wait for someone to try.</span></div>
+<div>
+<span style="font-family: inherit;"><br /></span></div>
+<div>
+<span style="font-family: inherit;">Try those with UFW enabled and disabled to see the difference but be careful, some machines may downright crash on you or fill all available space with logs.</span></div>
+<div>
+<ul>
+<li>http://ha.ckers.org/slowloris/<br />Written in Perl, features a lot of common attacks, including HTTPS</li>
+<li>http://www.sectorix.com/2012/05/17/hulk-web-server-dos-tool/<br />Written in Python, basic multi-threaded attack, very easy to use.</li>
+<li>http://www.joedog.org/siege-home/<br />Compiled, available in Ubuntu repositories, very good to benchmark</li>
+<li>http://blitz.io/<br />Online service when you can test freely with up to 250 concurrent users</li>
+</ul>
+</div>
+<div>
+<span style="font-family: inherit;">To confirm that everything works perfectly, SSH into your machine and start a </span><span style="font-family: Courier New, Courier, monospace;">tail -f /var/log/ufw.log </span><span style="font-family: inherit;">to see the packets being dropped and </span><span style="font-family: Courier New, Courier, monospace;">htop&nbsp;</span><span style="font-family: inherit;">to watch the CPU have fun.&nbsp;</span></div>
+<div>
+<span style="font-family: inherit;"><br /></span></div>
+<div>
+<span style="font-family: inherit;">SSH into another machine and start a script. You should see the CPU sky-rocket for a few seconds and then go back to normal. Logs will start to appear and your stress-tool will have some problems. While all this is going on, you should be able to browse normally your website using your computer.&nbsp;</span></div>
+<div>
+<span style="font-family: inherit;"><br /></span></div>
+<div>
+Great success.</div>
+<div>
+<span style="font-family: inherit;"><br /></span></div>
