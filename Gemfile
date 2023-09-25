@@ -7,6 +7,6 @@ group :development do
 end
 
 group :jekyll_plugins do
-  gem "minimal-mistakes-jekyll"
   gem "github-pages"
+  gem "jekyll-include-cache"
 end

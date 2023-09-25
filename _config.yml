@@ -1,5 +1,5 @@
-author: "Sebastien Lavoie"
-description: "Some short description of your blog can go here." # This will show up in places like twitter, linkedin, etc, if you share your sites url as a post.
+# author: "Sebastien Lavoie"
+# description: "Some short description of your blog can go here." # This will show up in places like twitter, linkedin, etc, if you share your sites url as a post.
 
 # Email / Social media user names used by the minima theme:
 # All of these are optional and can be removed or commented out
@@ -14,18 +14,7 @@ linkedin_username: "lavoiesl"
 #youtube_username: username
 #googleplus_username: +username
 
-theme: "minimal-mistakes-jekyll"
-
 rss: rss
-
-kramdown:
-  syntax_highlighter_opts:
-    disable: true
-
-plugins:
-  - jekyll-feed
-  - jekyll-gist
-  - jekyll-sitemap
 
 # Welcome to Jekyll!
 #
@@ -40,7 +29,7 @@ plugins:
 # https://mmistakes.github.io/minimal-mistakes/docs/quick-start-guide/#installing-the-theme
 
 # theme                  : "minimal-mistakes-jekyll"
-# remote_theme           : "mmistakes/minimal-mistakes"
+remote_theme           : "mmistakes/minimal-mistakes@4.24.0"
 minimal_mistakes_skin    : dark # "default", "air", "aqua", "contrast", "dark", "dirt", "neon", "mint", "plum", "sunrise"
 
 # Site Settings
