@@ -1,0 +1,11 @@
+default: true
+
+# Reasonable adjustments for Jekyll/blog content
+MD013: false       # Line length
+MD024: false       # Multiple headings with same content
+MD033: false       # Inline HTML allowed in posts/pages
+MD041: false       # First line heading not required in all docs
+
+# Code blocks and lists can be loose in blog posts
+MD012: false       # Multiple consecutive blank lines
+
