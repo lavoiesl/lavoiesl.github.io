@@ -1,3 +1,3 @@
-Repository for http://blog.lavoie.sl/
+Repository for <http://blog.lavoie.sl/>
 
-Built with https://mmistakes.github.io/minimal-mistakes/
+Built with <https://mmistakes.github.io/minimal-mistakes/>
