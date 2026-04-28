@@ -34,4 +34,18 @@ Two good libraries:</div>
 </div>
 But really, it boils down to this:
 
-<script src="https://gist.github.com/3879295.js"> </script>
+{% highlight php linenos %}
+<?php
+// bcrypt.php
+
+function bcrypt_encode($raw, $cost = 10) {
+    $salt = substr(base_convert(sha1(uniqid(mt_rand(), true)), 16, 36), 0, 22);
+    $param = sprintf('$2a$%02d$%s$', $cost, $salt);
+    return crypt($raw, $param);
+}
+
+function bcrypt_verify($raw, $encoded) {
+    return $encoded === crypt($raw, $encoded);
+}
+{% endhighlight %}
+<a href="https://gist.github.com/lavoiesl/3879295">View Gist</a> </script>

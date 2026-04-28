@@ -6,6 +6,7 @@ date: 2012-07-09 16:24:00 -0400
 
 CMS often come with a .htaccess that has a RewriteRule like this:<br />
 <br />
+
 {% highlight apache %}
 # RewriteBase /
 RewriteCond %{REQUEST_FILENAME} !-f
@@ -18,6 +19,57 @@ By checking the content of DOCUMENT_ROOT, we can guess which setup we are using 
 <br />
 Note however that this method is heavy on string comparison which is slow and should not go on production.<br />
 <br />
-<script src="https://gist.github.com/2721888.js">
 
-</script>
+{% highlight apacheconf linenos %}
+# .htaccess
+# VirtualHost Alias detection in .htaccess
+# https://gist.github.com/2721888
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Neat trick to rewrite with or without leading slash
+    # Works by checking if DOCUMENT_ROOT + REQUEST_URI == REQUEST_FILENAME
+    # If not, it is because you are in a virtual host alias and DOCUMENT_ROOT is not reliable
+    # Example when alias is active:
+    #   DOCUMENT_ROOT:      /var/www
+    #   real root:          /var/www/example.com/
+    #   REQUEST_FILENAME:   /var/www/example.com/foo
+    #
+    # Requesting via alias:
+    #   full request:       http://example.com/foo
+    #   REQUEST_URI:        /foo
+    #   test:               /var/www + /foo == /var/www/example.com/foo  => false
+    #   Rewrites to:        /app_dev.php
+    #
+    # Requesting via default host:
+    #   full request:       http://localhost/example.com/foo
+    #   REQUEST_URI:        /example.com/foo
+    #   test:               /var/www + /example.com/foo == /var/www/example.com/foo  => true
+    #   Rewrites to:        /example.com/app_dev.php
+
+    <IfModule mod_vhost_alias.c>
+      RewriteCond %{REQUEST_FILENAME} !-f
+      RewriteCond %{REQUEST_FILENAME}:::%{DOCUMENT_ROOT}%{REQUEST_URI} ^(.+):::\1
+      RewriteRule ^(.*)$ app_dev.php [QSA,L]
+
+      RewriteCond %{REQUEST_FILENAME} !-f
+      RewriteCond %{REQUEST_FILENAME}:::%{DOCUMENT_ROOT}%{REQUEST_URI} !^(.+):::\1
+      RewriteRule ^(.*)$ /app_dev.php [QSA,L]
+    </IfModule>
+
+    # All this is useless if mod_vhost_alias is not active
+    <IfModule !mod_vhost_alias.c>
+      RewriteCond %{REQUEST_FILENAME} !-f
+      RewriteRule ^(.*)$ app_dev.php [QSA,L]
+    </IfModule>
+
+    # While the method above is nice, it is slow
+    # Be sure to deactivate all this when deploying, with or without RewriteBase
+
+    ## RewriteBase /
+    #  RewriteCond %{REQUEST_FILENAME} !-f
+    #  RewriteRule ^(.*)$ app.php [QSA,L]
+</IfModule>
+{% endhighlight %}
+<a href="https://gist.github.com/lavoiesl/2721888">View Gist</a>

@@ -59,11 +59,64 @@ Inspired by the <span style="font-family: Courier New, Courier, monospace;">once
 <br /></div>
 <div>
 <br /></div>
-<script src="https://gist.github.com/lavoiesl/6241939.js?file=setupOnce.js"></script>
+{% highlight javascript linenos %}
+// setupOnce.js
+/**
+ * Runs `setup` on the first invocation
+ * Runs `callback` on each invocation
+ * @link https://gist.github.com/lavoiesl/6241939
+ *
+ * @param  Function setup
+ * @param  Function callback
+ */
+function setupOnce(setup, callback) {
+  var ran = false;
 
-<script src="https://gist.github.com/lavoiesl/6241939.js?file=examples.js"></script>
+  return function() {
+    if (!ran) {
+      setup.apply(this, arguments);
+      ran = true;
+    }
 
-<br />
+    return callback.apply(this, arguments);
+  }
+}
+{% endhighlight %}
+<a href="https://gist.github.com/lavoiesl/6241939">View Gist</a>
+
+{% highlight javascript linenos %}
+// examples.js
+/**
+ * Example using a Deferred object
+ */
+(function(){
+  var deferred;
+
+  $(document).on('click', '.show-scores', setupOnce(function(){
+    // $.getJSON returns a $.Deferred object
+    deferred = $.getJSON('/scores.json');
+  }, function() {
+    deferred.done(function(json) {
+      // fancy score handling
+    });
+  }));
+})();
+
+/**
+ * Prepare a modal box or a template once and fill it in at each invocation
+ */
+(function(){
+  var modal;
+
+  $(document).on('click', '.modal-trigger', setupOnce(function(){
+      modal = new Modal();
+  }, function() {
+      modal.title = this.source.title;
+      modal.show();
+  }));
+})();
+{% endhighlight %}
+<a href="https://gist.github.com/lavoiesl/6241939">View Gist</a>
 <h3>
 Mobile</h3>
 </div>

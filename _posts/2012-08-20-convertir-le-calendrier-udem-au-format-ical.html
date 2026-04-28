@@ -19,9 +19,20 @@ Voici une solution pour convertir le tout en .ics compatible avec Outlook, Gmail
 <li>Là où le curseur clignote, coller ceci:</li>
 </ol>
 </div>
-<script src="https://gist.github.com/3409527.js?file=bookmarklet-dev.js"></script>
-
-<br />
+{% highlight javascript linenos %}
+// bookmarklet-dev.js
+(function(d,s){
+    var n,b=d.getElementsByTagName(s)[0];
+    function l(u){
+        n=d.createElement(s);
+        n.src=u;
+        b.parentNode.insertBefore(n,b);
+    }
+    l("//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js");
+    l("//gist.github.com/raw/3409527/converter.js");
+})(document, "script");
+{% endhighlight %}
+<a href="https://gist.github.com/lavoiesl/3409527">View Gist</a>
 <div>
 Tout devrait fonctionner automatiquement et télécharger un fichier qui s’appellera download.ics<br />
 <br />

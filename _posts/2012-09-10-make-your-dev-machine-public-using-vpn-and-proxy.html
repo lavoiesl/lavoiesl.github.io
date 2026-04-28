@@ -48,5 +48,28 @@ If you have unprotected data like phpMyAdmin or other websites you are developin
 <h3>
 Configuration example for Apache and Nginx</h3>
 <div>
-<script src="https://gist.github.com/3693967.js"> </script>
+{% highlight text linenos %}
+# apache-proxy.conf
+<VirtualHost *:80>
+  ServerName dev.lavoie.sl
+  ServerAlias *.dev.lavoie.sl
+
+  ProxyRequests Off
+  ProxyPreserveHost On
+  ProxyPass / http://192.168.42.200/
+</VirtualHost>
+{% endhighlight %}
+
+{% highlight text linenos %}
+# nginx-proxy.conf
+server {
+  server_name .dev.lavoie.sl;
+  proxy_pass  http://192.168.42.200/;
+  proxy_buffering off;
+  proxy_set_header Host $host;
+  proxy_connect_timeout 10s;
+  proxy_read_timeout 60s;
+}
+{% endhighlight %}
+<a href="https://gist.github.com/lavoiesl/3693967">View Gist</a> </script>
 </div>

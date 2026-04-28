@@ -13,4 +13,40 @@ However, it is important, for a useful usage of your shared cache, to only start
 So the idea is to start a session when you need it; for example, in a login page. This will send a header to the client, setting a cookie and the cookie will get sent back on every request. Therefore, in some global file, you can detect this cookie and reload the session. At last, on the logout, clear everything.<br />
 <br />
 <br />
-<script src="https://gist.github.com/4319721.js"></script>
+
+{% highlight php linenos %}
+<?php
+# global.php
+# global.php
+# In some global configuration file,
+# Start the session only if the cookie is present
+if (isset($_COOKIE[session_name()])) { 
+  session_start(); 
+}
+# In the same file or elsewhere, after the previous lines:
+if (isset($_SESSION['userid'])) { 
+  # If the session has been loaded and the userid is detected, set it
+  $userid = $_SESSION['userid']; 
+}
+{% endhighlight %}
+
+{% highlight php linenos %}
+<?php 
+# login.php
+# login.php
+# We start a session if it not already started
+session_id() == '' && session_start(); 
+$_SESSION['userid'] = '1';
+{% endhighlight %}
+
+{% highlight php linenos %}
+<?php
+# logout.php
+# logout.php
+session_start(); 
+# Destroy the session, this is for the current request
+session_destroy();
+# Ensure that the cookie is destructed by setting a date in the past
+setcookie(session_name(), false, time() - 3600);
+{% endhighlight %}
+<a href="https://gist.github.com/lavoiesl/4319721">View Gist</a>

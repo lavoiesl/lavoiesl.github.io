@@ -13,4 +13,69 @@ The trick is to put a lock on the cache entry and make the other processes wait.
 This example uses Doctrine Cache as a global variable, but this should definitely be refactored (or change to another system).<br />
 <br />
 <br />
-<script src="https://gist.github.com/lavoiesl/9cdc5893a71c53e16b47.js"></script>
+
+{% highlight php linenos %}
+<?php
+# cacheGetDefault.php
+
+/**
+ * Get a value from the cache or compute it using a callback
+ * Includes cache stampede protection
+ * @link http://en.wikipedia.org/wiki/Cache_stampede
+ * @link http://blog.lavoie.sl/2014/12/preventing-cache-stampede-using-doctrine-cache.html
+ * @global cache Doctrine\Common\Cache\Cache
+ *
+ * @param  string  $key         Cache key
+ * @param  Closure $callback    Computing function
+ * @param  float   $ttl         Seconds
+ * @param  float   $stampedeTtl Seconds before cache stampede expires
+ *                              Should be about 2-3 times the estimated time to build the cache
+ * @return mixed
+ */
+function cacheGetDefault($key, Closure $callback, $ttl = 0, $stampedeTtl = null)
+{
+    global $cache;
+
+    $data = $cache->fetch($key);
+
+    if (false !== $data) {
+        return $data;
+    }
+
+    if (null !== $stampede) {
+        $stampede = max((double) $stampede, 0.001); // prevention for infinite ttl
+        // data is being computed, wait
+        while ('__STAMPEDE__' === $data) {
+            // wait 1/20th of the stampede TTL, to give the CPU a chance
+            sleep($stampede / 20);
+            $data = $cache->fetch($key);
+        }
+    }
+
+    if ($data === false) {
+        if (null !== $stampedeTtl) {
+            // acquire lock
+            $cache->save($key, '__STAMPEDE__', $stampedeTtl);
+        }
+        // compute the actual data
+        $data = $callback();
+    }
+
+    $cache->save($key, $data, $ttl);
+
+    return $data;
+}
+{% endhighlight %}
+
+{% highlight php linenos %}
+<?php
+# useCache.php
+
+$cacheTtl = 3600; // an hour
+$stampedeTtl = 5; // seconds before releasing lock
+
+cacheGetDefault('recent_tweets', function() {
+    return file_get_contents('https://api.twitter.com/1.1/search/tweets.json?q=@lavoiesl');
+}, $cacheTtl, $stampedeTtl);
+{% endhighlight %}
+<a href="https://gist.github.com/lavoiesl/9cdc5893a71c53e16b47">View Gist</a>

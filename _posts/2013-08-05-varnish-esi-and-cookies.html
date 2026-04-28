@@ -35,4 +35,70 @@ Since the X-Esi-Level header is enforced to be only present for ESI requests, yo
 <div>
 Here is the VCL used for Varnish and a simple example to illustrate the ?esi-cookies=1 trick.</div>
 <br />
-<script src="https://gist.github.com/lavoiesl/6156632.js"></script>
+
+{% highlight php linenos %}
+<?php
+# index.php
+header('Cache-Control: private');
+header('Pragma: no-cache');
+
+# Activate ESI processing
+header('X-Esi: 1');
+?>
+<!doctype html>
+<html>
+<head><title>Varnish test</title></head>
+<body>
+<p>This should NOT be cached:</p>
+<pre>
+Cookies: <?php print_r($_COOKIE); ?>
+Timestamp: <?php echo microtime(true); ?>
+</pre>
+<hr>
+<p>This should be cached:</p>
+<esi:include src="partial.php" />
+<hr>
+<p>This should be cached, but only if no Cookies are set:</p>
+<esi:include src="partial.php?esi-cookies=1" />
+</body>
+</html>
+{% endhighlight %}
+
+{% highlight php linenos %}
+<?php
+# partial.php
+# This file is slow to generate and can be cached
+
+# Shared cache only (Varnish)
+header('Cache-Control: shared, smax-age=30');
+?>
+<pre>
+Cookies: <?php print_r($_COOKIE); ?>
+Timestamp: <?php echo microtime(true); ?>
+</pre>
+{% endhighlight %}
+
+{% highlight vcl linenos %}
+# varnish.vcl
+sub vcl_recv {
+  if (req.esi_level > 0) {
+    # Backend may want to treat this request differently
+    set req.http.X-Esi-Level = req.esi_level;
+
+    if (req.url !~ "esi-cookies=1") {
+      unset req.http.cookie;
+    }
+  } else {
+    unset req.http.X-Esi-Level; # remove for security
+  }
+}
+
+sub vcl_fetch {
+  # Activate Edge Side Includes, but only if X-Esi header is present
+  if (beresp.http.X-Esi) {
+    set beresp.do_esi = true;
+    unset beresp.http.X-Esi; # remove header
+  }
+}
+{% endhighlight %}
+<a href="https://gist.github.com/lavoiesl/6156632">View Gist</a>

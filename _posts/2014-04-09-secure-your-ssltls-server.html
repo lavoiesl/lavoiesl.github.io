@@ -11,17 +11,15 @@ Recently the <a href="http://heartbleed.com/" target="_blank">Heartbleed bug</a>
 <div>
 To verify if you have protected, run this command and check for built on to be greater or equal to April 7th, 2014:</div>
 <div>
-<div>
-<span style="font-family: Courier New, Courier, monospace;">$ openssl version -a</span></div>
-<div>
-<span style="font-family: Courier New, Courier, monospace;"><br /></span></div>
-<div>
-<span style="font-family: Courier New, Courier, monospace;">OpenSSL 1.0.1e 11 Feb 2013</span></div>
-<div>
-<span style="font-family: Courier New, Courier, monospace;">built on: Mon Apr &nbsp;7 20:33:19 UTC 2014</span></div>
-<div>
-<span style="font-family: Courier New, Courier, monospace;">platform: debian-amd64</span></div>
-</div>
+
+{% highlight shell linenos %}
+$ openssl version -a
+
+OpenSSL 1.0.1e 11 Feb 2013
+built on: Mon Apr &nbsp;7 20:33:19 UTC 2014
+platform: debian-amd64
+{% endhighlight %}
+
 <h3>
 Disable weak ciphers</h3>
 <div>
@@ -32,10 +30,11 @@ The way SSL/TLS works is that the client and the server must agree on a cipher t
 I am using this configuration for Apache:</div>
 <div>
 <br /></div>
-<div>
-<span style="font-family: Courier New, Courier, monospace;">SSLCipherSuite ALL:!ADH:!AECDH:RC4+RSA:+HIGH:+MEDIUM:!LOW:!SSLv2:!EXPORT</span></div>
-<div>
-<span style="font-family: Courier New, Courier, monospace;"><br /></span></div>
+
+{% highlight shell linenos %}
+SSLCipherSuite ALL:!ADH:!AECDH:RC4+RSA:+HIGH:+MEDIUM:!LOW:!SSLv2:!EXPORT
+{% endhighlight %}
+
 <div>
 <span style="font-family: inherit;">For Nginx, see their <a href="http://wiki.nginx.org/NginxHttpSslModule#ssl_ciphers" target="_blank">configuration reference</a>. Since 1.0.5, they are using a sensible default. Otherwise, you can use the same as above.</span></div>
 <h3>

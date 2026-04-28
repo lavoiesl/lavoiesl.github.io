@@ -16,7 +16,43 @@ I am currently working on a big project with a lot of spaghetti-legacy code with
 <span style="font-family: Courier New, Courier, monospace;"><br /></span>
 I eventually managed to change every field, change all database connections and remove and traces of encode/decode. However, I still had the problem of having data not encoded properly in <i>some</i>&nbsp;rows/columns. You may or may not be familiar with mb_detect_encoding, here is a very simple trick:<br />
 <br />
-<script src="https://gist.github.com/lavoiesl/d7a41597c8023978cab7.js"></script>
+
+{% highlight php linenos %}
+<?php
+# check-utf8-db.php
+
+// $pdo = new PDO(...)
+
+$charsets = array('UTF-8', 'ISO-8859-1');
+
+$tables = array(
+    'events' => array(
+        'title',
+        'description',
+    ),
+    'locations' => array(
+        'title',
+        'description',
+    ),
+);
+
+foreach ($tables as $table => $fields) {
+    $result = $pdo->query('SELECT id, ' . implode(', ', $fields) . ' FROM ' . $table);
+    
+    while ($row = $result->fetch()) {
+        foreach ($fields as $field) {
+            if (($encoding = mb_detect_encoding($row[$field], $charsets, true)) != 'UTF-8') {
+                echo $table . '[' . $row['id'] . ']' . '.' . $field . ': ' . $encoding . "\n";
+
+                $converted = iconv($encoding, 'UTF-8', $row[$field]);
+                $stmt = $pdo->prepare('UPDATE ' . $table . ' SET ' . $field . ' = ? WHERE id = ?');
+                $stmt->execute(array($converted, $row['id']));
+            }
+        }
+    }
+}
+{% endhighlight %}
+<a href="https://gist.github.com/lavoiesl/d7a41597c8023978cab7">View Gist</a>
 
 Once you have detected the encoding, use iconv to convert it. This crunched through my 1GB database in no time and I was then sure that everything was in UTF-8.<br />
 <br />
