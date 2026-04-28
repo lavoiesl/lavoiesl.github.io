@@ -26,6 +26,12 @@
 - Assets: Put images in `assets/images/`; reference with absolute paths (e.g., `![Alt](/assets/images/pong.gif)`).
 - Ruby scripts: 2-space indentation; keep scripts in `.tools/`.
 
+## Copilot Skills
+
+- Repository-local Copilot skills live in `.github/skills/`.
+- Keep skill folder names lowercase kebab-case and make the `name` frontmatter match the folder.
+- Add new repo skills to `.github/skills/README.md` so they remain discoverable.
+
 ## Testing Guidelines
 
 - No unit test suite. Validate by:
