@@ -4,23 +4,23 @@ tags: ["CSS", "Responsive", "HTML"]
 date: 2013-11-26 14:19:00 -0500
 ---
 
-Having menus that gracefully adapt to the size of your screen can be troublesome. Inspired by the collapsible menu of <a href="http://getbootstrap.com/" target="_blank">Bootstrap</a>, here is a pure CSS implementation using the checkbox trick to toggle visibility.<br />
-<br />
-The example attached features a smaller menu when the screen is narrower than 900px and is collapsed then narrower than 650px. I encourage you to test whatever suits you best.<br />
-<br />
-On collapse toggle, the height and visibility are animated for a smooth transition. <span style="font-family: Courier New, Courier, monospace;">height: auto;</span> is not directly supported, so we instead animate the <span style="font-family: Courier New, Courier, monospace;">max-height</span> property. The downside is that you need to specify the max-height your menu will ever have. If you set this too high, you will experience a slight graphic glitch.<br />
-<br />
-The toggle handle is also inspired from Bootstrap, but with minimal markup.<br />
-<br />
-* the <span style="font-family: Courier New, Courier, monospace;">:checked</span> selector is not supported prior to IE9, you may use a polyfill like&nbsp;http://selectivizr.com/ if you need to.<br />
-<br />
-Happy coding !<br />
-<br />
-To test it, resize your browser.<br />
-<br />
-<a href="http://codepen.io/lavoiesl/pen/KthjD" target="_blank">Live demo on CodePen.io</a>
-<br />
-<br />
+Having menus that gracefully adapt to the size of your screen can be troublesome. Inspired by the collapsible menu of [Bootstrap](http://getbootstrap.com/), here is a pure CSS implementation using the checkbox trick to toggle visibility.
+
+The example attached features a smaller menu when the screen is narrower than 900px and is collapsed then narrower than 650px. I encourage you to test whatever suits you best.
+
+On collapse toggle, the height and visibility are animated for a smooth transition. `height: auto;` is not directly supported, so we instead animate the `max-height` property. The downside is that you need to specify the max-height your menu will ever have. If you set this too high, you will experience a slight graphic glitch.
+
+The toggle handle is also inspired from Bootstrap, but with minimal markup.
+
+\* the `:checked` selector is not supported prior to IE9, you may use a polyfill like http://selectivizr.com/ if you need to.
+
+Happy coding !
+
+To test it, resize your browser.
+
+[Live demo on CodePen.io](http://codepen.io/lavoiesl/pen/KthjD)
+
+
 
 {% highlight html linenos %}
 <!-- responsive-menu.html -->
@@ -38,8 +38,8 @@ To test it, resize your browser.<br />
 </nav>
 {% endhighlight %}
 
-{% highlight less linenos %}
-# responsive-menu.less
+{% highlight css linenos %}
+// responsive-menu.less
 // Smaller menu when on small screen
 // All padding and margin are in em, so they will scale as well
 @media (min-width : 900px) {
@@ -159,4 +159,5 @@ To test it, resize your browser.<br />
   }
 }
 {% endhighlight %}
-<a href="https://gist.github.com/lavoiesl/7664315">View Gist</a>
+[View Gist](https://gist.github.com/lavoiesl/7664315)
+

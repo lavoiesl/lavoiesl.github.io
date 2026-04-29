@@ -7,101 +7,94 @@ argument-hint: 'Path to the HTML or Markdown file to convert, plus optional stri
 # HTML To Markdown (Kramdown + Rouge)
 
 ## Outcome
-Produce clean, readable Markdown for content that is fully representable in Markdown supported by Jekyll kramdown, while preserving unsupported or ambiguous HTML exactly.
+Clean, readable Markdown for content fully representable in Jekyll kramdown; unsupported or ambiguous HTML is preserved exactly as-is.
 
 ## When To Use
-- Migrating old HTML pages/posts to Markdown for Jekyll.
+- Migrating old HTML posts/pages to Markdown for Jekyll.
 - Reducing HTML noise without changing meaning.
-- Keeping browser-dependent or non-Markdown elements in raw HTML.
 
-## Conversion Policy
-- Convert only when there is an exact Markdown equivalent supported by kramdown.
-- If conversion would lose semantics or structure, keep the original HTML.
-- Treat unsupported elements (for example `<script>`) as non-convertible and preserve them as HTML.
+## Implementation
 
-## Decision Flow
-1. Parse the document block-by-block (headings, paragraphs, lists, tables, inline spans, separators, code).
-2. For each element, decide:
-   - Exact Markdown support exists: convert.
-   - Support is partial/ambiguous or needs non-standard extensions: keep as HTML.
-3. Apply special normalization rules for known span/div patterns.
-4. Run quality checks and stop if unsafe conversions are detected.
+**Always use the scripts in this skill directory — do not write ad-hoc conversion code.**
 
-## Element Rules
+### Requirements
+- Ruby 2.7+
+- Nokogiri gem (in Gemfile or: `gem install nokogiri`)
 
-### Headings, Paragraphs, Links, Emphasis, Lists
-- Convert standard HTML headings (`<h1>`-`<h6>`) to `#`-style headings.
-- Convert `<p>` to Markdown paragraphs.
-- Convert `<a>` to Markdown links when href/text mapping is direct.
-- Ignore `target="_blank"` when converting links.
-- Convert `<strong>/<b>` and `<em>/<i>` to Markdown emphasis.
-- Convert `<ul>/<ol>/<li>` to Markdown lists when nesting maps cleanly.
+### Scripts
+- `html_to_markdown.rb` — Converts HTML to Markdown using Nokogiri
+- `validate_conversion.rb` — Verifies no content was lost and checks for trivial leftover HTML tags (`<a>`, `<br>`)
 
-### Images
-- Always convert `<img>` to Markdown image syntax.
-- Preserve meaningful `alt` text when present; if missing, use an empty alt (`![](...)`).
-- Ignore presentational attributes/styles (for example `width`, `height`, `style`, `class`) in Markdown output.
+### Workflow
 
-### Code
-- Convert inline `<code>` to backticks.
-- Convert `<pre><code>` blocks to fenced code blocks.
-- Use fenced code blocks compatible with Rouge highlighting.
-- Preserve language hints when present and normalize aliases to Rouge-friendly names when possible (for example `js` -> `javascript`, `ts` -> `typescript`, `sh` -> `bash`, `py` -> `python`).
+```bash
+# Convert
+ruby .github/skills/html-to-markdown-kramdown/html_to_markdown.rb input.html output.md
 
-### Tables
-- Convert only simple HTML tables to Markdown tables.
-- Simple table criteria:
-  - Straight header/body row structure.
-  - No merged cells (`rowspan`/`colspan`).
-  - No nested tables.
-  - No layout-only wrappers required for meaning.
-- Ignore minor stylistic differences such as text alignment during conversion.
-- If advanced markup is present, keep the entire table as HTML.
+# Validate (must pass before accepting the result)
+# On success, this deletes input.html automatically.
+ruby .github/skills/html-to-markdown-kramdown/validate_conversion.rb input.html output.md
 
-### Spans And Font Rules
-- Monospace style spans:
-  - Pattern example: `<span style="font-family: Courier New, Courier, monospace;">text</span>`
-  - Convert contents to inline code: `` `text` ``
-- Inherit font spans:
-  - Pattern example: `<span style="font-family: inherit;">text</span>`
-  - Remove wrapper and keep only contents.
-- If styling does not change text semantics, drop styling and keep plain Markdown text.
-- If styling carries semantics that cannot be represented in Markdown, keep HTML.
+# Optional: keep the original HTML file
+ruby .github/skills/html-to-markdown-kramdown/validate_conversion.rb input.html output.md --keep-source
+```
 
-### Separators
-- Convert separator blocks like:
-  - `<div class="separator" style="clear: both; text-align: center;"> ... </div>`
-- Replace with a standard Markdown thematic break:
-  - `---`
-- If separator div also carries meaningful non-separator content, keep HTML.
+### Non-Interactive Terminal Rule
 
-### Unsupported Or Risky HTML
-- Preserve as HTML when no exact Markdown equivalent exists, including:
-  - `<script>`, `<style>`, embedded widgets, custom components, complex interactive markup.
-- Do not attempt approximate rewrites for unsupported behavior.
+- Keep this workflow to the two Ruby commands above.
+- Do not add extra `rg`/`grep` absence checks where exit code `1` means "no matches".
+- For this skill, all expected-success commands should exit with code `0`.
+- Source HTML deletion is handled by `validate_conversion.rb` after successful validation.
 
-## Procedure
-1. Identify target file and scan for obvious non-convertible blocks first (`<script>`, advanced tables, embeds).
-2. Convert clearly supported block-level elements.
-3. Convert supported inline elements (including links and images), then apply span normalization rules.
-4. Convert simple tables only after validating criteria.
-5. Keep all non-convertible structures in HTML.
-6. Review final content for accidental semantic drift.
+The scripts use Nokogiri for safe DOM parsing. Never use regex on raw HTML — it silently loses URLs, link text, inline code, and nested content.
 
-## Quality Checks
-- No unsupported constructs are force-converted.
-- `<script>` and similar non-Markdown elements remain HTML.
-- Anchor conversion ignores `target="_blank"` and keeps standard Markdown link syntax.
-- `<img>` elements are converted to Markdown images.
-- Monospace font spans are converted to inline backticks.
-- `font-family: inherit` spans are unwrapped.
-- Non-semantic styles are dropped instead of preserved as HTML.
-- Separator div patterns become `---` when safe.
-- Simple tables become Markdown tables; advanced tables remain HTML.
-- Fenced code block language aliases are normalized to Rouge-friendly names.
-- Output is valid for Jekyll with kramdown and compatible with Rouge code highlighting.
+## Conversion Rules
+
+### Convert → Markdown
+
+| HTML | Markdown |
+|------|----------|
+| `<h1>`–`<h6>` | `#`–`######` |
+| `<p>` | paragraph (blank line between) |
+| `<strong>`, `<b>` | `**text**` |
+| `<em>`, `<i>` | `_text_` |
+| `<a href="url">text</a>` | `[text](url)` — URL and text must be exact |
+| `<code>text</code>` | `` `text` `` |
+| `<pre><code>…</code></pre>` | fenced block (` ``` `), normalize language alias |
+| `<ul>/<ol>/<li>` | `- item` / `1. item`, preserve nesting depth and keep nested items tight (no blank lines between list items unless a single item contains multiple paragraphs) |
+| `<img src="…" alt="…">` | `![alt](src)` — drop presentational attrs |
+| Simple `<table>` | GFM pipe table |
+| `<span style="font-family: Courier New…">text</span>` | `` `text` `` |
+| `<span style="font-family: inherit;">text</span>` | unwrap, keep text |
+| Separator `<div class="separator">` | `---` |
+| Plain `<div>...</div>` wrapper | unwrap, keep inner content |
+
+Headings in output Markdown must be separated from preceding paragraph text by an empty line so they are parsed as headings by Markdown renderers.
+
+Lists in output Markdown must be emitted as tight lists by default. Nested items should render like:
+
+```markdown
+- Foo
+	- Bar
+	- Baz
+- Qux
+```
+
+### Keep As HTML
+
+- `<script>`, `<style>`, embedded widgets, custom components.
+- Tables with `rowspan`/`colspan`, nested tables, layout wrappers.
+- Any element where conversion would lose meaning or structure.
+- `<pre>` blocks with mixed markup inside.
+
+### Language Alias Normalisation (code blocks)
+`js` → `javascript` · `ts` → `typescript` · `sh` → `bash` · `py` → `python`
 
 ## Completion Criteria
-- Conversion is conservative and reversible in intent.
-- Markdown readability improves without changing document meaning.
-- Remaining HTML is intentional and justified by unsupported syntax.
+- Zero content loss: every link URL, anchor text, emphasis, inline code, and list item from the source is present in the output.
+- `validate_conversion.rb` exits with no errors.
+- No trivial leftover HTML tags (`<a>`, `<br>`) remain in converted Markdown unless intentionally preserved.
+- No plain wrapper `<div>` tags remain in converted Markdown unless intentionally preserved for unsupported constructs.
+- Source `.html` file is deleted after successful validation (unless `--keep-source` is provided).
+- Remaining HTML is intentional (unsupported constructs only).
+- Output is valid Jekyll kramdown and Rouge-compatible.

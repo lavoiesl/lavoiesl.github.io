@@ -1,31 +1,31 @@
----
 title: "Service management utility for Mac OSX (launchctl helper)"
 tags: ["Development tool", "Mac OSX", "sysadmin"]
 date: 2013-08-31 13:03:00 -0400
 ---
 
-Having dealt with services mostly on Linux, I grew accustomed to type <code>service php restart</code>. On Mac, this is more like:<br />
-<br />
-<code>
-launchctl unload ~/Library/LaunchAgents/homebrew-php.josegonzalez.php55.plist<br />
-launchctl load ~/Library/LaunchAgents/homebrew-php.josegonzalez.php55.plist<br />
-</code>
-<br />
-<br />
-Which is ugly, hard to remember and launchctl has no way of listing all available services. Plus, those plist can reside in all those directories:<br />
-<ul>
-<li>/System/Library/LaunchDaemons</li>
-<li>/System/Library/LaunchAgent</li>
-<li>/Library/LaunchDaemons</li>
-<li>/Library/LaunchAgents</li>
-<li>~/Library/LaunchAgents</li>
-</ul>
-<div>
-Those in you home directory generally don’t need sudo, while the others do.</div>
-<br />
-This is why I can up with an utility to manage services. It searches in all directories above for your service, prompts for sudo if it is in a system directory and provide goodies like <code>restart</code>, <code>reload</code> and <code>link</code>.<br />
-<h3>
-Usage:</h3>
+Having dealt with services mostly on Linux, I grew accustomed to type `service php restart`. On Mac, this is more like:
+
+{% highlight shell linenos %}
+launchctl unload ~/Library/LaunchAgents/homebrew-php.josegonzalez.php55.plist
+launchctl load ~/Library/LaunchAgents/homebrew-php.josegonzalez.php55.plist
+{% endhighlight %}
+
+
+Which is ugly, hard to remember and launchctl has no way of listing all available services. Plus, those plist can reside in all those directories:
+
+```sh
+/System/Library/LaunchDaemons
+/System/Library/LaunchAgent
+/Library/LaunchDaemons
+/Library/LaunchAgents
+~/Library/LaunchAgents
+```
+
+Those in you home directory generally don’t need sudo, while the others do.
+This is why I can up with an utility to manage services. It searches in all directories above for your service, prompts for sudo if it is in a system directory and provide goodies like `restart`, `reload` and `link`.
+
+### Usage:
+
 <dl>
 <dt><code>service selfupdate</code></dt>
 <dd>update from the Gist</dd>
@@ -34,11 +34,10 @@ Usage:</h3>
 <dt><code>service php load|unload|reload</code></dt>
 <dd>insert or remove a plist from launchctl</dd>
 <dt><code>service php start|stop|restart</code></dt>
-<dd>manage a daemon, but leave it in launchctl &nbsp;(does not work with Agents)</dd>
+<dd>manage a daemon, but leave it in launchctl  (does not work with Agents)</dd>
 <dt><code>service php link</code></dt>
-<dd>If you use <a href="http://brew.sh/" target="_blank">Homebrew</a>, which you should, it will link the plist of this Formula into ~/Library/LaunchAgents, reloading if needed. Very useful when upgrading.</dd>
+<dd>If you use [Homebrew](http://brew.sh/), which you should, it will link the plist of this Formula into ~/Library/LaunchAgents, reloading if needed. Very useful when upgrading.</dd>
 </dl>
-<br />
 
 {% highlight shell linenos %}
 # service.sh
@@ -186,12 +185,12 @@ case ${2:-search} in
         ;;
 esac
 {% endhighlight %}
-<a href="https://gist.github.com/lavoiesl/6160897">View Gist</a>
-<h3>
-Manage all optional services at once</h3>
-<div>
-If you have several services running, especially if you are a developer, I also recommend to use a script to start/stop all of them at once when you are not working. They may not be using much resources, but having them running keeps the laptop working and can drain you battery very quickly.&nbsp;</div>
-<br />
+[View Gist](https://gist.github.com/lavoiesl/6160897)
+
+### Manage all optional services at once
+
+
+If you have several services running, especially if you are a developer, I also recommend to use a script to start/stop all of them at once when you are not working. They may not be using much resources, but having them running keeps the laptop working and can drain you battery very quickly. 
 
 {% highlight shell linenos %}
 # service.sh
@@ -339,4 +338,4 @@ case ${2:-search} in
         ;;
 esac
 {% endhighlight %}
-<a href="https://gist.github.com/lavoiesl/6160897">View Gist</a>
+[View Gist](https://gist.github.com/lavoiesl/6160897)

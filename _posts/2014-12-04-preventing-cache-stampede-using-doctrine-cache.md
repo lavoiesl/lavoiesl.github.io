@@ -4,15 +4,13 @@ tags: ["Caching", "PHP", "Doctrine", "Performance"]
 date: 2014-12-04 11:28:00 -0500
 ---
 
-<a href="http://en.wikipedia.org/wiki/Cache_stampede" target="_blank">Wikipedia has short and clear article</a> on the matter, cache stampede can be quite deadly, especially when you are rebooting your server, clearing your cache or having a midnight maintenance (cronjob).<br />
-<br />
-Cache stampede, put simply, is when your process is trying to fetch an expensive cache entry, it is not there, and tries to build it, but a simultaneous process comes and does the same thing. This results in resource waste because of processes all trying to do the same thing, uselessly.<br />
-<br />
-The trick is to put a lock on the cache entry and make the other processes wait. I use the trick of having a TTL for the cache calculation. This way, even if the server crashes or there is an exception, the lock will expire and another process will take over. This estimation is also used to calculate how much time to sleep while waiting.<br />
-<br />
-This example uses Doctrine Cache as a global variable, but this should definitely be refactored (or change to another system).<br />
-<br />
-<br />
+[Wikipedia has short and clear article](http://en.wikipedia.org/wiki/Cache_stampede) on the matter, cache stampede can be quite deadly, especially when you are rebooting your server, clearing your cache or having a midnight maintenance (cronjob).
+
+Cache stampede, put simply, is when your process is trying to fetch an expensive cache entry, it is not there, and tries to build it, but a simultaneous process comes and does the same thing. This results in resource waste because of processes all trying to do the same thing, uselessly.
+
+The trick is to put a lock on the cache entry and make the other processes wait. I use the trick of having a TTL for the cache calculation. This way, even if the server crashes or there is an exception, the lock will expire and another process will take over. This estimation is also used to calculate how much time to sleep while waiting.
+
+This example uses Doctrine Cache as a global variable, but this should definitely be refactored (or change to another system).
 
 {% highlight php linenos %}
 <?php
@@ -78,4 +76,6 @@ cacheGetDefault('recent_tweets', function() {
     return file_get_contents('https://api.twitter.com/1.1/search/tweets.json?q=@lavoiesl');
 }, $cacheTtl, $stampedeTtl);
 {% endhighlight %}
-<a href="https://gist.github.com/lavoiesl/9cdc5893a71c53e16b47">View Gist</a>
+
+[View Gist](https://gist.github.com/lavoiesl/9cdc5893a71c53e16b47)
+

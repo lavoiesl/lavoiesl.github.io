@@ -4,13 +4,13 @@ tags: ["FOSUserBundle", "Mongo", "Symfony2", "Doctrine"]
 date: 2015-01-06 13:44:00 -0500
 ---
 
-In Symfony Cookbook <a href="http://symfony.com/doc/current/cookbook/bundles/override.html#entities-entity-mapping" target="_blank">How to Override any Part of a Bundle</a>, it is written that you cannot override entity mappings and only attributes can be modified in superclasses. However, it is&nbsp;possible to hack you way through and&nbsp;<a href="http://symfony.com/doc/current/bundles/DoctrineMongoDBBundle/index.html#registering-event-listeners-and-subscribers" target="_blank">register an Event Listener</a>&nbsp;on loadClassMetadata that will rewrite the mapping on-the-fly. I would not qualify this as a good approach, but it is the only way I found.<br />
-<br />
-A similar solution can be used for Doctrine ORM.<br />
-<br />
-Here is an example, removing the uniqueness on emailCanonical of FOSUserBundle:<br />
-<br />
-<br />
+In Symfony Cookbook [How to Override any Part of a Bundle](http://symfony.com/doc/current/cookbook/bundles/override.html#entities-entity-mapping), it is written that you cannot override entity mappings and only attributes can be modified in superclasses. However, it is possible to hack you way through and [register an Event Listener](http://symfony.com/doc/current/bundles/DoctrineMongoDBBundle/index.html#registering-event-listeners-and-subscribers) on loadClassMetadata that will rewrite the mapping on-the-fly. I would not qualify this as a good approach, but it is the only way I found.
+
+A similar solution can be used for Doctrine ORM.
+
+Here is an example, removing the uniqueness on emailCanonical of FOSUserBundle:
+
+
 
 {% highlight php linenos %}
 <?php
@@ -50,4 +50,5 @@ services:
         tags:
             -  { name: doctrine_mongodb.odm.event_listener, event: loadClassMetadata }
 {% endhighlight %}
-<a href="https://gist.github.com/lavoiesl/0ac2d841b07ea122bfd0">View Gist</a>
+[View Gist](https://gist.github.com/lavoiesl/0ac2d841b07ea122bfd0)
+

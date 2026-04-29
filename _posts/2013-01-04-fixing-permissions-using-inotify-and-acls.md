@@ -4,50 +4,41 @@ tags: ["Bash", "inotify", "acl", "sysadmin"]
 date: 2013-01-04 18:45:00 -0500
 ---
 
-I was working on a shared hosting project and I noticed the permissions were getting a bit complicated.<br />
-<br />
-For each website:<br />
-<ul>
-<li>Each user must have read/write permission</li>
-<li>Each user's group must have read/write permission (reseller access)</li>
-<li>Apache must have read access</li>
-<li>Would be nice if admins had read/write as well</li>
-</ul>
-<div>
-New files can appear at any time, created by all those users, and it would be nice to keep trace of who created them. This is where ACLs kick in.</div>
-<div>
-<br /></div>
-<div>
-For the case above, you need this command:</div>
-<div>
-<span style="background-color: white; font-family: Consolas, 'Liberation Mono', Courier, monospace; font-size: 12px; line-height: 16px; white-space: pre;">setfacl -m </span><span class="s1" style="background-color: white; color: #dd1144; font-family: Consolas, 'Liberation Mono', Courier, monospace; font-size: 12px; line-height: 16px; white-space: pre;">'u:www-data:r-X,g:example-group:rwX,g:sudo:rwX,o::---'</span><span style="background-color: white; font-family: Consolas, 'Liberation Mono', Courier, monospace; font-size: 12px; line-height: 16px; white-space: pre;"> </span><span class="s2" style="background-color: white; color: #dd1144; font-family: Consolas, 'Liberation Mono', Courier, monospace; font-size: 12px; line-height: 16px; white-space: pre;">"/srv/www/example.org/htdocs"</span></div>
-<h3>
-ACLs quirks</h3>
-<div>
-The problem with ACLs is that they are very fragile and a lot of programs don't propagate them, even if you specify <i>default</i> rules. For example, all programs that <i>move</i>&nbsp;instead of creating will honour the ACL of the directory in which the file was created and the destination. Hence, if you <i>untar</i>&nbsp;the whole website in the directory, the default permissions won't be applied.</div>
-<h3>
-Running a script</h3>
-<div>
-You could run a script that will loop through all your websites and force the permissions through a cron, but this is a slow process (around 2 minutes on my current setup with ~10 websites), there is a delay before it will run (15-30 minutes, depending on how you set it up), and it is <i><b>very</b></i> I/O intensive.</div>
-<h3>
-inotifywait</h3>
-<div>
-inotify is a library that can warn you if some event occurs on a file or in a folder (recursively). It can be very useful for various tasks like syncing files, doing backups, recording edits progress, etc. inotifywait it simply a program that will wait until the event occurs, so you can execute what you want after.</div>
-<div>
-<br /></div>
-<div>
-Watching specifically on CREATE and MOVE events, we can fix the permissions of only the files we need.</div>
-<div>
-<br /></div>
-<div>
-The event ATTRIB (<i>chown, chmod, setfacl</i>) was intentionally left out not to cause loops, but it could probably be worked around.</div>
-<div>
-<br /></div>
-<div>
-Included below is an example of watching two folders and the corresponding init script. Tested on Ubuntu.&nbsp;</div>
-<div>
-<br /></div>
-<br />
+I was working on a shared hosting project and I noticed the permissions were getting a bit complicated.
+
+For each website:
+
+- Each user must have read/write permission
+- Each user's group must have read/write permission (reseller access)
+- Apache must have read access
+- Would be nice if admins had read/write as well
+
+New files can appear at any time, created by all those users, and it would be nice to keep trace of who created them. This is where ACLs kick in.
+
+For the case above, you need this command:
+
+```sh
+setfacl -m 'u:www-data:r-X,g:example-group:rwX,g:sudo:rwX,o::---' "/srv/www/example.org/htdocs"
+```
+
+### ACLs quirks
+
+
+The problem with ACLs is that they are very fragile and a lot of programs don't propagate them, even if you specify *default* rules. For example, all programs that *move* instead of creating will honour the ACL of the directory in which the file was created and the destination. Hence, if you *untar* the whole website in the directory, the default permissions won't be applied.
+
+### Running a script
+
+You could run a script that will loop through all your websites and force the permissions through a cron, but this is a slow process (around 2 minutes on my current setup with ~10 websites), there is a delay before it will run (15-30 minutes, depending on how you set it up), and it is ***very*** I/O intensive.
+
+### inotifywait
+
+inotify is a library that can warn you if some event occurs on a file or in a folder (recursively). It can be very useful for various tasks like syncing files, doing backups, recording edits progress, etc. inotifywait it simply a program that will wait until the event occurs, so you can execute what you want after.
+
+Watching specifically on CREATE and MOVE events, we can fix the permissions of only the files we need.
+
+The event ATTRIB (*chown, chmod, setfacl*) was intentionally left out not to cause loops, but it could probably be worked around.
+
+Included below is an example of watching two folders and the corresponding init script. Tested on Ubuntu. 
 
 {% highlight shell linenos %}
 # fixpermissions-inotify-init.sh
@@ -189,4 +180,4 @@ done &
 
 wait
 {% endhighlight %}
-<a href="https://gist.github.com/lavoiesl/4458418">View Gist</a>
+[View Gist](https://gist.github.com/lavoiesl/4458418)

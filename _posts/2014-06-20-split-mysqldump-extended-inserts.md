@@ -2,58 +2,54 @@
 title: "Adding newlines in a SQL mysqldump to split extended inserts"
 tags: ["MySQL", "sysadmin"]
 date: 2014-06-20 15:27:00 -0400
+toc: true
 ---
 
-The official&nbsp;<a href="http://dev.mysql.com/doc/refman/5.6/en/mysqldump.html" target="_blank">mysqldump</a>&nbsp;supports more or less two output styles: separate&nbsp;INSERTs&nbsp;(one insert statement per row)&nbsp;or extended&nbsp;INSERTs&nbsp;(one insert per table). Extended INSERTs are much faster, but MySQL&nbsp;write them all in one line, the result being a SQL very hard to read. Can we get the best of both worlds ?<br />
-<h4>
-Separate INSERTs</h4>
-<div>
-<span style="font-family: Courier New, Courier, monospace;">INSERT INTO mytable (id) VALUES (1);</span></div>
-<div>
-<span style="font-family: Courier New, Courier, monospace;">INSERT INTO mytable (id) VALUES (2);</span></div>
-<div>
-<h4>
-Extended INSERTs</h4>
-<div>
-<span style="font-family: Courier New, Courier, monospace;">INSERT INTO mytable (id) VALUES (1),</span><span style="font-family: 'Courier New', Courier, monospace;">(2);</span></div>
-</div>
-<div>
-<h4>
-New-And-Improved<span style="font-family: 'Courier New', Courier, monospace;">™</span>&nbsp;INSERTs</h4>
-<div>
-<span style="font-family: Courier New, Courier, monospace;">INSERT INTO mytable (id) VALUES</span></div>
-<div>
-<span style="font-family: Courier New, Courier, monospace;">(1),</span></div>
-<div>
-<span style="font-family: Courier New, Courier, monospace;">(2);</span></div>
-</div>
-<h3>
-Current solutions</h3>
-<h4>
-Using sed</h4>
-<div>
-<span style="font-family: Courier New, Courier, monospace;">mysqldump --extended-insert | sed 's/),(/),\n(/g'</span></div>
-<div>
-<br /></div>
-<div>
-Only problem is, lines will be split, even in the middle of strings, altering your data.</div>
-<h4>
-Using net_buffer_length</h4>
-<div>
-<span style="font-family: Courier New, Courier, monospace;">mysqldump --extended-insert --net_buffer_length=5000</span></div>
-<div>
-<br /></div>
-<div>
-mysqldump will make sure lines are not longer than 5000 (or whatever), starting a new INSERT when needed. The problem is that the behaviour is kinda random, diffs are hard to analyze and it may break your data if you are storing columns longer than this.</div>
-<h3>
-Writing a parser</h3>
-<div>
-This question has been&nbsp;<a href="http://stackoverflow.com/questions/1293529/how-to-deal-with-enormous-line-lengths-created-by-mysqldump" target="_blank">often</a>&nbsp;<a href="http://forums.mysql.com/read.php?28,420002,420002" target="_blank">asked</a>&nbsp;without a proper <a href="http://serverfault.com/questions/142588/mysql-dump-output-each-table-row-on-a-new-line-whilst-using-extended-insert" target="_blank">reply</a>, so I decided to write a simple parser. Precisely, we need to check for quotes, parenthesis, and escape characters.</div>
-<div>
-<br /></div>
-<div>
-I first wrote it in PHP:</div>
-<br />
+The official [mysqldump](http://dev.mysql.com/doc/refman/5.6/en/mysqldump.html) supports more or less two output styles: separate INSERTs (one insert statement per row) or extended INSERTs (one insert per table). Extended INSERTs are much faster, but MySQL write them all in one line, the result being a SQL very hard to read. Can we get the best of both worlds ?
+
+#### Separate INSERTs
+
+{% highlight sql %}
+INSERT INTO mytable (id) VALUES (1);
+INSERT INTO mytable (id) VALUES (2);
+{% endhighlight %}
+
+#### Extended INSERTs
+
+`INSERT INTO mytable (id) VALUES (1),(2);`
+
+#### New-And-Improved™ INSERTs
+
+{% highlight sql %}
+INSERT INTO mytable (id) VALUES
+(1),
+(2);
+{% endhighlight %}
+
+### Current solutions
+
+#### Using sed
+
+{% highlight sh %}
+mysqldump --extended-insert | sed 's/),(/),\n(/g'
+{% endhighlight %}
+
+Only problem is, lines will be split, even in the middle of strings, altering your data.
+
+#### Using net_buffer_length
+
+{% highlight sh %}
+mysqldump --extended-insert --net_buffer_length=5000
+{% endhighlight %}
+
+mysqldump will make sure lines are not longer than 5000 (or whatever), starting a new INSERT when needed. The problem is that the behaviour is kinda random, diffs are hard to analyze and it may break your data if you are storing columns longer than this.
+
+### Writing a parser
+
+This question has been [often](http://stackoverflow.com/questions/1293529/how-to-deal-with-enormous-line-lengths-created-by-mysqldump) [asked](http://forums.mysql.com/read.php?28,420002,420002) without a proper [reply](http://serverfault.com/questions/142588/mysql-dump-output-each-table-row-on-a-new-line-whilst-using-extended-insert), so I decided to write a simple parser. Precisely, we need to check for quotes, parenthesis, and escape characters.
+
+I first wrote it in PHP:
+
 
 {% highlight php linenos %}
 <?php
@@ -107,7 +103,7 @@ function process_line($line) {
                 $escape = false;
                 break;
 
-            case '\\':
+            case '\':
                 $escape = !$escape;
                 break;
 
@@ -130,11 +126,10 @@ function process_line($line) {
 
 fclose($input);
 {% endhighlight %}
-<a href="https://gist.github.com/lavoiesl/9a08e399fc9832d12794">View Gist</a>
-<div>
-<br />
-But then I realized it was too slow, so I rewrote it in C, using strcspn to find string occurence:</div>
-<br />
+[View Gist](https://gist.github.com/lavoiesl/9a08e399fc9832d12794)
+
+But then I realized it was too slow, so I rewrote it in C, using strcspn to find string occurence:
+
 
 {% highlight c linenos %}
 // process-mysqldump.c
@@ -152,7 +147,7 @@ But then I realized it was too slow, so I rewrote it in C, using strcspn to find
 bool is_escaped(char* string, int offset) {
     if (offset == 0) {
         return false;
-    } else if (string[offset - 1] == '\\') {
+    } else if (string[offset - 1] == '\') {
         return !is_escaped(string, offset - 1);
     } else {
         return false;
@@ -265,10 +260,8 @@ int main(int argc, char *argv[])
     return 0;
 }
 {% endhighlight %}
-<a href="https://gist.github.com/lavoiesl/9a08e399fc9832d12794">View Gist</a>
-<div>
-The only flaw that I can think of is that the parser will fail if the 10001st character of a line is an escaped quote, it will see it as an unescaped quote.<br />
-<br />
-Happy dumping !</div>
-<div>
-<br /></div>
+[View Gist](https://gist.github.com/lavoiesl/9a08e399fc9832d12794)
+
+The only flaw that I can think of is that the parser will fail if the 10001st character of a line is an escaped quote, it will see it as an unescaped quote.
+
+Happy dumping !
