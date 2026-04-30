@@ -4,7 +4,7 @@ tags: ["LAMP", "cluster", "hosting", "VPS", "Linode", "sysadmin"]
 date: 2013-03-21 16:01:00 -0400
 ---
 
-This post is part of: [Guide to replicated LAMP stack hosting with failover](http://blog.lavoie.sl/2013/03/guide-to-replicated-lamp-stack-hosting-with-failover.html)
+This post is part of: [Guide to replicated LAMP stack hosting with failover](/2013/03/guide-to-replicated-lamp-stack-hosting-with-failover.html)
 
 
 

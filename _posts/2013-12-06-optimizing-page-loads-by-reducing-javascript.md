@@ -32,7 +32,7 @@ If you have a big block of code that needs to be executed only in specific cases
 
 
 
-- Delay heavy libraries like Google Maps or Facebook Like. See this [post about loading social libraries](http://blog.lavoie.sl/2012/08/reducing-load-of-all-those-social.html).
+- Delay heavy libraries like Google Maps or Facebook Like. See this [post about loading social libraries](/2012/08/reducing-load-of-all-those-social.html).
 
 - Use [requestAnimationFrame](https://developer.mozilla.org/en/docs/Web/API/window.requestAnimationFrame) for animations.
 

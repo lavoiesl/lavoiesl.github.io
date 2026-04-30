@@ -22,7 +22,7 @@ When I have complete control over my assets, I usually like to split all the ass
 ### Cache busting
 
 
-I mostly use Amazon CloudFront as a CDN which handles query parameters so I set the expire date to one year and append a query parameter with the last git commit. (`git rev-parse --short HEAD`). That way, a fresh file is used each time there is any change in the project’s code. See [Automatic cache busting using Git commit in Symfony2](http://blog.lavoie.sl/2012/10/automatic-cache-busting-using-git-in-symfony2.html) for an example.
+I mostly use Amazon CloudFront as a CDN which handles query parameters so I set the expire date to one year and append a query parameter with the last git commit. (`git rev-parse --short HEAD`). That way, a fresh file is used each time there is any change in the project’s code. See [Automatic cache busting using Git commit in Symfony2](/2012/10/automatic-cache-busting-using-git-in-symfony2.html) for an example.
 
 ### About combining
 
@@ -30,7 +30,7 @@ People often talk about combining how it saves HTTP requests but consider that i
 
 
 
-However, be careful not to overload the browser. Keep it mind that the Javascript will be executed on each page load. For example, to not try to initialize every modal window just in case one might pop up. See [Optimizing page loads by reducing the impact of the Javascript initialization](http://blog.lavoie.sl/2013/12/optimizing-page-loads-by-reducing-javascript.htmlhttp://blog.lavoie.sl/2013/12/optimizing-page-loads-by-reducing-javascript.html) for more details.
+However, be careful not to overload the browser. Keep it mind that the Javascript will be executed on each page load. For example, to not try to initialize every modal window just in case one might pop up. See [Optimizing page loads by reducing the impact of the Javascript initialization](/2013/12/optimizing-page-loads-by-reducing-javascript.htmlhttp://blog.lavoie.sl/2013/12/optimizing-page-loads-by-reducing-javascript.html) for more details.
 
 
 

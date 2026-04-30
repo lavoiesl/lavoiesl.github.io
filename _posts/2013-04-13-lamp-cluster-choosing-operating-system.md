@@ -51,7 +51,7 @@ It is usually possible to install newer versions, but this implies relying on th
 ### Forget benchmarks
 
 
-Linux is very low-print system; a common mistake is trying to over optimize it. What will eat your CPU is PHP and MySQL, what will eat your memory is MySQL and the number of connections you can handle is mostly dependant on your webserver. If you machine is spending too much time in kernel space, it is probably because you need a bigger one. Also, don’t forget to benchmark your disks. [See my post on choosing hardware](http://blog.lavoie.sl/2013/03/lamp-cluster-hosting-platform.html).
+Linux is very low-print system; a common mistake is trying to over optimize it. What will eat your CPU is PHP and MySQL, what will eat your memory is MySQL and the number of connections you can handle is mostly dependant on your webserver. If you machine is spending too much time in kernel space, it is probably because you need a bigger one. Also, don’t forget to benchmark your disks. [See my post on choosing hardware](/2013/03/lamp-cluster-hosting-platform.html).
 
 ### Conclusion
 
