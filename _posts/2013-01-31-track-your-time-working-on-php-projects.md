@@ -70,7 +70,7 @@ Well, I rarely design, it’s someone else who does it. Developing a complicated
  * 
  * The weird class name is to ensure no name collision will occur.
  * 
- * @link http://blog.lavoie.sl/2013/01/track-your-time-working-on-php-projects.html
+ * @link http://blog.lavoie.sl/2013/01/track-your-time-working-on-php-projects
  */
 class __TimeSpenderLogger
 {

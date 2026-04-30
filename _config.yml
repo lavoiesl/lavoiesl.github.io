@@ -116,7 +116,7 @@ analytics:
 author:
   name             : "Sebastien Lavoie"
   avatar           : "/assets/images/face.jpg"
-  bio              : "Development Manager @ <a href='https://www.coveo.com/'>Coveo</a>"
+  bio              : "Development Manager @ <a href='https://www.coveo.com/'>Coveo</a>.<br>Ex-Shopify, ex-Apple, ex-startup."
   location         : "Montréal, Canada"
   email            :
   # fediverse      : "@you@instance.social"  # used for fediverse:creator meta tag
@@ -333,4 +333,4 @@ defaults:
 collections:
   posts:
     output: true
-    permalink: /:year/:month/:title:output_ext
+    permalink: /:year/:month/:title

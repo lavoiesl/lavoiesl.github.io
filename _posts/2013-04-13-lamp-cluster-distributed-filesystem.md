@@ -4,7 +4,7 @@ tags: ["Linux", "NFS", "Filesystem", "hosting", "GlusterFS", "Csync2", "Lustre",
 date: 2013-04-13 17:49:00 -0400
 ---
 
-This post is part of: [Guide to replicated LAMP stack hosting with failover](/2013/03/guide-to-replicated-lamp-stack-hosting-with-failover.html)
+This post is part of: [Guide to replicated LAMP stack hosting with failover](/2013/03/guide-to-replicated-lamp-stack-hosting-with-failover)
 
 The core concept of choosing a filesystem for a Web hosting cluster is to eliminate single points of failure, but sometimes it is just not easy like that. A true distributed system will still need to be performant, at least on reads. The problem relies in the fact that the bottleneck if very often the I/O so if your filesystem is not performant, you will end up spending a fortune on scaling, without gaining real performance.
 

@@ -45,64 +45,21 @@ So I decided to do a comparison of the three options: using a **public** **CDN**
 - jQuery UI (including core and dependencies)
 - Twitter Bootstrap
 
-
 On the demo, you may notice Javascript errors, I may have made some errors in the dependencies order, but it does not change the idea.
-
-
 
 Then, the tests are done fully **cached**, **304** requests (when forcing refresh) and without any cache (**No cache)**. **Exec time** is calculated using [Google Speed Tracer](https://chrome.google.com/webstore/detail/speed-tracer-by-google/ognampngfcbddbfemdapefohjiobgbdl), it includes parsing of JS/CSS and some JS execution. Keep in mind that the DOM was almost empty so result could scale a lot on crowded pages.
 
 ### Results breakdown
 
-<table border="0" cellpadding="6" style="text-align: right; width: 100%;">
-    <thead>
-<tr>
-            <th></th>
-            <th>Custom </th>
-            <th>Hosted</th>
-            <th>Public CDN</th>
-            <th>Half/CDN</th>
-        </tr>
-</thead>
-    <tbody>
-<tr>
-            <th>Gzipped size</th>
-            <td>82.91 KB</td>
-            <td>110.13 KB</td>
-            <td>128.93 KB</td>
-            <td>36 %</td>
-        </tr>
-<tr>
-            <th>Exec time</th>
-            <td>15 ms</td>
-            <td>22 ms</td>
-            <td>22 ms</td>
-            <td>32 %</td>
-        </tr>
-<tr>
-            <th>Cached</th>
-            <td>110 ms</td>
-            <td>130 ms</td>
-            <td>150 ms</td>
-            <td>27 %</td>
-        </tr>
-<tr>
-            <th>304</th>
-            <td>125 ms</td>
-            <td>155 ms</td>
-            <td>195 ms</td>
-            <td>36 %</td>
-        </tr>
-<tr>
-            <th>No cache</th>
-            <td>220 ms</td>
-            <td>240 ms</td>
-            <td>250 ms</td>
-            <td>12 %</td>
-        </tr>
-</tbody>
-</table>
-* The measured time is onLoad event, so all files are downloaded, script are executed and the browser is ready.
+| | Custom | Hosted | Public CDN | Half/CDN |
+|---|---|---|---|---|
+| **Gzipped size** | 82.91 KB | 110.13 KB | 128.93 KB | 36 % |
+| **Exec time** | 15 ms | 22 ms | 22 ms | 32 % |
+| **Cached** | 110 ms | 130 ms | 150 ms | 27 % |
+| **304** | 125 ms | 155 ms | 195 ms | 36 % |
+| **No cache** | 220 ms | 240 ms | 250 ms | 12 % |
+
+\* The measured time is onLoad event, so all files are downloaded, script are executed and the browser is ready.
 
 ### Developer tools screenshots
 

@@ -4,7 +4,7 @@ tags: ["Wordpress", "Drupal", "Filesystem", "hosting", "GlusterFS", "Symfony2", 
 date: 2013-12-06 23:46:00 -0500
 ---
 
-A couple months ago, I did a [comparison of different distributed filesystems](/2013/04/lamp-cluster-distributed-filesystem.html). It came out that [GlusterFS](http://www.gluster.org/) was the easiest and most feature full, but it was slow. Since I would really like to use it, I decided to give another chance. Instead of doing raw benchmarks using [sysbench](http://sysbench.sourceforge.net/), I decided to stress test a basic installation of the three PHP frameworks/CMS I use the most using [siege](http://www.joedog.org/siege-home/).
+A couple months ago, I did a [comparison of different distributed filesystems](/2013/04/lamp-cluster-distributed-filesystem). It came out that [GlusterFS](http://www.gluster.org/) was the easiest and most feature full, but it was slow. Since I would really like to use it, I decided to give another chance. Instead of doing raw benchmarks using [sysbench](http://sysbench.sourceforge.net/), I decided to stress test a basic installation of the three PHP frameworks/CMS I use the most using [siege](http://www.joedog.org/siege-home/).
 
 My test environment:
 

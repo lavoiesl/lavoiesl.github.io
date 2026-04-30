@@ -20,7 +20,7 @@ I was aware of all those principles, but @ircmaxell, contributor to PHP, made a 
 
 
 
-And be sure to check [his blog post](http://blog.ircmaxell.com/2012/10/password-hashing-in-php-talk.html) with the slides and some other discussion (yes, we have the same blog template).
+And be sure to check [his blog post](http://blog.ircmaxell.com/2012/10/password-hashing-in-php-talk) with the slides and some other discussion (yes, we have the same blog template).
 
 
 

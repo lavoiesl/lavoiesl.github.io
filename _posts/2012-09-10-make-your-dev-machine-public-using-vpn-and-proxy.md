@@ -26,7 +26,7 @@ The solution I came up with is to tunnel through a VPN to a public machine and l
 
 
 
-1. Install apache or nginx and pptpd (you can follow this [tutorial for the VPN](http://www.ubuntugeek.com/howto-pptp-vpn-server-with-ubuntu-10-04-lucid-lynx.html) or [this one if you are using ufw](http://silverlinux.blogspot.ca/2012/05/how-to-pptp-vpn-on-ubuntu-1204-pptpd.html))
+1. Install apache or nginx and pptpd (you can follow this [tutorial for the VPN](http://www.ubuntugeek.com/howto-pptp-vpn-server-with-ubuntu-10-04-lucid-lynx.html) or [this one if you are using ufw](http://silverlinux.blogspot.ca/2012/05/how-to-pptp-vpn-on-ubuntu-1204-pptpd))
 2. In you `/etc/ppp/chap-secrets` file, be sure to specify a fixed address for yourself (4th column)
 3. Create a DNS wildcard pointing to your server 
 4. Create an Apache or Ngnix proxy to match a server wildcard and redirect it to the VPN IP decided before

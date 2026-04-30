@@ -20,7 +20,7 @@ This example uses Doctrine Cache as a global variable, but this should definitel
  * Get a value from the cache or compute it using a callback
  * Includes cache stampede protection
  * @link http://en.wikipedia.org/wiki/Cache_stampede
- * @link http://blog.lavoie.sl/2014/12/preventing-cache-stampede-using-doctrine-cache.html
+ * @link http://blog.lavoie.sl/2014/12/preventing-cache-stampede-using-doctrine-cache
  * @global cache Doctrine\Common\Cache\Cache
  *
  * @param  string  $key         Cache key

@@ -43,7 +43,7 @@ drupal-install-module.sh will install or update one module, drupal-update-modul
 # Specifiy Drupal version 6 or 7
 # Works with themes as well
 # You must go to /update.php to complete the process afterwards
-# @link http://blog.lavoie.sl/2012/10/batch-update-drupal-modules.html
+# @link http://blog.lavoie.sl/2012/10/batch-update-drupal-modules
 
 if [ "$(basename $PWD)" != "modules" -a "$(basename $PWD)" != "themes" ]; then
   echo "*** You must reside in the modules or themes directory of Drupal" >&2
@@ -112,7 +112,7 @@ echo "Done."
 # Updates all modules or themes in current folder
 # Specifiy Drupal version 6 or 7
 # You must go to /update.php to complete the process afterwards
-# @link http://blog.lavoie.sl/2012/10/batch-update-drupal-modules.html
+# @link http://blog.lavoie.sl/2012/10/batch-update-drupal-modules
 
 options=$@
 

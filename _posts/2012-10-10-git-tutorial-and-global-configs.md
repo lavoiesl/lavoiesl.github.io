@@ -13,7 +13,7 @@ Also, here is my setup for gitconfig and gitignore. Just copy gitignore to /etc/
 
 {% highlight text linenos %}
 # gitconfig
-# http://blog.lavoie.sl/2012/10/git-tutorial-and-global-configs.html
+# http://blog.lavoie.sl/2012/10/git-tutorial-and-global-configs
 
 [user]
 	name = Sébastien Lavoie

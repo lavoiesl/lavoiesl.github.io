@@ -48,6 +48,38 @@ ruby .github/skills/html-to-markdown-kramdown/validate_conversion.rb input.html 
 
 The scripts use Nokogiri for safe DOM parsing. Never use regex on raw HTML — it silently loses URLs, link text, inline code, and nested content.
 
+### Script Limitation: Tables Not Converted
+
+The `html_to_markdown.rb` script does **not** implement table conversion. If a simple `<table>` remains as HTML in the output, convert it manually to a GFM pipe table:
+
+1. The `<thead>` row becomes the header row; each `<th>` becomes a column header.
+2. A separator row (`|---|---|…`) follows the header.
+3. Each `<tbody>` `<tr>` becomes a data row; `<td>` cells become pipe-delimited values.
+4. Row-header `<th>` cells (first column) become **bold** text: `| **Label** |`.
+5. Strip all HTML attributes (`border`, `cellpadding`, `style`, etc.) — they have no meaning in GFM.
+6. Use Python to do the line-range replacement when `replace_string_in_file` fails due to whitespace/indentation differences in the source file.
+
+Example:
+
+```html
+<table>
+  <thead><tr><th></th><th>A</th><th>B</th></tr></thead>
+  <tbody>
+    <tr><th>Row 1</th><td>1a</td><td>1b</td></tr>
+  </tbody>
+</table>
+```
+
+Becomes:
+
+```markdown
+| | A | B |
+|---|---|---|
+| **Row 1** | 1a | 1b |
+```
+
+Do **not** convert tables that contain `rowspan`/`colspan`, nested tables, or mixed block content — keep those as HTML.
+
 ## Conversion Rules
 
 ### Convert → Markdown

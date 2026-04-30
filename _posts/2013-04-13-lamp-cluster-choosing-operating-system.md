@@ -5,7 +5,7 @@ date: 2013-04-13 14:50:00 -0400
 toc: true
 ---
 
-This post is part of: [Guide to replicated LAMP stack hosting with failover](/2013/03/guide-to-replicated-lamp-stack-hosting-with-failover.html)
+This post is part of: [Guide to replicated LAMP stack hosting with failover](/2013/03/guide-to-replicated-lamp-stack-hosting-with-failover)
 
 
 Beside choosing Linux vs Mac or Windows, the OS should not impact your users, it is mostly a sysadmin choice. Your users, the ones who will be connecting via SSH, will expect binaries to be available without modifying their PATH and common tools like Git or SVN to be already installed, but it does not really matter how it was installed.
@@ -51,7 +51,7 @@ It is usually possible to install newer versions, but this implies relying on th
 ### Forget benchmarks
 
 
-Linux is very low-print system; a common mistake is trying to over optimize it. What will eat your CPU is PHP and MySQL, what will eat your memory is MySQL and the number of connections you can handle is mostly dependant on your webserver. If you machine is spending too much time in kernel space, it is probably because you need a bigger one. Also, don’t forget to benchmark your disks. [See my post on choosing hardware](/2013/03/lamp-cluster-hosting-platform.html).
+Linux is very low-print system; a common mistake is trying to over optimize it. What will eat your CPU is PHP and MySQL, what will eat your memory is MySQL and the number of connections you can handle is mostly dependant on your webserver. If you machine is spending too much time in kernel space, it is probably because you need a bigger one. Also, don’t forget to benchmark your disks. [See my post on choosing hardware](/2013/03/lamp-cluster-hosting-platform).
 
 ### Conclusion
 

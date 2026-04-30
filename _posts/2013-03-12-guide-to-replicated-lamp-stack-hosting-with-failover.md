@@ -50,9 +50,9 @@ And the last but not the least, we like profits, so the whole system must have a
 
 As I am starting to write this guide, the system is already operational and in production. I already stumbled across many problems, but I am sure some others are still to come. Here is an overview of all the parts I want to address, links will become available as they are written. The considered options are also listed to give you an idea of where I am going with all this.
 
-1. [Hosting platform](/2013/03/lamp-cluster-hosting-platform.html)
-2. [Linux](/2013/04/lamp-cluster-choosing-operating-system.html)
-3. [Filesystem](/2013/04/lamp-cluster-distributed-filesystem.html)
+1. [Hosting platform](/2013/03/lamp-cluster-hosting-platform)
+2. [Linux](/2013/04/lamp-cluster-choosing-operating-system)
+3. [Filesystem](/2013/04/lamp-cluster-distributed-filesystem)
 4. Load balancer
 5. Reverse proxy with caching
 6. Web server
