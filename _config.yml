@@ -334,3 +334,7 @@ collections:
   posts:
     output: true
     permalink: /:year/:month/:title
+
+after_footer_scripts:
+  - https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js
+  - /assets/js/mermaid-init.js
