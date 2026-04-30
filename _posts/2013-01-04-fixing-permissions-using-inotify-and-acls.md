@@ -23,7 +23,6 @@ setfacl -m 'u:www-data:r-X,g:example-group:rwX,g:sudo:rwX,o::---' "/srv/www/exam
 
 ### ACLs quirks
 
-
 The problem with ACLs is that they are very fragile and a lot of programs don't propagate them, even if you specify *default* rules. For example, all programs that *move* instead of creating will honour the ACL of the directory in which the file was created and the destination. Hence, if you *untar* the whole website in the directory, the default permissions won't be applied.
 
 ### Running a script

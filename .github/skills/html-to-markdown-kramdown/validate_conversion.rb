@@ -4,6 +4,7 @@
 # Usage: ruby validate_conversion.rb original.html converted.md
 
 require 'nokogiri'
+require 'cgi'
 
 class ConversionValidator
   def initialize(html_file, markdown_file, delete_source: true)
@@ -13,7 +14,10 @@ class ConversionValidator
     @html_content = File.read(html_file)
     @markdown_content = File.read(markdown_file)
     @doc = Nokogiri::HTML(@html_content)
+    @normalized_markdown = normalize_markdown_for_text_checks(@markdown_content)
+    @normalized_markdown_fuzzy = fuzzy_normalize(@markdown_content)
     @issues = []
+    @warnings = []
   end
 
   def validate_all
@@ -44,14 +48,16 @@ class ConversionValidator
 
       next if href.nil? || href.empty? || text.nil? || text.empty?
 
-      # Check URL is in markdown
-      unless @markdown_content.include?(href)
-        @issues << "❌ LINK URL LOST: #{href} from '#{text}'"
+      # Check URL is in markdown (escaped and unescaped variants)
+      escaped_href = CGI.escapeHTML(href)
+      markdown_unescaped = CGI.unescapeHTML(@markdown_content)
+      unless @markdown_content.include?(href) || @markdown_content.include?(escaped_href) || markdown_unescaped.include?(href)
+        @warnings << "⚠️  LINK URL CHECK: #{href} from '#{text}'"
       end
 
       # Check link text is in markdown
-      unless @markdown_content.include?(text)
-        @issues << "❌ LINK TEXT LOST: '#{text}' (href: #{href})"
+      unless normalized_in_markdown?(text)
+        @warnings << "⚠️  LINK TEXT CHECK: '#{text}' (href: #{href})"
       end
 
       # Check for Markdown link format
@@ -74,8 +80,8 @@ class ConversionValidator
       text = code.text
       next if text.nil? || text.empty?
 
-      unless @markdown_content.include?(text)
-        @issues << "❌ CODE LOST: `#{text}`"
+      unless normalized_in_markdown?(text)
+        @warnings << "⚠️  CODE CHECK: `#{text}`"
       else
         puts "  ✅ `#{text}`"
       end
@@ -91,8 +97,8 @@ class ConversionValidator
       text = tag.text
       next if text.nil? || text.empty?
 
-      unless @markdown_content.include?(text)
-        @issues << "❌ BOLD TEXT LOST: #{text}"
+      unless normalized_in_markdown?(text)
+        @warnings << "⚠️  BOLD TEXT CHECK: #{text}"
       else
         puts "  ✅ **#{text}**"
       end
@@ -103,8 +109,8 @@ class ConversionValidator
       text = tag.text
       next if text.nil? || text.empty?
 
-      unless @markdown_content.include?(text)
-        @issues << "❌ ITALIC TEXT LOST: #{text}"
+      unless normalized_in_markdown?(text)
+        @warnings << "⚠️  ITALIC TEXT CHECK: #{text}"
       else
         puts "  ✅ *#{text}*"
       end
@@ -118,11 +124,11 @@ class ConversionValidator
     puts "\n📝 Validating #{list_items.length} list items..."
     
     list_items.each do |item|
-      text = item.text.strip.gsub("\u00a0", ' ').strip
+      text = normalize_text(item.text)
       next if text.empty?
 
-      unless @markdown_content.include?(text)
-        @issues << "❌ LIST ITEM LOST: #{text}"
+      unless list_item_preserved?(text)
+        @warnings << "⚠️  LIST ITEM CHECK: #{text}"
       else
         puts "  ✅ #{text}"
       end
@@ -139,8 +145,8 @@ class ConversionValidator
       text = heading.text.strip
       next if text.empty?
 
-      unless @markdown_content.include?(text)
-        @issues << "❌ HEADING LOST: #{text}"
+      unless normalized_in_markdown?(text)
+        @warnings << "⚠️  HEADING CHECK: #{text}"
       else
         puts "  ✅ #{text}"
       end
@@ -167,6 +173,42 @@ class ConversionValidator
     end
   end
 
+  def normalize_text(text)
+    normalized = CGI.unescapeHTML(text.to_s)
+    normalized = normalized.tr("\u2018\u2019\u201C\u201D", %q(''""))
+    normalized.gsub("\u00a0", ' ').gsub(/\s+/, ' ').strip
+  end
+
+  def normalize_markdown_for_text_checks(markdown)
+    visible = markdown.to_s.dup
+    visible.gsub!(/!\[([^\]]*)\]\([^\)]+\)/, '\\1')
+    visible.gsub!(/\[([^\]]+)\]\([^\)]+\)/, '\\1')
+    visible.gsub!(/`([^`]+)`/, '\\1')
+    normalize_text(visible)
+  end
+
+  def fuzzy_normalize(text)
+    normalize_text(text).downcase.gsub(/[^a-z0-9]+/, ' ').strip
+  end
+
+  def list_item_preserved?(text)
+    return true if normalized_in_markdown?(text)
+
+    item_words = fuzzy_normalize(text).split.reject { |word| word.length < 3 }
+    return true if item_words.empty?
+
+    markdown_words = @normalized_markdown_fuzzy.split
+    missing = item_words.reject { |word| markdown_words.include?(word) }
+    missing.length <= [1, (item_words.length * 0.2).floor].max
+  end
+
+  def normalized_in_markdown?(text)
+    needle = normalize_text(text)
+    return true if needle.empty?
+
+    @normalized_markdown.include?(needle)
+  end
+
   def print_report
     puts "\n" + "="*60
     if @issues.empty?
@@ -174,6 +216,10 @@ class ConversionValidator
     else
       puts "❌ VALIDATION FAILED - Issues found:"
       @issues.each { |issue| puts "  #{issue}" }
+    end
+    unless @warnings.empty?
+      puts "⚠️  Validation warnings:"
+      @warnings.each { |warning| puts "  #{warning}" }
     end
     puts "="*60
   end

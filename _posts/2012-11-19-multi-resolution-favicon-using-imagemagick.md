@@ -1,0 +1,45 @@
+---
+title: "Generate a multi-resolution favicon using ImageMagick"
+tags: ["Retina", "Imagemagick", "favicon"]
+date: 2012-11-19 16:09:00 -0500
+---
+
+PNG format for favicons are supported by most browsers, but as you are all aware, the current state of the Web implies we must not only develop for "most browsers".
+
+
+
+ICO favicons are very well supported and offer a bonus feature: multiple resolution in a single file. This way, the browser decides which resolution he prefers. This is notably useful in the era of iPads and Macbooks with high resolutions (Retina).
+
+
+Here is a simple script to resize an image multiple times and combines them using ImageMagick. Should work with all supported formats of ImageMagick
+
+
+
+{% highlight shell linenos %}
+# favicon.sh
+#!/bin/bash
+# Converts an image in a multi-resolution favicon
+# Requires Imagemagick
+# @link https://gist.github.com/lavoiesl/4113857
+
+if [[ "$#" != "2" ]]; then
+    echo "Usage: $0 input.png output.ico" >&2
+    exit 1
+fi
+
+input="$1"
+output="$2"
+sizes="16 32 64 128 256"
+tmp_dir=$(mktemp -d /tmp/favicon.XXXXXXXXXX)
+files=""
+
+for size in $sizes; do
+    file="$tmp_dir/$size.png"
+    convert "$input" -depth 8 -background transparent -flatten -resize "${size}x${size}" "$file"
+    files="$files $file"
+done
+
+convert $files $output
+rm -R $tmp_dir
+{% endhighlight %}
+[View Gist](https://gist.github.com/lavoiesl/4113857) 
