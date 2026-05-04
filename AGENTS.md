@@ -32,6 +32,15 @@
 - Keep skill folder names lowercase kebab-case and make the `name` frontmatter match the folder.
 - Add new repo skills to `.github/skills/README.md` so they remain discoverable.
 
+### Writing Workflow Skills
+
+- Use `series-architect` for series-level sequencing and narrative spine work.
+- Use `article-planner` for single-article briefs derived from a thesis, series map, or notes.
+- Use `source-triage` before drafting when evidence quality or source selection is still unsettled.
+- Use `draft-critic` for findings-first structural review.
+- Use `style-enforcer` for prose-only cleanup and `citation-hygiene` for sourcing-only cleanup.
+- Use `revision-metrics` when repeated rewrite loops need a defect log or process signal.
+
 ## Testing Guidelines
 
 - No unit test suite. Validate by:

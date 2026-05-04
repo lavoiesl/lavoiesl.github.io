@@ -53,3 +53,35 @@ figure.highlight {
   line-height: 1.5;
   font-size: $type-size-7;
 }
+
+.notice--primary a, .markdown-alert-important a {
+    color: #42c3cb;
+}
+
+.notice--primary a:hover, .markdown-alert-important a:hover {
+    color: #68e3ebg darkblue;
+}
+
+table {
+  font-size: 0.85em;
+  margin-bottom: 1.25em;
+}
+
+.mermaid-block {
+    margin-bottom: 2em;
+
+    pre {
+        margin-block: 0;
+        margin-bottom: 1em;
+    }
+
+    .mermaid-source-toggle {
+        font-size: 0.8em;
+        margin-top: -1rem;
+        float: right;
+    }
+}
+
+.mermaid-source {
+    margin-top: 0.75rem;
+}

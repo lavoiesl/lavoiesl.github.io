@@ -7,6 +7,23 @@ var config = {
         }
 };
 
+function getMermaidBlockContainer(preBlock) {
+    var parent = preBlock.parentElement;
+    if (!parent) {
+        return null;
+    }
+
+    if (parent.classList.contains('mermaid-block')) {
+        return parent;
+    }
+
+    var wrapper = document.createElement('div');
+    wrapper.className = 'mermaid-block';
+    parent.insertBefore(wrapper, preBlock);
+    wrapper.appendChild(preBlock);
+    return wrapper;
+}
+
 function createMermaidSourceToggle(codeBlock) {
     var source = codeBlock.textContent;
     if (!source || !source.trim()) {
@@ -18,15 +35,19 @@ function createMermaidSourceToggle(codeBlock) {
         return;
     }
 
+    var blockContainer = getMermaidBlockContainer(preBlock);
+    if (!blockContainer) {
+        return;
+    }
+
     var toggle = document.createElement('a');
     toggle.href = '#';
     toggle.textContent = 'Show source';
-    toggle.style.display = 'inline-block';
-    toggle.style.marginTop = '0.75rem';
+    toggle.className = 'mermaid-source-toggle';
 
     var sourceBlock = document.createElement('pre');
+    sourceBlock.className = 'mermaid-source';
     sourceBlock.hidden = true;
-    sourceBlock.style.marginTop = '0.75rem';
 
     var sourceCode = document.createElement('code');
     sourceCode.textContent = source;
@@ -39,7 +60,7 @@ function createMermaidSourceToggle(codeBlock) {
         toggle.textContent = sourceBlock.hidden ? 'Show source' : 'Hide source';
     });
 
-    preBlock.insertAdjacentElement('afterend', toggle);
+    blockContainer.appendChild(toggle);
     toggle.insertAdjacentElement('afterend', sourceBlock);
     preBlock.dataset.mermaidSourceAttached = 'true';
 }
