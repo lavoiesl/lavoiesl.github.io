@@ -1,6 +1,7 @@
 ---
 title: Designing agentic systems for engineering organizations
 date: 2026-05-01 09:00:00 -0400
+description: "A practical operating model for engineering teams using agents: separate planning, execution, evaluation, approval, and rollout with real gates."
 tags: ["AI", "Agentic Systems", "Software Engineering"]
 toc: true
 ---

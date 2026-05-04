@@ -1,6 +1,7 @@
 ---
 title: Agentic systems are struggling to scale (this should feel familiar)
 date: 2026-05-01 09:00:00 -0400
+description: "Why companies that cut for AI are rehiring: the models can help, but agentic systems fail when coordination, validation, and human handoffs disappear."
 tags: ["AI", "Agentic Systems", "Software Engineering"]
 toc: true
 ---

@@ -1,6 +1,7 @@
 ---
 title: Long-lived systems need modularity
 date: 2026-05-01 09:00:00 -0400
+description: "Long-lived agentic systems need modularity: explicit interfaces, stable handoffs, and local change boundaries that survive new tools, models, and teams."
 tags: ["AI", "Agentic Systems", "Software Engineering"]
 toc: true
 ---

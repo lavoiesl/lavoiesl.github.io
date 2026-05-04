@@ -1,6 +1,7 @@
 ---
 title: "Writing this series with AI: a postmortem"
 date: 2026-05-01 09:00:00 -0400
+description: "A postmortem on writing this series with AI: what structure, artifacts, review loops, and manual judgment actually contributed, and where the models failed."
 tags: ["AI", "Agentic Systems", "Software Engineering", "Writing", "Series"]
 toc: true
 ---

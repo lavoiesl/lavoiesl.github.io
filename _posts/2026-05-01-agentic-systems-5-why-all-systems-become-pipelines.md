@@ -1,6 +1,7 @@
 ---
 title: Why all systems become pipelines
 date: 2026-05-01 09:00:00 -0400
+description: "Complex, high-stakes work converges on pipelines. Agentic systems need explicit stages, transitions, and outputs once work spans multiple dependent steps."
 tags: ["AI", "Agentic Systems", "Software Engineering"]
 toc: true
 ---

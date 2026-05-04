@@ -1,6 +1,7 @@
 ---
 title: Agentic systems are bound by the same fundamental limits
 date: 2026-05-01 09:00:00 -0400
+description: "Adding more agents does not remove serial work or bottlenecks. Agentic systems hit the same throughput limits, queues, and constraints as any workflow."
 tags: ["AI", "Agentic Systems", "Software Engineering"]
 toc: true
 ---

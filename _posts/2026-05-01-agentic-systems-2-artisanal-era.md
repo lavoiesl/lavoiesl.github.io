@@ -1,6 +1,7 @@
 ---
 title: Agentic systems are still in the artisanal era
 date: 2026-05-01 09:00:00 -0400
+description: "Agentic systems still operate like craft work: impressive demos depend on operator skill, implicit knowledge, and manual recovery instead of engineered workflows."
 tags: ["AI", "Agentic Systems", "Software Engineering"]
 toc: true
 ---

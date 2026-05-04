@@ -1,6 +1,7 @@
 ---
 title: "Artifacts are compression: how systems handle complexity"
 date: 2026-05-01 09:00:00 -0400
+description: "Artifacts compress complexity for the next stage. Specs, PRDs, test plans, and release evidence keep agentic systems from passing raw context downstream."
 tags: ["AI", "Agentic Systems", "Software Engineering"]
 toc: true
 ---
