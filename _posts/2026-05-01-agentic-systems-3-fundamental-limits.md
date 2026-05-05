@@ -21,9 +21,7 @@ This article is part of a series on agentic systems:
 
 Brittleness explains part of what teams are feeling. It does not remove the deeper limits that govern any workflow once it has to scale.
 
-Every system that scales eventually runs into the same reality:
-
-The constraint defines the system.
+Every system that scales eventually runs into the same reality: the constraint defines the system.
 
 These are not AI-native limits. Engineering has been running into them for decades.
 
@@ -31,9 +29,9 @@ These are not AI-native limits. Engineering has been running into them for decad
 
 The default assumption is simple: add more capacity, get more output. Add more agents, get more work done.
 
-That is exactly the assumption behind many AI replacement efforts, and it is why those efforts reversed so quickly. Adding more AI capacity did not remove escalation, approval, testing, or exception handling. It only pushed more work toward those stages.
+Many AI replacement efforts rest on exactly that assumption, which is why those efforts reversed so quickly. Adding more AI capacity did not remove escalation, approval, testing, or exception handling. It only pushed more work toward those stages.
 
-In practice, adding more agents still did not increase throughput in real systems. Local work sped up. The constrained stages did not.
+Adding more agents still did not increase throughput in real systems. Local work sped up. The constrained stages did not.
 
 ## Two constraints, one outcome
 
@@ -48,9 +46,7 @@ In practice, adding more agents still did not increase throughput in real system
 
 Operationally, the same limit shows up as a queue.
 
-If review is slow, faster drafting creates a review queue. If integration is slow, faster implementation creates an integration queue. If approvals are slow, faster planning creates an approval queue.
-
-The form changes. The constraint does not.
+If review is slow, faster drafting creates a review queue. If integration is slow, faster implementation creates an integration queue. If approvals are slow, faster planning creates an approval queue. The form changes, but the underlying constraint does not.
 
 ## Why agentic systems hit this early
 
@@ -60,11 +56,11 @@ Agentic systems often try to scale by increasing what is easiest to increase:
 * More parallel tasks
 * More intermediate output
 
-That improves local productivity. It does not automatically improve delivery.
+That improves local productivity without automatically improving delivery.
 
 As [Atlassian][2] notes, once AI accelerates drafting, the system starts accumulating work at reviews, approvals, and risk checks. [The Engineering Leadership Newsletter][3] makes the same point with one concrete example: code review can become the bottleneck even when implementation gets faster.
 
-This is why the layoff-and-rehiring cycle from Part 1 matters so much. The failure was not that AI produced nothing. The failure was that the system still depended on narrow stages where judgment, escalation, and validation lived.
+That is why the layoff-and-rehiring cycle from Part 1 matters so much. The failure was not that AI produced nothing. The failure was that the system still depended on narrow stages where judgment, escalation, and validation lived.
 
 ## Scaling means working the constraint
 

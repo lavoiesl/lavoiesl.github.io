@@ -37,17 +37,15 @@ They rely on:
 * Informal workflows
 * Trial and error
 
-That is where agentic systems still are.
+That is still where agentic systems are.
 
 Success often depends on someone who knows how to phrase prompts, recover from failures, and manually steer execution back on course. That is not yet a robust operating model. It is a skilled operator compensating for missing structure.
 
-That is what companies that removed humans early ran into: they mistook operator effort for system design. The hidden coordination work was still there. It only became visible once the system started failing.
+Companies that removed humans early ran into exactly that: they mistook operator effort for system design. The hidden coordination work was still there. It only became visible once the system started failing.
 
 ## The signs of an artisanal system
 
-You can recognize this stage quickly.
-
-The system works, but:
+You can recognize this stage quickly. The system works, but:
 
 * Results vary depending on who operates it
 * Knowledge is implicit instead of encoded
@@ -67,7 +65,7 @@ The shift is from improvisation to workflow engineering:
 * [Anthropic][1] calls the problem context engineering: deciding what information the system should carry forward, in what form, and for which next step.
 * [OpenAI][2] recommends starting with the simplest agent that can work and only adding more specialization when prompt complexity, tool overload, or task divergence genuinely require it.
 
-The point is not to eliminate prompts. It is to stop treating prompt skill as the system.
+Prompt skill should not stand in for the system.
 
 ## From craft to engineering
 
@@ -81,9 +79,7 @@ This transition is familiar because every engineering field goes through it.
 
 Agentic systems are still early enough that outcomes often depend more on how the workflow is operated than on how it is designed.
 
-That is not unusual. It is what immaturity looks like.
-
-But maturity does not remove the next problem.
+That dependence on operation over design is what immaturity looks like, and maturity only makes the next problem easier to see.
 
 ## The next pressure
 

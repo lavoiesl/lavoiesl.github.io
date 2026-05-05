@@ -23,13 +23,13 @@ Pipelines are easy to mistake for bureaucracy until the work actually has to sur
 
 Artifacts only work because pipelines exist.
 
-Not every exploratory task needs one. But once work becomes multi-stage, interdependent, and high-consequence, staged flow stops being optional.
+Not every exploratory task needs one, but once work becomes multi-stage, interdependent, and high-consequence, staged flow stops being optional.
 
 [NASA's systems engineering handbook][1] and [Anthropic's guide on building effective agents][2] describe different domains, but both converge on the same point: scaled work moves through explicit stages with different responsibilities and outputs.
 
 ## Why stages appear
 
-Pipelines are not a stylistic choice. They are a response to how complex work behaves.
+Pipelines are not a stylistic choice; they are a response to how complex work behaves.
 
 | Force | Why it creates stages |
 | --- | --- |
@@ -58,9 +58,7 @@ Pipelines matter because they are not just sequences of tasks. They are coordina
 
 ## Where agentic systems drift
 
-Many agentic systems still ignore this shape.
-
-They rely on:
+Many agentic systems still ignore this shape. They rely on:
 
 * A single agent handling multiple stages
 * Loosely defined transitions between steps

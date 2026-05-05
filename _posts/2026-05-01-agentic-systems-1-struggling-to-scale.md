@@ -29,17 +29,15 @@ Between 2023 and 2026, executives cut teams on the assumption that AI could abso
 
 [TechRepublic][3] reports that **55% of companies now regret AI-driven layoffs**. [Computerworld][4], summarizing Forrester, adds the missing diagnosis: too often management laid people off based on **the future promise of AI**, not on proven capability inside a working system.
 
-This is the important point:
-
 > The industry is not struggling because AI is weak, it's because systems were removed faster than they could be replaced.
 
-AI did not remove the system. It accelerated it until the weak parts became impossible to ignore.
+It accelerated the system until the weak parts became impossible to ignore.
 
 ## The first public failures are already here
 
 Klarna became the clearest public example. Its leadership said AI was handling work equivalent to roughly **700 customer service agents**, and the move was framed as evidence that replacement at scale had arrived. But as [Digital Applied's Klarna analysis][5] summarizes, the routine volume held while customer satisfaction fell on the complex interactions that actually required judgment, escalation, and trust. Klarna then shifted back toward rehiring and a hybrid model.
 
-That is not an isolated story. It is the same system failure in a more visible form.
+It was the same system failure in a more visible form.
 
 | Local gain | System failure |
 | --- | --- |
@@ -47,17 +45,15 @@ That is not an isolated story. It is the same system failure in a more visible f
 | Staffing costs looked lower on paper | Rehiring and correction costs erased savings |
 | Output arrived faster | Judgment, escalation, and accountability became the constraint |
 
-The failure is easy to misread. The models did useful work. The diagnosis was wrong.
+The failure is easy to misread because the models did useful work. The diagnosis was wrong.
 
 Companies removed the human layer that interpreted ambiguity, handled exceptions, and preserved continuity across the workflow. Once that layer was gone, the system degraded.
 
 ## The wrong conclusion
 
-The easy conclusion is that the models still are not capable enough.
+The easy conclusion is that the models still are not capable enough, but that misses the failure mode.
 
-That misses the failure mode.
-
-The failure is not in the agent. It is in the system it operates in.
+The failure sits in the system the agent operates in.
 
 What broke first was the control layer around the agent: intent definition, handoffs, validation, and exception handling.
 
@@ -65,9 +61,7 @@ What broke first was the control layer around the agent: intent definition, hand
 
 The same pattern shows up in engineering teams building agentic systems.
 
-An agent can write a function. It can scaffold something meaningful.
-
-But ask it to help ship a real feature, one that spans research, design, implementation, testing, and rollout, and the surrounding system starts to break down.
+An agent can write a function or scaffold something meaningful, but ask it to help ship a real feature, one that spans research, design, implementation, testing, and rollout, and the surrounding system starts to break down.
 
 That happens because agentic systems today often:
 
@@ -87,15 +81,15 @@ Pilots were not removed from the loop. Their role shifted toward supervision, in
 
 > Automation does not remove the system. It shifts control within it.
 
-That is the same structural change happening in software organizations. Agents do more local work, but the surrounding system still has to decide when to delegate, what to pass forward, how to validate results, and where human judgment remains necessary.
+The same structural change is happening in software organizations. Agents do more local work, but the surrounding system still has to decide when to delegate, what to pass forward, how to validate results, and where human judgment remains necessary.
 
-AI is not failing. Systems are failing under acceleration.
+The surrounding systems are failing under acceleration.
 
 ## The key insight: AI amplifies the system
 
 The [2025 DORA report][7] names the principle directly: **"AI is an amplifier, not a fix."** Faster drafting does not repair unclear ownership, brittle reviews, or weak validation. It exposes them.
 
-That is why the recurring debate about smarter models misses the main constraint.
+The recurring debate about smarter models misses the main constraint.
 
 The real question is not:
 
@@ -105,7 +99,7 @@ It is:
 
 > How do we structure systems so intelligence can scale without losing control?
 
-This series argues that agentic systems are not an AI problem, but a systems engineering problem.
+This series argues that agentic systems are fundamentally a systems engineering problem.
 
 ## The next question
 

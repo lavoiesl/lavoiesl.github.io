@@ -19,9 +19,7 @@ This article is part of a series on agentic systems:
 8. [Writing this series with AI: a postmortem](/2026/05/agentic-systems-8-writing-with-ai-postmortem)
 </div>
 
-Once a system has real bottlenecks, handoffs stop being optional paperwork.
-
-Artifacts exist because downstream stages are constrained.
+Once a system has real bottlenecks, handoffs stop being optional paperwork because downstream stages are constrained.
 
 If a downstream stage has to keep rereading and reinterpreting everything upstream, the bottleneck has not gone away. It has simply moved.
 
@@ -31,7 +29,7 @@ If your system depends on full context, it is already broken.
 
 ## Artifacts are compression
 
-Complex systems do not pass raw information forward. They compress it into artifacts.
+Complex systems do not pass raw information forward; they compress it into artifacts.
 
 Healthy delivery systems already do this. [Atlassian's PRD guide][3] describes the PRD as a single source of truth for purpose, features, user needs, and success criteria. The same logic applies to specs, designs, test plans, and release evidence.
 
@@ -74,7 +72,7 @@ Many agentic systems still rely on large prompts with mixed context, loosely str
 
 That removes the structure [Anthropic][2] recommends: compact context, explicit compaction, and clear boundaries around what each step should receive. It asks each stage to recover intent from a transcript instead of receiving a handoff that already encodes the objective, constraints, and output shape.
 
-The result is predictable. Outputs drift, reasoning repeats, and ambiguity moves downstream.
+The result is predictable: outputs drift, reasoning repeats, and ambiguity moves downstream.
 
 ## Why this still is not enough
 

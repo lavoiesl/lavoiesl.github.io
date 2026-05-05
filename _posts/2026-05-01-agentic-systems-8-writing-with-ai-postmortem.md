@@ -23,7 +23,7 @@ This series was mostly written with AI assistance.
 
 I want to say that plainly because pretending otherwise would be silly. What feels more worth saying is that the parts that work did not come from some perfect prompt. They came from turning a messy writing process into something more structured: plans, artifacts, review passes, explicit roles, and a lot of manual correction when the drafts drifted or sounded wrong.
 
-That is also why this felt worth writing down. If the series has a useful point, I more or less learned it while writing it: AI was helpful, but only after I gave it a system to work inside.
+That felt worth writing down. If the series has a useful point, I more or less learned it while writing it: AI was helpful, but only after I gave it a system to work inside.
 
 ## The workflow
 
@@ -51,19 +51,19 @@ That separation mattered more than the specific tools.
 
 ## What actually made it work
 
-If I had to reduce it to a few things, they would be structure, artifacts, and iteration.
+What made it work was structure, artifacts, and iteration.
 
 [OpenAI argues that customers "typically achieve greater success with an incremental approach"][2]. That is a better description of the workflow than any story about fully autonomous generation.
 
 Moving the work out of chat and into plans, briefs, and drafts made it easier to keep the argument stable. Once those artifacts existed, the models had something concrete to work against instead of a fading conversational context.
 
-The useful skill was not inventing the perfect prompt. It was learning how to inspect output, identify the failure mode, and redirect the next pass without reopening the whole problem.
+The useful skill ended up being learning how to inspect output, identify the failure mode, and redirect the next pass without reopening the whole problem.
 
 Most of the quality still came from manual judgment: rejecting obscure sources, removing citation clutter, rewriting robotic transitions, and cutting sections that sounded tidy but dead. That is probably the part people underestimate most when they talk about AI-assisted writing.
 
 ## Where the models struggled
 
-The hardest failures were not grammar or obvious hallucinations. They were structural.
+The hardest failures were structural rather than grammatical or obviously hallucinatory.
 
 The models were prone to soft argument drift: flattening distinctions, overexplaining points that had already been made, or turning a causal sequence into a list of adjacent observations. That showed up most clearly in endings and transitions, which often sounded like mini summaries instead of the next step in an argument.
 
@@ -75,7 +75,7 @@ The uncomfortable part is that the workflow depended on me being able to notice 
 
 ## What I would do differently next time
 
-This is probably the most useful part of the postmortem. The series got to a result that I like, but not efficiently.
+The most useful part of the postmortem for me is what I would change next. The series got to a result that I like, but not efficiently.
 
 ### 1. Lock the constraints and artifacts earlier
 
@@ -97,7 +97,7 @@ I kept rediscovering the same roles in ad hoc prompts: series architect, source 
 
 The series argued that agentic systems do not scale because of intelligence alone. They scale when work is decomposed into artifacts, pipelines, interfaces, and validation loops.
 
-The writing process followed the same pattern. One-shot generation did not produce publishable essays. Structured plans, stable artifacts, repeated review loops, and human intervention did.
+The writing process followed the same pattern. Publishable essays came from structured plans, stable artifacts, repeated review loops, and human intervention rather than one-shot generation.
 
 The [literature review paper is even harsher on this point, warning that "a press-button strategy leaving AI to do the work is a recipe for disaster"][4]. That is exactly right. The more autonomous the drafting looked, the more human the editing had to become.
 

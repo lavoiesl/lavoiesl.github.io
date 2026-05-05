@@ -19,9 +19,7 @@ This article is part of a series on agentic systems:
 8. [Writing this series with AI: a postmortem](/2026/05/agentic-systems-8-writing-with-ai-postmortem)
 </div>
 
-Pipelines explain how complex work moves. They do not explain what lets a system survive change.
-
-That is what modularity is for.
+Pipelines explain how complex work moves, but modularity explains what lets a system survive change.
 
 Long-lived systems need modularity because tools change, models change, teams change, and workflows still have to keep working.
 
@@ -31,9 +29,7 @@ If the stages, handoffs, and responsibilities are still ambiguous, there is noth
 
 ## Modularity is survivability
 
-A pipeline can be clear and still be fragile.
-
-If planning logic lives in one operator's head, if approval criteria only exist in one long transcript, or if recovery depends on one coordinating agent, the workflow cannot absorb change.
+A pipeline can be clear and still be fragile if planning logic lives in one operator's head, approval criteria only exist in one long transcript, or recovery depends on one coordinating agent.
 
 | Without modularity | With modularity |
 | --- | --- |
@@ -63,8 +59,6 @@ Long-lived agentic systems need the same discipline. When a model changes, a too
 
 ## Real systems already optimize for replaceable interfaces
 
-The most useful current examples are not theoretical.
-
 | System example | Stable interface |
 | --- | --- |
 | GitHub Copilot cloud agent | Plan, branch diff, checks, and pull request are explicit handoff objects [2][3] |
@@ -75,7 +69,7 @@ These systems do not scale by hiding more state inside the model. They scale by 
 
 ## What modularity buys you
 
-In practice, modularity buys three things.
+Modularity buys three things in practice:
 
 * Replaceability: one evaluator, planner, or model can change without rewriting the whole workflow.
 * Evolvability: the system can adopt better tools gradually instead of through all-or-nothing rewrites.

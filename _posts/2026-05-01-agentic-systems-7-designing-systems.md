@@ -19,9 +19,7 @@ This article is part of a series on agentic systems:
 8. [Writing this series with AI: a postmortem](/2026/05/agentic-systems-8-writing-with-ai-postmortem)
 </div>
 
-The first post in this series opened with layoffs, regret, and rehiring. It also used autopilot as the precedent that matters: automation does not remove the system, it redistributes control inside it.
-
-That is the design problem for engineering organizations.
+The first post in this series opened with layoffs, regret, and rehiring. It also used autopilot as the precedent that matters: automation does not remove the system, it redistributes control inside it. That is the design problem for engineering organizations.
 
 The goal is not to maximize agent count. It is to place automation where it reduces load without erasing the handoffs, validation, and judgment the organization still needs.
 
@@ -67,7 +65,7 @@ One actor can sometimes do more than one role, but the responsibilities should s
 
 ## Principle 4 — Put validation and approval inside the workflow
 
-Tests are not cleanup. Human review is not a vague fallback. Deterministic checks and approval gates belong at the points where artifacts are produced and irreversible actions become possible. OpenAI argues that [high-risk actions should trigger human oversight][1], and Microsoft goes further by saying to ["require human approvals for high-impact cross-agent actions"][3].
+Deterministic checks and approval gates belong at the points where artifacts are produced and irreversible actions become possible. OpenAI argues that [high-risk actions should trigger human oversight][1], and Microsoft goes further by saying to ["require human approvals for high-impact cross-agent actions"][3].
 
 Those stage boundaries are also security boundaries. They let teams limit capabilities, inspect artifacts before granting more power, and avoid giving a context-exposed agent more write access than it needs.
 
@@ -87,7 +85,7 @@ Agentic systems don't turn bad systems into good ones. They turn unclear systems
 
 Taken together, the lesson is narrow and unsentimental: agents belong inside engineering organizations as bounded contributors, not as replacements for the organization itself.
 
-They can draft, implement, and evaluate. But they only create durable leverage when handoffs are clear, validation is built in, and humans remain accountable at the irreversible edges.
+They can draft, implement, and evaluate, but they only create durable leverage when handoffs are clear, validation is built in, and humans remain accountable at the irreversible edges.
 
 The systems that scale will not look like autonomous swarms. They will look like disciplined engineering teams with better tools.
 
