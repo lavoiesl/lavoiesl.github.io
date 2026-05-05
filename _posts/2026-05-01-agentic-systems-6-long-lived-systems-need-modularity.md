@@ -51,6 +51,8 @@ The key question is not whether the boxes are large or small. It is whether chan
 
 A good boundary lets you replace one part without forcing the rest of the system to rediscover intent, state, or operating rules. A bad boundary only redraws the diagram while the real coupling remains hidden underneath.
 
+That matters even more in a field moving this quickly. Pipelines do take time to build and maintain, but the real cost comes from brittle, tightly coupled workflows that force full rewrites whenever a better tool arrives. If the interfaces are stable and the custom logic stays light, migrations remain local and often get faster too.
+
 ## Aviation solved this at the handoff
 
 Part 1 pointed to the aviation version of this problem.

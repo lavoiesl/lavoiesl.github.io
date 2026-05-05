@@ -69,6 +69,8 @@ One actor can sometimes do more than one role, but the responsibilities should s
 
 Tests are not cleanup. Human review is not a vague fallback. Deterministic checks and approval gates belong at the points where artifacts are produced and irreversible actions become possible. OpenAI argues that [high-risk actions should trigger human oversight][1], and Microsoft goes further by saying to ["require human approvals for high-impact cross-agent actions"][3].
 
+Those stage boundaries are also security boundaries. They let teams limit capabilities, inspect artifacts before granting more power, and avoid giving a context-exposed agent more write access than it needs.
+
 ## Principle 5 — Optimize the real constraint, not the busiest stage
 
 If review is slow, improve review. If validation is brittle, improve validation. If context transfer is failing, improve the artifact. More agents do not matter if the bottleneck still sits elsewhere. Microsoft recommends [tracking performance and resource usage metrics for each agent so that you can establish a baseline, find bottlenecks, and optimize][2].

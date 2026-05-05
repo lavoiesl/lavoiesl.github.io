@@ -70,6 +70,12 @@ It can look flexible in a demo, but it scales poorly. Work loops, direction drif
 
 [Anthropic][2] explicitly recommends simple, composable patterns instead of unnecessary framework complexity for exactly this reason.
 
+## Security is another reason stages appear
+
+Prompt injection makes the security case concrete. [OWASP][3] treats indirect prompt injection as a major risk for systems that read external content and recommends least-privilege access plus human approval for high-risk actions.
+
+That principle should already feel familiar from human systems. [NIST][4] recommends only giving users, or processes acting on their behalf, the least privilege needed for assigned tasks. In practice, a stage that reads broadly from untrusted sources should produce an artifact, not take broad write actions; review happens there, and only later stages get narrower permissions.
+
 ## What pipelines still do not solve
 
 A pipeline explains how work moves. It does not explain why that flow survives change.
@@ -80,3 +86,5 @@ Stages can be clear and still remain fragile if their meaning lives in one opera
 
 [1]: https://www.nasa.gov/reference/systems-engineering-handbook/ "Systems Engineering Handbook - NASA"
 [2]: https://www.anthropic.com/engineering/building-effective-agents "Building effective agents - Anthropic"
+[3]: https://genai.owasp.org/llmrisk/llm01-prompt-injection/ "LLM01:2025 Prompt Injection - OWASP GenAI Security Project"
+[4]: https://csrc.nist.gov/glossary/term/least_privilege "Least privilege - NIST Computer Security Resource Center"
