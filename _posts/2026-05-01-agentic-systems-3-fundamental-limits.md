@@ -84,7 +84,7 @@ Most of the system can get faster without the system moving faster at all.
 
 Once constrained stages define throughput, raw upstream context becomes a liability.
 
-You cannot ask every downstream step to reread everything and still expect the system to move. The next design question is therefore simple: what exactly should cross those bottlenecks, and in what form?
+You cannot ask every downstream step to reread everything and still expect the system to move. What crosses the bottleneck has to be smaller, sharper, and easier to verify than the full upstream discussion.
 
 👉 [Part 4: Artifacts are compression: how systems handle complexity](/2026/05/agentic-systems-4-artifacts-are-compression)
 

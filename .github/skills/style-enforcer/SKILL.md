@@ -40,6 +40,12 @@ The pass should also watch for industry-fatigued AI writing patterns: stacks of 
 6. Call out where the prose sounds finished but emotionally or rhetorically hollow.
 7. End with the two or three highest-leverage style fixes.
 
+## Contrast-Line Checklist
+- Keep one strong contrast line when it crystallizes the argument.
+- Cut the rest unless a later contrast line genuinely escalates the claim.
+- Merge adjacent short paragraphs when they are only delivering rhythm, not new meaning.
+- Treat repeated "This is not X. It is Y." constructions as a series-level pattern, not as isolated sentences.
+
 ## Output Format
 - Tone check
 - Style findings by pattern

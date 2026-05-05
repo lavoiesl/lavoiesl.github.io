@@ -87,7 +87,7 @@ Automation makes modularity more valuable, not less.
 
 Once the boundaries are clear enough to survive change, the remaining problem is organizational.
 
-Who plans, who executes, who checks, and where should judgment stay human? That is the last step in the argument, because modularity only matters if it can be turned into a real operating model.
+Who plans, who executes, who checks, and where judgment stays human determines whether modularity becomes a real operating model.
 
 👉 [Part 7: Designing agentic systems for engineering organizations](/2026/05/agentic-systems-7-designing-systems)
 

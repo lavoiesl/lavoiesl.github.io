@@ -91,7 +91,7 @@ They can draft, implement, and evaluate. But they only create durable leverage w
 
 The systems that scale will not look like autonomous swarms. They will look like disciplined engineering teams with better tools.
 
-That also turned out to be the right way to write about agentic systems in the first place.
+The writing process ended up reinforcing the same point.
 
 👉 [Part 8](/2026/05/agentic-systems-8-writing-with-ai-postmortem) is a postmortem on that process, and on why the writing only became good once it was treated as a system too.
 

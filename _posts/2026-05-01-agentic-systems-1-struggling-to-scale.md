@@ -111,7 +111,7 @@ This series argues that agentic systems are not an AI problem, but a systems eng
 
 If faster agents still yield brittle systems, the problem is not a lack of intelligence. It is that too much of the work is still being held together by operators compensating in real time.
 
-So the next step is not to jump straight to architecture diagrams. It is to understand the maturity of the field itself, and why so many systems still depend on craft more than design.
+That makes the field's maturity hard to ignore, because so many systems still depend on craft more than design.
 
 👉 [Part 2: Agentic systems are still in the artisanal era](/2026/05/agentic-systems-2-artisanal-era)
 

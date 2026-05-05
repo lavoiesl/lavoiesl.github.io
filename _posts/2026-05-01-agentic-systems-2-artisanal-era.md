@@ -89,7 +89,7 @@ But maturity does not remove the next problem.
 
 Moving from craft to structure makes a system more repeatable, but it also makes its limits easier to see.
 
-Once work has to move across multiple stages, throughput is no longer set by individual brilliance. It is set by sequencing, coordination, and the slowest point in the flow.
+Once work has to move across multiple stages, throughput is set by sequencing, coordination, and the slowest point in the flow.
 
 👉 [Part 3: Agentic systems are bound by the same fundamental limits](/2026/05/agentic-systems-3-fundamental-limits)
 

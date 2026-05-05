@@ -80,7 +80,7 @@ That principle should already feel familiar from human systems. [NIST][4] recomm
 
 A pipeline explains how work moves. It does not explain why that flow survives change.
 
-Stages can be clear and still remain fragile if their meaning lives in one operator, one model, or one transcript. The next question is what makes the flow durable when tools, teams, and requirements change around it.
+Stages can be clear and still remain fragile if their meaning lives in one operator, one model, or one transcript. Durability comes from boundaries that can survive changing tools, teams, and requirements.
 
 👉 [Part 6: Long-lived systems need modularity](/2026/05/agentic-systems-6-long-lived-systems-need-modularity)
 

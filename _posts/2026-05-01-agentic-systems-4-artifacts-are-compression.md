@@ -80,7 +80,7 @@ The result is predictable. Outputs drift, reasoning repeats, and ambiguity moves
 
 A good artifact reduces ambiguity, but by itself it is only a local act of compression.
 
-It becomes operational only when there is an ordered flow of stages that know when to expand it, when to validate it, and when to pass it on. The next step is not a better document. It is the structure that lets documents do work at all.
+It becomes operational only when there is an ordered flow of stages that know when to expand it, when to validate it, and when to pass it on. Without that structure, even good documents stay inert.
 
 👉 [Part 5: Why all systems become pipelines](/2026/05/agentic-systems-5-why-all-systems-become-pipelines)
 
