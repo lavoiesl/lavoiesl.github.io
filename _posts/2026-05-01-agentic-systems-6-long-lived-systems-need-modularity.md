@@ -51,9 +51,9 @@ That matters even more in a field moving this quickly. Pipelines do take time to
 
 ## Aviation solved this at the handoff
 
-Part 1 pointed to the aviation version of this problem.
+Part 1 pointed to the aviation version of this problem, but only in a narrow sense.
 
-As [Maximilian Walterskirchen][1] points out, autopilot did not remove pilots from the system. It changed the interface between automation, procedure, and human takeover. Aviation became safer because the system learned to formalize when automation should lead, when humans should re-enter, and how that handoff should happen.
+Commercial aviation is far more standardized than most software work, so the analogy is not that engineering can be formalized like pilot training. As [Maximilian Walterskirchen][1] points out, the useful lesson is narrower: autopilot did not remove pilots from the system. It changed the interface between automation, procedure, and human takeover. Aviation became safer because the system learned to make that handoff explicit.
 
 Long-lived agentic systems need the same discipline. When a model changes, a tool fails, or a task falls outside the expected path, the workflow needs a stable takeover point rather than a hidden dependency on one giant prompt.
 

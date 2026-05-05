@@ -45,6 +45,8 @@ For a feature request that touches API behavior, UI text, tests, and rollout, a 
 
 That shape matters because each stage has a clear responsibility, a clear artifact, and a clear point where the next actor can say no.
 
+It also does not mean the human only appears at final approval. In practice, the highest-value human involvement often happens earlier: on scope, design direction, risky changes, and the points where the system needs judgment rather than throughput.
+
 The principles that follow are not abstract best practices. They are the places teams usually lose control once agents move past the demo stage.
 
 ## Principle 0 — Structure before automation
@@ -53,7 +55,7 @@ If the workflow is ambiguous, undocumented, or negotiated ad hoc in chat, agents
 
 ## Principle 1 — Use the interfaces the organization already understands
 
-Requirements, specs, design docs, diffs, test plans, and approval records already move work between humans. Agent stages should plug into the same interfaces rather than inventing a parallel AI-only process. OpenAI explicitly recommends to ["use existing documents"][1] when defining agent routines.
+Requirements, specs, design docs, diffs, test plans, and approval records already move work between humans in many organizations, even if they exist unevenly. Where those interfaces already exist, agent stages should plug into them rather than inventing a parallel AI-only process. Where they are still weak, AI increases the payoff of making them just explicit enough to support review and handoff. OpenAI explicitly recommends to ["use existing documents"][1] when defining agent routines.
 
 ## Principle 2 — Match orchestration to the shape of the work
 
@@ -71,7 +73,7 @@ Those stage boundaries are also security boundaries. They let teams limit capabi
 
 ## Principle 5 — Optimize the real constraint, not the busiest stage
 
-If review is slow, improve review. If validation is brittle, improve validation. If context transfer is failing, improve the artifact. More agents do not matter if the bottleneck still sits elsewhere. Microsoft recommends [tracking performance and resource usage metrics for each agent so that you can establish a baseline, find bottlenecks, and optimize][2].
+If review is slow, improve review. If validation is brittle, improve validation. If context transfer is failing, improve the artifact. More agents do not matter if the bottleneck still sits elsewhere. In many engineering teams, that bottleneck is PR review, which means the useful question is not "can AI replace review?" but "can better reviewer instructions, tighter diffs, stronger design context, or earlier evaluator feedback raise the signal of review?" Microsoft recommends [tracking performance and resource usage metrics for each agent so that you can establish a baseline, find bottlenecks, and optimize][2].
 
 ## Principle 6 — Keep humans at the irreversible edges
 

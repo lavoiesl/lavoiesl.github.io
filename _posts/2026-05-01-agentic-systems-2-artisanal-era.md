@@ -67,6 +67,8 @@ The shift is from improvisation to workflow engineering:
 
 Prompt skill should not stand in for the system.
 
+That does not mean every engineering task should be documented like a training manual. The leverage is in making recurring, cross-role, or high-consequence handoffs explicit enough that the work can be resumed, reviewed, and delegated without one operator carrying all the state.
+
 ## From craft to engineering
 
 This transition is familiar because every engineering field goes through it.
